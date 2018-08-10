@@ -1,17 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import BoxBreath from './components/BoxBreath'
+import Breath from './components/Breath'
 
 export default class App extends React.Component {
 
   render() {
     return (
       <View style={styles.container}>
-        <BoxBreath 
+        {/* <BoxBreath 
           style={styles.boxBreath} 
           size={200}
           duration={8 * 1000} 
-          ratio={[1,1,1,1]}/>
+          ratio={[1,1,1,1]}/> */}
+        <Breath duration={3000} />
       </View>
     );
   }
