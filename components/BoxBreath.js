@@ -104,7 +104,7 @@ export default class BoxBreath extends React.Component {
   }
 }
 
-const borderWidth = 4
+const borderWidth = 5
 const ballSize = 20
 const ballOffset = (borderWidth / 2) + (ballSize / 2)
 

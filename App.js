@@ -8,12 +8,12 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <BoxBreath 
+        <BoxBreath 
           style={styles.boxBreath} 
           size={200}
           duration={8 * 1000} 
-          ratio={[1,1,1,1]}/> */}
-        <Breath duration={3000} />
+          ratio={[1,1,1,1]}/>
+        <Breath duration={6000} ratio={[1,2]} />
       </View>
     );
   }
