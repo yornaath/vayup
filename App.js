@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
-import BoxBreath from './components/BoxBreath'
-import Breath from './components/Breath'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import BoxBreath from './build/components/BoxBreath'
+import Breath from './build/components/Breath'
 
 export default class App extends React.Component {
 
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   },
   boxBreath: {
     height: 200,
-    width: 200
+    width: 200,
+    marginBottom: 40
   }
-});
+})

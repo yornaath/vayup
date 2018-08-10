@@ -1,13 +1,23 @@
 import React from 'react'
-import { StyleSheet, Text, View, Animated, Easing } from 'react-native'
+import { StyleSheet, View, Animated } from 'react-native'
 
+interface Props {
+  ratio: [number, number];
+  duration: number;
+  style?: Object
+}
 
-export default class Breath extends React.Component {
+interface State {
+  ballScale: Animated.Value
+}
 
-  constructor(...args) {
-    super(...args)
-    this.state = {text: ""}
-    this.ballScale = new Animated.Value(0)
+export default class Breath extends React.Component<Props, State> {
+
+  constructor(props:Props) {
+    super(props)
+    this.state = {
+      ballScale: new Animated.Value(0)
+    }
   }
 
   runAnimation() {
@@ -16,11 +26,11 @@ export default class Breath extends React.Component {
     const durationPerUnit = this.props.duration / (inn + out)
 
     const loop = () => {
-      Animated.timing(this.ballScale, {
+      Animated.timing(this.state.ballScale, {
         toValue: 1,
         duration: inn * durationPerUnit
       }).start(() => {
-        Animated.timing(this.ballScale, {
+        Animated.timing(this.state.ballScale, {
           toValue: 0,
           duration: out * durationPerUnit
         }).start(loop)
@@ -37,7 +47,7 @@ export default class Breath extends React.Component {
 
   render() {
 
-    var scale = this.ballScale.interpolate({
+    var scale = this.state.ballScale.interpolate({
       inputRange: [0, 1],
       outputRange: [0.5, 1],
       extrapolate: 'clamp'

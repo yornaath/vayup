@@ -6,11 +6,25 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "tsc": "tsc",
+    "clean": "rimraf build",
+    "build": "yarn run clean && yarn run tsc --",
+    "watch": "yarn run build -- -w",
+    "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run start\" \"yarn run ios\"",
+    "buildRunIOS": "yarn run build && yarn run watchAndRunIOS "
   },
   "dependencies": {
     "expo": "^29.0.0",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "@types/expo": "^27.0.7",
+    "@types/react": "^16.4.9",
+    "@types/react-native": "^0.56.6",
+    "concurrently": "^3.6.1",
+    "rimraf": "^2.6.2",
+    "typescript": "^3.0.1"
   }
 }

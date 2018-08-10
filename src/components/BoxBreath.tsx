@@ -1,14 +1,28 @@
 import React from 'react'
 import { StyleSheet, Text, View, Animated, Easing } from 'react-native'
 
+interface Props {
+  ratio: [number, number, number, number];
+  duration: number;
+  size: number;
+  style?: Object
+}
 
-export default class BoxBreath extends React.Component {
+interface State {
+  text: string;
+  ballLocation: Animated.ValueXY;
+  ballScale: Animated.Value
+}
 
-  constructor(...args) {
-    super(...args)
-    this.state = {text: ""}
-    this.ballLocation = new Animated.ValueXY({ x: 0, y: 0 })
-    this.ballScale = new Animated.Value(0)
+export default class BoxBreath extends React.Component<Props, State> {
+
+  constructor(props:Props) {
+    super(props)
+    this.state = {
+      text: "",
+      ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
+      ballScale: new Animated.Value(0)
+    }
   }
 
   runAnimation() {
@@ -19,34 +33,34 @@ export default class BoxBreath extends React.Component {
     const loop = () => {
       this.setState({text: "in"})
       Animated.parallel([
-        Animated.timing(this.ballLocation.y, {
+        Animated.timing(this.state.ballLocation.y, {
           toValue: 1,
           duration: inn * durationPerUnit
         }),
-        Animated.timing(this.ballScale, {
+        Animated.timing(this.state.ballScale, {
           toValue: 1,
           duration: inn * durationPerUnit
         }),
       ]).start(() => {
         this.setState({text: "hold"})
-        Animated.timing(this.ballLocation.x, {
+        Animated.timing(this.state.ballLocation.x, {
           toValue: 1,
           easing: Easing.linear,
           duration: innHold * durationPerUnit
         }).start(() => {
           this.setState({text: "out"})
           Animated.parallel([
-            Animated.timing(this.ballScale, {
+            Animated.timing(this.state.ballScale, {
               toValue: 0,
               duration: out * durationPerUnit
             }),
-            Animated.timing(this.ballLocation.y, {
+            Animated.timing(this.state.ballLocation.y, {
               toValue: 0,
               duration: out * durationPerUnit
             })
           ]).start(() => {
             this.setState({text: "hold"})
-            Animated.timing(this.ballLocation.x, {
+            Animated.timing(this.state.ballLocation.x, {
               toValue: 0,
               easing: Easing.linear,
               duration: outHold * durationPerUnit
@@ -66,19 +80,19 @@ export default class BoxBreath extends React.Component {
 
   render() {
 
-    var x = this.ballLocation.x.interpolate({
+    var x = this.state.ballLocation.x.interpolate({
       inputRange: [0, 1],
       outputRange: [0, this.props.size - borderWidth],
       extrapolate: 'clamp'
     })
 
-    var y = this.ballLocation.y.interpolate({
+    var y = this.state.ballLocation.y.interpolate({
       inputRange: [0, 1],
       outputRange: [0, -(this.props.size - borderWidth)],
       extrapolate: 'clamp'
     })
 
-    var scale = this.ballScale.interpolate({
+    var scale = this.state.ballScale.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 2],
       extrapolate: 'clamp'
