@@ -13,10 +13,12 @@ export default class Breath extends React.Component {
         const loop = () => {
             Animated.timing(this.state.ballScale, {
                 toValue: 1,
+                useNativeDriver: true,
                 duration: inn * durationPerUnit
             }).start(() => {
                 Animated.timing(this.state.ballScale, {
                     toValue: 0,
+                    useNativeDriver: true,
                     duration: out * durationPerUnit
                 }).start(loop);
             });

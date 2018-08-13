@@ -11,13 +11,16 @@
     "clean": "rimraf build",
     "build": "yarn run clean && yarn run tsc --",
     "watch": "yarn run build -- -w",
-    "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run start\" \"yarn run ios\"",
+    "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run ios\"",
     "buildRunIOS": "yarn run build && yarn run watchAndRunIOS "
   },
   "dependencies": {
+    "@types/ms": "^0.7.30",
     "expo": "^29.0.0",
+    "ms": "^2.1.1",
     "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
+    "rxjs": "^6.2.2"
   },
   "devDependencies": {
     "@types/expo": "^27.0.7",

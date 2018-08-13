@@ -35,10 +35,12 @@ export default class BoxBreath extends React.Component<Props, State> {
       Animated.parallel([
         Animated.timing(this.state.ballLocation.y, {
           toValue: 1,
+          useNativeDriver: true,
           duration: inn * durationPerUnit
         }),
         Animated.timing(this.state.ballScale, {
           toValue: 1,
+          useNativeDriver: true,
           duration: inn * durationPerUnit
         }),
       ]).start(() => {
@@ -46,22 +48,26 @@ export default class BoxBreath extends React.Component<Props, State> {
         Animated.timing(this.state.ballLocation.x, {
           toValue: 1,
           easing: Easing.linear,
+          useNativeDriver: true,
           duration: innHold * durationPerUnit
         }).start(() => {
           this.setState({text: "out"})
           Animated.parallel([
             Animated.timing(this.state.ballScale, {
               toValue: 0,
+              useNativeDriver: true,
               duration: out * durationPerUnit
             }),
             Animated.timing(this.state.ballLocation.y, {
               toValue: 0,
+              useNativeDriver: true,
               duration: out * durationPerUnit
             })
           ]).start(() => {
             this.setState({text: "hold"})
             Animated.timing(this.state.ballLocation.x, {
               toValue: 0,
+              useNativeDriver: true,
               easing: Easing.linear,
               duration: outHold * durationPerUnit
             }).start(() => loop())
@@ -125,8 +131,8 @@ const ballOffset = (borderWidth / 2) + (ballSize / 2)
 const styles = StyleSheet.create({
   box: {
     borderWidth: borderWidth,
-    borderColor: "rgba(0,0,0,0.7)",
-    borderRadius: 8,
+    borderColor: "rgba(0,0,0,1)",
+    borderRadius: 6,
     justifyContent: "center",
     alignItems: "center"
   },

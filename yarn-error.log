@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.6.0/libexec/bin/yarn.js run build
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.6.0/libexec/bin/yarn.js run start
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/jorntangen/progg/meditation/package.json: Unexpected token } in JSON at position 533
+  SyntaxError: /Users/jorntangen/progg/meditation/package.json: Unexpected token } in JSON at position 411
       at JSON.parse (<anonymous>)
       at /usr/local/Cellar/yarn/1.6.0/libexec/lib/cli.js:1130:59
       at Generator.next (<anonymous>)
@@ -28,7 +28,7 @@ npm manifest:
     "main": "node_modules/expo/AppEntry.js",
     "private": true,
     "scripts": {
-      "start": "expo start",
+      "start": "concurrently \"yarn run watch\" \"expo start\"",
       "android": "expo start --android",
       "ios": "expo start --ios",
       "eject": "expo eject",
@@ -36,8 +36,6 @@ npm manifest:
       "clean": "rimraf build",
       "build": "yarn run clean && yarn run tsc --",
       "watch": "yarn run build -- -w",
-      "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run start\" \"yarn run ios\"",
-      "buildRunIOS": "yarn run build && yarn run watchAndRunIOS ",
     },
     "dependencies": {
       "expo": "^29.0.0",

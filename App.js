@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import BoxBreath from './build/components/BoxBreath'
-import Breath from './build/components/Breath'
+import BoxBreath from './build/components/pranayama/BoxBreath'
+import Breath from './build/components/pranayama/Breath'
+import TriangleBreath from './build/components/pranayama/TriangleBreath'
 
 export default class App extends React.Component {
 
@@ -14,6 +15,7 @@ export default class App extends React.Component {
           duration={8 * 1000} 
           ratio={[1,1,1,1]}/>
         <Breath duration={6000} ratio={[1,2]} />
+        <TriangleBreath size={200} />
       </View>
     );
   }

@@ -22,16 +22,18 @@ export default class Breath extends React.Component<Props, State> {
 
   runAnimation() {
 
-    const [inn, out ] = this.props.ratio
+    const [inn, out] = this.props.ratio
     const durationPerUnit = this.props.duration / (inn + out)
 
     const loop = () => {
       Animated.timing(this.state.ballScale, {
         toValue: 1,
+        useNativeDriver: true,
         duration: inn * durationPerUnit
       }).start(() => {
         Animated.timing(this.state.ballScale, {
           toValue: 0,
+          useNativeDriver: true,
           duration: out * durationPerUnit
         }).start(loop)
       })
