@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Animated, Easing } from 'react-native'
+import * as Pranayama from '../../lib/Pranayama'
+import { inflateSync } from 'zlib';
 
 interface Props {
   ratio: [number, number, number, number];
@@ -16,6 +18,8 @@ interface State {
 
 export default class BoxBreath extends React.Component<Props, State> {
 
+  guide: Pranayama.Guide
+
   constructor(props:Props) {
     super(props)
     this.state = {
@@ -23,82 +27,33 @@ export default class BoxBreath extends React.Component<Props, State> {
       ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
       ballScale: new Animated.Value(0)
     }
-  }
-
-  runAnimation() {
-
-    const [inn, innHold, out, outHold] = this.props.ratio
-    const durationPerUnit = this.props.duration / (inn + innHold + out + outHold)
-
-    const loop = () => {
-      this.setState({text: "in"})
-      Animated.parallel([
-        Animated.timing(this.state.ballLocation.y, {
-          toValue: 1,
-          useNativeDriver: true,
-          duration: inn * durationPerUnit
-        }),
-        Animated.timing(this.state.ballScale, {
-          toValue: 1,
-          useNativeDriver: true,
-          duration: inn * durationPerUnit
-        }),
-      ]).start(() => {
-        this.setState({text: "hold"})
-        Animated.timing(this.state.ballLocation.x, {
-          toValue: 1,
-          easing: Easing.linear,
-          useNativeDriver: true,
-          duration: innHold * durationPerUnit
-        }).start(() => {
-          this.setState({text: "out"})
-          Animated.parallel([
-            Animated.timing(this.state.ballScale, {
-              toValue: 0,
-              useNativeDriver: true,
-              duration: out * durationPerUnit
-            }),
-            Animated.timing(this.state.ballLocation.y, {
-              toValue: 0,
-              useNativeDriver: true,
-              duration: out * durationPerUnit
-            })
-          ]).start(() => {
-            this.setState({text: "hold"})
-            Animated.timing(this.state.ballLocation.x, {
-              toValue: 0,
-              useNativeDriver: true,
-              easing: Easing.linear,
-              duration: outHold * durationPerUnit
-            }).start(() => loop())
-          })
-        })
-      })
-    }
-
-    loop()
+    const boxBreath = Pranayama.BoxBreath(this.props.ratio, this.props.duration, Infinity)
+    this.guide = Pranayama.guide(boxBreath)
+    this.guide.instructions.on("step", (step) => {
+      this.setState({ text: step.instruction })
+    })
   }
 
   componentDidMount() {
-    this.runAnimation()
+    this.guide.start()
   }
 
 
   render() {
 
-    var x = this.state.ballLocation.x.interpolate({
+    var x = this.guide.value.x.interpolate({
       inputRange: [0, 1],
       outputRange: [0, this.props.size - borderWidth],
       extrapolate: 'clamp'
     })
 
-    var y = this.state.ballLocation.y.interpolate({
+    var y = this.guide.value.y.interpolate({
       inputRange: [0, 1],
       outputRange: [0, -(this.props.size - borderWidth)],
       extrapolate: 'clamp'
     })
 
-    var scale = this.state.ballScale.interpolate({
+    var scale = this.guide.value.y.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 2],
       extrapolate: 'clamp'

@@ -1,83 +1,117 @@
 
-import {EasingFunction, Animated, Easing} from 'react-native'
+import {Animated, Easing} from 'react-native'
 import EventEmitter from 'events'
 
-export interface Pranayama {
+
+
+export interface PranayamaSequence {
+  steps: Array<PranayamaStep|PranayamaSequence>;
+  ratio: Array<number>;
   duration: number;
-  ratio: [number, number, number, number];
+  cycles: number;
 }
 
-export const animated = (pranayama:Pranayama, easings?:[EasingFunction, EasingFunction, EasingFunction, EasingFunction]) => {
+function isPranayamaSequence (pranayama:any): pranayama is PranayamaSequence {
+  return pranayama && typeof pranayama["duration"] == "number"
+}
 
-  const [inn, innHold, out, outHold] = pranayama.ratio
-  const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold)
 
-  const [innEasing, innHoldEasing, outEasing, outHoldEasing] = easings || [
-    Easing.inOut(Easing.ease), Easing.linear, Easing.inOut(Easing.ease), Easing.linear
-  ]
+export type Breath = "puraka" | "rechaka" | "antar-kumbhaka" | "bahya-kumbhaka"
 
-  const state = new EventEmitter()
+
+export interface PranayamaStep {
+  breath:Breath;
+  instruction:string;
+}
+
+
+export const BoxBreath = (ratio:[number, number, number, number], duration:number, cycles:number):PranayamaSequence => ({
+  steps: [
+    { breath: "puraka", instruction: "breath in" },
+    { breath: "antar-kumbhaka", instruction: "hold" },
+    { breath: "rechaka", instruction: "breath out" },
+    { breath: "bahya-kumbhaka", instruction: "hold" }
+  ],
+  ratio, duration, cycles
+}) 
+
+
+export interface Guide {
+  value: Animated.ValueXY;
+  instructions: EventEmitter;
+  start: () => void
+}
+
+
+export const guide = (pranayama:PranayamaSequence):Guide => {
+
   const value = new Animated.ValueXY({x: 0, y: 0})
-  
-  let animation:Animated.CompositeAnimation|null = null
+  const instructions = new EventEmitter()
 
-  const run = () => {
-    state.emit('update', {state: 'in', value: {x: value.x, y: value.y}})
+  const next = async (pranayama:PranayamaSequence, cyclesRun:number = 0) => new Promise(async (resolve) => {
 
-    animation = Animated.timing(value, {
-      toValue: {x: 0, y: 1},
-      easing: innEasing,
-      useNativeDriver: true,
-      duration: inn * durationPerUnit
-    })
-    
-    animation.start(() => {
-      state.emit('update', {state: 'hold-in', value: {x: value.x, y: value.y}})
-      Animated.timing(value, {
-        toValue: {x: 1, y: 1},
-        easing: innHoldEasing,
-        useNativeDriver: true,
-        duration: innHold * durationPerUnit
-      }).start(() => {
-        state.emit('update', {state: 'out', value: {x: value.x, y: value.y}})
-        Animated.timing(value, {
-          toValue: {x: 0, y: 1},
-          easing: outEasing,
-          useNativeDriver: true,
-          duration: out * durationPerUnit
-        }).start(() => {
-          state.emit('update', {state: 'hold-out', value: {x: value.x, y: value.y}})
-          Animated.timing(value, {
-            toValue: {x: 0, y: 0},
-            easing: outHoldEasing,
-            useNativeDriver: true,
-            duration: outHold * durationPerUnit
-          }).start(() => run())
-        })
-      })
-    })
-  }
+    const [inn, innHold, out, outHold] = pranayama.ratio
+    const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold)
 
-  const start = () => {
-    if(animation) {
-      return animation.start()
+    for(let step of pranayama.steps) {
+      if(isPranayamaSequence(step)) {
+        await next(step)
+      }
+      else  {
+
+        let animation:Animated.CompositeAnimation|null = null
+
+        switch(step.breath) {
+          case 'puraka':
+            animation = Animated.timing(value, {
+              toValue: {x: 0, y: 1},
+              useNativeDriver: true,
+              duration: inn * durationPerUnit
+            })
+          break
+          case 'antar-kumbhaka':
+            animation = Animated.timing(value, {
+              toValue: {x: 1, y: 1},
+              useNativeDriver: true,
+              easing: Easing.linear,
+              duration: inn * durationPerUnit
+            })
+          break
+          case 'rechaka':
+            animation = Animated.timing(value, {
+              toValue: {x: 1, y: 0},
+              useNativeDriver: true,
+              duration: inn * durationPerUnit
+            })
+          break
+          case 'bahya-kumbhaka':
+            animation = Animated.timing(value, {
+              toValue: {x: 0, y: 0},
+              useNativeDriver: true,
+              duration: inn * durationPerUnit
+            })
+          break
+        }
+
+        instructions.emit("step", step)
+
+        await new Promise((resolve) => animation.start(resolve))
+
+      }
     }
-    else {
-      return run()
-    }
-  }
 
-  const stop = () => {
-    if(animation) {
-      animation.stop()
-      animation = null
+    if(cyclesRun +1 < pranayama.cycles) {
+      await next(pranayama, cyclesRun + 1)
     }
-  }
+
+    resolve()
+  })
+
+  const start = () => next(pranayama)
 
   return {
     value,
-    state,
-    start,
-    stop
+    instructions,
+    start
   }
 }

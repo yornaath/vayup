@@ -14,8 +14,8 @@ export default class App extends React.Component {
           size={200}
           duration={8 * 1000} 
           ratio={[1,1,1,1]}/>
-        <Breath duration={6000} ratio={[1,2]} />
-        <TriangleBreath size={200} />
+        {/* <Breath duration={6000} ratio={[1,2]} />
+        <TriangleBreath size={200} /> */}
       </View>
     );
   }
