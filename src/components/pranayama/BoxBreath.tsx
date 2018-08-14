@@ -34,8 +34,13 @@ export default class BoxBreath extends React.Component<Props, State> {
     })
   }
 
-  componentDidMount() {
-    this.guide.start()
+  async componentDidMount() {
+    try {
+      await this.guide.start()
+    }
+    catch(err) {
+      console.log(err)
+    }
   }
 
 

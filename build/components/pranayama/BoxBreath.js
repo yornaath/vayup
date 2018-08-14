@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import * as Pranayama from '../../lib/Pranayama';
@@ -16,7 +24,14 @@ export default class BoxBreath extends React.Component {
         });
     }
     componentDidMount() {
-        this.guide.start();
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.guide.start();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
     }
     render() {
         var x = this.guide.value.x.interpolate({
