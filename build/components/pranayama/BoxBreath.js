@@ -62,7 +62,11 @@ const styles = StyleSheet.create({
     ball: {
         width: ballSize,
         height: ballSize,
-        backgroundColor: "rgba(0,0,0, 0.9)",
+        backgroundColor: "rgba(0,0,0, 1)",
+        // shadowColor: 'white',
+        // shadowOffset: { width: 0, height: 0 },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 5,
         position: "absolute",
         bottom: -ballOffset,
         left: -ballOffset,

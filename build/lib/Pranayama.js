@@ -27,6 +27,7 @@ export const guide = (pranayama) => {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             const [inn, innHold, out, outHold] = pranayama.ratio;
             const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold);
+            const minHold = 250;
             for (let step of pranayama.steps) {
                 if (isPranayamaSequence(step)) {
                     yield next(step);
@@ -46,21 +47,21 @@ export const guide = (pranayama) => {
                                 toValue: { x: 1, y: 1 },
                                 useNativeDriver: true,
                                 easing: Easing.linear,
-                                duration: inn * durationPerUnit
+                                duration: (innHold * durationPerUnit) || minHold
                             });
                             break;
                         case 'rechaka':
                             animation = Animated.timing(value, {
                                 toValue: { x: 1, y: 0 },
                                 useNativeDriver: true,
-                                duration: inn * durationPerUnit
+                                duration: out * durationPerUnit
                             });
                             break;
                         case 'bahya-kumbhaka':
                             animation = Animated.timing(value, {
                                 toValue: { x: 0, y: 0 },
                                 useNativeDriver: true,
-                                duration: inn * durationPerUnit
+                                duration: (outHold * durationPerUnit) || minHold
                             });
                             break;
                     }
