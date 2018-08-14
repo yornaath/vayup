@@ -1,11 +1,10 @@
-
+import Promise from 'bluebird'
 import {Animated, Easing} from 'react-native'
 import EventEmitter from 'events'
 
 
-
 export interface PranayamaSequence {
-  steps: Array<PranayamaStep|PranayamaSequence>;
+  steps: Array<PranayamaStep|PranayamaSequence|InstructionStep>;
   ratio?: Array<number>;
   duration?: number;
   cycles?: number;
@@ -25,12 +24,26 @@ export interface PranayamaStep {
   duration?: number;
 }
 
+function isPranayamaStep (step:any): step is PranayamaStep {
+  return step && step.instruction && step.breath
+}
+
+
+export interface InstructionStep {
+  instruction:string;
+  duration?: number;
+}
+
+function isInstructionStep (step:any): step is InstructionStep {
+  return step && step.instruction && 
+}
+
 
 export const BoxBreath = (ratio:[number, number, number, number], duration:number, cycles:number):PranayamaSequence => ({
   steps: [
-    { breath: "bahya-kumbhaka", instruction: "3", duration: 1000 },
-    { breath: "bahya-kumbhaka", instruction: "2", duration: 1000 },
-    { breath: "bahya-kumbhaka", instruction: "1", duration: 1000 },
+    { instruction: "3", duration: 1000 },
+    { instruction: "2", duration: 1000 },
+    { instruction: "1", duration: 1000 },
     {
       steps: [
         { breath: "puraka", instruction: "breath in" },
@@ -59,10 +72,11 @@ export const guide = (pranayama:PranayamaSequence):Guide => {
   const next = async (pranayama:PranayamaSequence, cyclesRun:number = 0) => new Promise(async (resolve) => {
 
     for(let step of pranayama.steps) {
-      if(isPranayamaSequence(step)) {
-        await next(step)
+      if(isInstructionStep(step)) {
+        instructions.emit("step", step)
+        await Promise.delay(step.duration)
       }
-      else  {
+      else if(isPranayamaStep(step))  {
 
         const [inn, innHold, out, outHold] = pranayama.ratio
         const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold)
@@ -101,6 +115,9 @@ export const guide = (pranayama:PranayamaSequence):Guide => {
 
         await new Promise((resolve) => animation.start(resolve))
 
+      }
+      else if(isPranayamaSequence(step)) {
+        await next(step)
       }
     }
 

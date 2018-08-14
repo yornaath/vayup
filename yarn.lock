@@ -449,6 +449,10 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
+"@types/bluebird@^3.5.23":
+  version "3.5.23"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.23.tgz#e805da976b76892b2b2e50eec29e84914c730670"
+
 "@types/expo@^27.0.7":
   version "27.0.7"
   resolved "https://registry.yarnpkg.com/@types/expo/-/expo-27.0.7.tgz#fbe03e372405af85d17ffb97c0f82e6339fc0f11"
@@ -1347,6 +1351,10 @@ basic-auth@~2.0.0:
 big-integer@^1.6.7:
   version "1.6.34"
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.34.tgz#701affc8f0d73c490930a6b482dc23ed6ffc7484"
+
+bluebird@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 bplist-creator@0.0.7:
   version "0.0.7"

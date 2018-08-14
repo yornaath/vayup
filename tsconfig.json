@@ -26,7 +26,8 @@
   "types": [
     "react",
     "react-dom",
-    "react-native"
+    "react-native",
+    "es2015"
   ],
   "exclude":[
       "build", 
