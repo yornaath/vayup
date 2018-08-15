@@ -6,16 +6,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import Promise from 'bluebird';
 import { Animated, Easing } from 'react-native';
 import EventEmitter from 'events';
 function isPranayamaSequence(pranayama) {
     return pranayama && typeof pranayama["duration"] == "number";
 }
+function isPranayamaStep(step) {
+    return step && step.instruction && step.breath;
+}
+function isInstructionStep(step) {
+    return step && step.instruction;
+}
 export const BoxBreath = (ratio, duration, cycles) => ({
     steps: [
-        { breath: "bahya-kumbhaka", instruction: "3", duration: 1000 },
-        { breath: "bahya-kumbhaka", instruction: "2", duration: 1000 },
-        { breath: "bahya-kumbhaka", instruction: "1", duration: 1000 },
         {
             steps: [
                 { breath: "puraka", instruction: "breath in" },
@@ -33,10 +37,7 @@ export const guide = (pranayama) => {
     const next = (pranayama, cyclesRun = 0) => __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             for (let step of pranayama.steps) {
-                if (isPranayamaSequence(step)) {
-                    yield next(step);
-                }
-                else {
+                if (isPranayamaStep(step)) {
                     const [inn, innHold, out, outHold] = pranayama.ratio;
                     const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold);
                     let animation = null;
@@ -68,6 +69,9 @@ export const guide = (pranayama) => {
                     });
                     instructions.emit("step", step);
                     yield new Promise((resolve) => animation.start(resolve));
+                }
+                else if (isPranayamaSequence(step)) {
+                    yield next(step);
                 }
             }
             if (pranayama.cycles && cyclesRun + 1 < pranayama.cycles) {

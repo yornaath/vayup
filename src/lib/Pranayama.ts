@@ -35,15 +35,12 @@ export interface InstructionStep {
 }
 
 function isInstructionStep (step:any): step is InstructionStep {
-  return step && step.instruction && 
+  return step && step.instruction
 }
 
 
 export const BoxBreath = (ratio:[number, number, number, number], duration:number, cycles:number):PranayamaSequence => ({
   steps: [
-    { instruction: "3", duration: 1000 },
-    { instruction: "2", duration: 1000 },
-    { instruction: "1", duration: 1000 },
     {
       steps: [
         { breath: "puraka", instruction: "breath in" },
@@ -72,11 +69,7 @@ export const guide = (pranayama:PranayamaSequence):Guide => {
   const next = async (pranayama:PranayamaSequence, cyclesRun:number = 0) => new Promise(async (resolve) => {
 
     for(let step of pranayama.steps) {
-      if(isInstructionStep(step)) {
-        instructions.emit("step", step)
-        await Promise.delay(step.duration)
-      }
-      else if(isPranayamaStep(step))  {
+      if(isPranayamaStep(step))  {
 
         const [inn, innHold, out, outHold] = pranayama.ratio
         const durationPerUnit = pranayama.duration / (inn + innHold + out + outHold)
@@ -106,7 +99,7 @@ export const guide = (pranayama:PranayamaSequence):Guide => {
             duration =  step.duration || (outHold * durationPerUnit)
           break
         }
-
+        
         animation = Animated.timing(value, {
           toValue, duration, easing, useNativeDriver: true,
         })

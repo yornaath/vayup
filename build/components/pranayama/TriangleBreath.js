@@ -1,51 +1,81 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React from 'react';
 import { Svg } from 'expo';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
+import * as Pranayama from '../../lib/Pranayama';
 export default class Breath extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
-    }
-    runAnimation() {
-        // const [inn, out] = this.props.ratio
-        // const durationPerUnit = this.props.duration / (inn + out)
-        // const loop = () => {
-        //   Animated.timing(this.state.ballScale, {
-        //     toValue: 1,
-        //     useNativeDriver: true,
-        //     duration: inn * durationPerUnit
-        //   }).start(() => {
-        //     Animated.timing(this.state.ballScale, {
-        //       toValue: 0,
-        //       useNativeDriver: true,
-        //       duration: out * durationPerUnit
-        //     }).start(loop)
-        //   })
-        // }
-        // loop()
+        this.state = {
+            text: "",
+            ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
+            ballScale: new Animated.Value(0)
+        };
+        const boxBreath = Pranayama.BoxBreath([1, 1, 1, 0], 10 * 1000, Infinity);
+        this.guide = Pranayama.guide(boxBreath);
+        this.guide.instructions.on("step", (step) => {
+            this.setState({ text: step.instruction });
+        });
     }
     componentDidMount() {
-        this.runAnimation();
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.guide.start();
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
     }
     render() {
         const { size } = this.props;
-        // var scale = this.state.ballScale.interpolate({
-        //   inputRange: [0, 1],
-        //   outputRange: [0.5, 1],
-        //   extrapolate: 'clamp'
-        // })
+        var x = this.guide.value.x.interpolate({
+            inputRange: [0, 1],
+            outputRange: [this.props.size - strokeWidth, (this.props.size - strokeWidth) / 2, 0],
+            extrapolate: 'clamp'
+        });
+        var y = this.guide.value.y.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, -(this.props.size - strokeWidth)],
+            extrapolate: 'clamp'
+        });
+        var scale = this.guide.value.y.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 2],
+            extrapolate: 'clamp'
+        });
         return (React.createElement(View, { style: [styles.container, this.props.style] },
-            React.createElement(Svg, { height: size, width: size },
-                React.createElement(Svg.Polygon, { stroke: "black", fill: "transparent", strokeWidth: strokeWidth, points: `${size / 2 + (strokeWidth / 2)}, ${0 + (strokeWidth)} ${0 + strokeWidth}, ${size - (strokeWidth / 2)} ${size - (strokeWidth / 2)}, ${size - (strokeWidth / 2)}` }))));
+            React.createElement(View, { style: styles.triangleContainer },
+                React.createElement(Svg, { height: size, width: size },
+                    React.createElement(Svg.Path, { strokeLineJoin: "round", stroke: "black", strokeWidth: strokeWidth, fill: "transparent", d: `M ${size / 2},${strokeWidth} ${size - (strokeWidth / 2)},${size - (strokeWidth / 2)} ${strokeWidth},${size - (strokeWidth / 2)} z` }))),
+            React.createElement(Animated.View, { style: [
+                    styles.ball,
+                    {
+                        transform: [
+                            { translateX: x },
+                            { translateY: y },
+                            { scale: scale }
+                        ]
+                    }
+                ] })));
     }
 }
-const ballSize = 200;
+const ballSize = 20;
 const strokeWidth = 5;
+const ballOffset = (ballSize / 2);
 const styles = StyleSheet.create({
     container: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "red"
     },
     ballBorder: {
         borderWidth: 5,
@@ -56,9 +86,15 @@ const styles = StyleSheet.create({
         width: ballSize,
         height: ballSize,
         backgroundColor: "rgba(0,0,0, 0.9)",
-        borderRadius: ballSize,
-        justifyContent: "center",
-        alignItems: "center"
+        position: "absolute",
+        bottom: -ballOffset,
+        left: -ballOffset,
+        borderRadius: ballSize
+    },
+    triangleContainer: {
+        transform: [
+            { rotateZ: "180deg" }
+        ]
     }
 });
 //# sourceMappingURL=TriangleBreath.js.map
