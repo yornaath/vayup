@@ -11,6 +11,7 @@ import { StyleSheet, Text, View, Animated } from 'react-native';
 export default class BoxBreath extends React.Component {
     constructor(props) {
         super(props);
+        this.animationRunning = false;
         this.state = {
             text: "",
             breath: new Animated.ValueXY({ x: 0, y: 0 })
@@ -21,38 +22,47 @@ export default class BoxBreath extends React.Component {
             this.startAnimation();
         });
     }
-    startAnimation() {
-        let animation = () => {
-            this.setState({ text: "inhale" });
-            Animated.timing(this.state.breath, {
-                toValue: { x: 0, y: 1 },
-                useNativeDriver: true,
-                duration: this.props.duration
-            }).start(() => {
-                this.setState({ text: "hold" });
-                Animated.timing(this.state.breath, {
-                    toValue: { x: 1, y: 1 },
+    animateToValue(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise(resolve => {
+                this.animation = Animated.timing(this.state.breath, {
+                    toValue: value,
                     useNativeDriver: true,
                     duration: this.props.duration
-                }).start(() => {
-                    this.setState({ text: "exhale" });
-                    Animated.timing(this.state.breath, {
-                        toValue: { x: 1, y: 0 },
-                        useNativeDriver: true,
-                        duration: this.props.duration
-                    }).start(() => {
-                        this.setState({ text: "hold" });
-                        Animated.timing(this.state.breath, {
-                            toValue: { x: 0, y: 0 },
-                            useNativeDriver: true,
-                            duration: this.props.duration
-                        }).start(() => {
-                            animation();
-                        });
-                    });
                 });
+                this.animation.start(resolve);
             });
-        };
+        });
+    }
+    stopAnimation() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.animation) {
+                this.animation.stop();
+                this.animationRunning = false;
+            }
+        });
+    }
+    startAnimation() {
+        let animation = () => __awaiter(this, void 0, void 0, function* () {
+            this.setState({ text: "Innhale" });
+            yield this.animateToValue({ x: 0, y: 1 });
+            !this.animationRunning && ;
+            return null;
+            this.setState({ text: "Hold" });
+            yield this.animateToValue({ x: 1, y: 1 });
+            !this.animationRunning && ;
+            return null;
+            this.setState({ text: "Exhale" });
+            yield this.animateToValue({ x: 1, y: 0 });
+            !this.animationRunning && ;
+            return null;
+            this.setState({ text: "Hold" });
+            yield this.animateToValue({ x: 0, y: 0 });
+            !this.animationRunning && ;
+            return null;
+            animation();
+        });
+        this.animationRunning = true;
         return animation();
     }
     render() {
@@ -71,7 +81,7 @@ export default class BoxBreath extends React.Component {
             outputRange: [1, 2],
             extrapolate: 'clamp'
         });
-        return (React.createElement(View, { style: [styles.box, this.props.style] },
+        return (React.createElement(View, { style: [styles.box, { height: this.props.size, width: this.props.size }] },
             React.createElement(Animated.View, { style: [
                     styles.ball,
                     {
@@ -85,32 +95,38 @@ export default class BoxBreath extends React.Component {
             React.createElement(Text, { style: styles.text }, this.state.text)));
     }
 }
-const borderWidth = 5;
+const borderWidth = 4;
 const ballSize = 20;
 const ballOffset = (borderWidth / 2) + (ballSize / 2);
 const styles = StyleSheet.create({
     box: {
         borderWidth: borderWidth,
-        borderColor: "rgba(0,0,0,1)",
-        borderRadius: 0,
+        borderColor: "rgb(50,50,50)",
+        borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    animationContainer: {
         justifyContent: "center",
         alignItems: "center"
     },
     ball: {
         width: ballSize,
         height: ballSize,
-        backgroundColor: "rgba(0,0,0, 1)",
-        // shadowColor: 'white',
-        // shadowOffset: { width: 0, height: 0 },
-        // shadowOpacity: 0.5,
-        // shadowRadius: 5,
+        backgroundColor: "#2d67c4",
+        shadowColor: '#2d67c4',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.2,
+        shadowRadius: 0.5,
         position: "absolute",
         bottom: -ballOffset,
         left: -ballOffset,
         borderRadius: ballSize
     },
     text: {
-        fontSize: 20
+        fontSize: 25,
+        fontWeight: "normal",
+        color: "#2d67c4"
     }
 });
 //# sourceMappingURL=BoxBreath.js.map
