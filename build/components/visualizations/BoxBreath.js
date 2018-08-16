@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native';
 import { colors } from '../../theme';
 import Promise from 'bluebird';
 export default class BoxBreath extends React.Component {
@@ -47,13 +47,18 @@ export default class BoxBreath extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.duration !== nextProps.duration) {
             clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                this.stopAnimation();
-                this.state.breath.setValue({ x: 0, y: 0 });
-                yield Promise.delay(200);
-                setImmediate(() => this.startAnimation());
-            }), 500);
+            this.timeout = setTimeout(() => {
+                this.restartAnimation();
+            }, 500);
         }
+    }
+    restartAnimation() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.stopAnimation();
+            this.state.breath.setValue({ x: 0, y: 0 });
+            yield Promise.delay(200);
+            setImmediate(() => this.startAnimation());
+        });
     }
     startAnimation() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -95,10 +100,10 @@ export default class BoxBreath extends React.Component {
         });
         var scale = this.state.breath.y.interpolate({
             inputRange: [0, 1],
-            outputRange: [1, 2],
+            outputRange: [1, 2.2],
             extrapolate: 'clamp'
         });
-        return (React.createElement(View, { style: [styles.box, { height: this.props.size, width: this.props.size }] },
+        return (React.createElement(TouchableOpacity, { style: [styles.box, { height: this.props.size, width: this.props.size }], onPress: this.restartAnimation.bind(this) },
             React.createElement(Animated.View, { style: [
                     styles.ball,
                     {

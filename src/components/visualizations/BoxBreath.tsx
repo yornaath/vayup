@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Animated } from 'react-native' 
+import { StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native' 
 import {colors} from '../../theme'
 import Promise from 'bluebird'
 
@@ -55,13 +55,17 @@ export default class BoxBreath extends React.Component<Props, State> {
   componentWillReceiveProps(nextProps:Props) {
     if(this.props.duration !== nextProps.duration) {
       clearTimeout(this.timeout)
-      this.timeout = setTimeout(async () => {
-        this.stopAnimation()
-        this.state.breath.setValue({x: 0, y:0})
-        await Promise.delay(200)
-        setImmediate(() => this.startAnimation())
+      this.timeout = setTimeout(() => {
+        this.restartAnimation()
       }, 500)
     }
+  }
+
+  async restartAnimation() {
+    this.stopAnimation()
+    this.state.breath.setValue({x: 0, y:0})
+    await Promise.delay(200)
+    setImmediate(() => this.startAnimation())
   }
 
   async startAnimation() {
@@ -111,12 +115,12 @@ export default class BoxBreath extends React.Component<Props, State> {
 
     var scale = this.state.breath.y.interpolate({
       inputRange: [0, 1],
-      outputRange: [1, 2],
+      outputRange: [1, 2.2],
       extrapolate: 'clamp'
     })
 
     return (
-      <View style={[styles.box, {height: this.props.size, width: this.props.size}]}>
+      <TouchableOpacity style={[styles.box, {height: this.props.size, width: this.props.size}]} onPress={this.restartAnimation.bind(this)}>
           <Animated.View style={[
             styles.ball,
             {
@@ -130,7 +134,7 @@ export default class BoxBreath extends React.Component<Props, State> {
           <Text style={styles.text}>
             {this.state.text}
           </Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
