@@ -9,13 +9,12 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <BoxBreath 
+        {/* <BoxBreath 
           style={styles.boxBreath} 
           size={200}
-          duration={8 * 1000} 
-          ratio={[1,1,1,1]}/>
-        {/* <Breath duration={6000} ratio={[1,2]} />*/}
-        <TriangleBreath size={200} />
+          duration={4000}/>
+        <Breath ratio={[4000,6000]} />
+        <TriangleBreath size={200} ratio={[4000, 2000, 5000]} /> */}
       </View>
     );
   }

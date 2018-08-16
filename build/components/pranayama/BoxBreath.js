@@ -8,43 +8,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
-import * as Pranayama from '../../lib/Pranayama';
 export default class BoxBreath extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             text: "",
-            ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
-            ballScale: new Animated.Value(0)
+            breath: new Animated.ValueXY({ x: 0, y: 0 })
         };
-        const boxBreath = Pranayama.BoxBreath(this.props.ratio, this.props.duration, Infinity);
-        this.guide = Pranayama.guide(boxBreath);
-        this.guide.instructions.on("step", (step) => {
-            this.setState({ text: step.instruction });
-        });
     }
     componentDidMount() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.guide.start();
-            }
-            catch (err) {
-                console.log(err);
-            }
+            this.startAnimation();
         });
     }
+    startAnimation() {
+        let animation = () => {
+            this.setState({ text: "inhale" });
+            Animated.timing(this.state.breath, {
+                toValue: { x: 0, y: 1 },
+                useNativeDriver: true,
+                duration: this.props.duration
+            }).start(() => {
+                this.setState({ text: "hold" });
+                Animated.timing(this.state.breath, {
+                    toValue: { x: 1, y: 1 },
+                    useNativeDriver: true,
+                    duration: this.props.duration
+                }).start(() => {
+                    this.setState({ text: "exhale" });
+                    Animated.timing(this.state.breath, {
+                        toValue: { x: 1, y: 0 },
+                        useNativeDriver: true,
+                        duration: this.props.duration
+                    }).start(() => {
+                        this.setState({ text: "hold" });
+                        Animated.timing(this.state.breath, {
+                            toValue: { x: 0, y: 0 },
+                            useNativeDriver: true,
+                            duration: this.props.duration
+                        }).start(() => {
+                            animation();
+                        });
+                    });
+                });
+            });
+        };
+        return animation();
+    }
     render() {
-        var x = this.guide.value.x.interpolate({
+        var x = this.state.breath.x.interpolate({
             inputRange: [0, 1],
             outputRange: [0, this.props.size - borderWidth],
             extrapolate: 'clamp'
         });
-        var y = this.guide.value.y.interpolate({
+        var y = this.state.breath.y.interpolate({
             inputRange: [0, 1],
             outputRange: [0, -(this.props.size - borderWidth)],
             extrapolate: 'clamp'
         });
-        var scale = this.guide.value.y.interpolate({
+        var scale = this.state.breath.y.interpolate({
             inputRange: [0, 1],
             outputRange: [1, 2],
             extrapolate: 'clamp'
@@ -70,7 +92,7 @@ const styles = StyleSheet.create({
     box: {
         borderWidth: borderWidth,
         borderColor: "rgba(0,0,0,1)",
-        borderRadius: 6,
+        borderRadius: 0,
         justifyContent: "center",
         alignItems: "center"
     },

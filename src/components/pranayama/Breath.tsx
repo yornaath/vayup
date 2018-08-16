@@ -3,7 +3,6 @@ import { StyleSheet, View, Animated } from 'react-native'
 
 interface Props {
   ratio: [number, number];
-  duration: number;
   style?: Object
 }
 
@@ -23,23 +22,22 @@ export default class Breath extends React.Component<Props, State> {
   runAnimation() {
 
     const [inn, out] = this.props.ratio
-    const durationPerUnit = this.props.duration / (inn + out)
 
-    const loop = () => {
+    const animation = () => {
       Animated.timing(this.state.ballScale, {
         toValue: 1,
         useNativeDriver: true,
-        duration: inn * durationPerUnit
+        duration: inn 
       }).start(() => {
         Animated.timing(this.state.ballScale, {
           toValue: 0,
           useNativeDriver: true,
-          duration: out * durationPerUnit
-        }).start(loop)
+          duration: out
+        }).start(animation)
       })
     }
 
-    loop()
+    return animation()
   }
 
   componentDidMount() {

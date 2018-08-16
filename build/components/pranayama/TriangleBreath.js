@@ -9,44 +9,60 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import React from 'react';
 import { Svg } from 'expo';
 import { StyleSheet, View, Animated } from 'react-native';
-import * as Pranayama from '../../lib/Pranayama';
-export default class Breath extends React.Component {
+export default class TriangleBreath extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             text: "",
-            ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
-            ballScale: new Animated.Value(0)
+            ballLocation: new Animated.ValueXY({ x: 0.5, y: 0 })
         };
-        const boxBreath = Pranayama.BoxBreath([1, 1, 1, 0], 10 * 1000, Infinity);
-        this.guide = Pranayama.guide(boxBreath);
-        this.guide.instructions.on("step", (step) => {
-            this.setState({ text: step.instruction });
-        });
     }
     componentDidMount() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                yield this.guide.start();
-            }
-            catch (err) {
-                console.log(err);
-            }
+            this.startAnimation();
         });
+    }
+    startAnimation() {
+        const [inn, innHold, out] = this.props.ratio;
+        let animation = () => {
+            this.setState({ text: "in" });
+            Animated.timing(this.state.ballLocation, {
+                toValue: { x: 0, y: 1 },
+                useNativeDriver: true,
+                duration: inn
+            }).start(() => {
+                this.setState({ text: "hold" });
+                Animated.timing(this.state.ballLocation, {
+                    toValue: { x: 1, y: 1 },
+                    useNativeDriver: true,
+                    duration: innHold
+                }).start(() => {
+                    this.setState({ text: "out" });
+                    Animated.timing(this.state.ballLocation, {
+                        toValue: { x: 0.5, y: 0 },
+                        useNativeDriver: true,
+                        duration: out
+                    }).start(() => {
+                        animation();
+                    });
+                });
+            });
+        };
+        return animation();
     }
     render() {
         const { size } = this.props;
-        var x = this.guide.value.x.interpolate({
+        var x = this.state.ballLocation.x.interpolate({
             inputRange: [0, 1],
-            outputRange: [this.props.size - strokeWidth, (this.props.size - strokeWidth) / 2, 0],
+            outputRange: [0, this.props.size - strokeWidth],
             extrapolate: 'clamp'
         });
-        var y = this.guide.value.y.interpolate({
+        var y = this.state.ballLocation.y.interpolate({
             inputRange: [0, 1],
             outputRange: [0, -(this.props.size - strokeWidth)],
             extrapolate: 'clamp'
         });
-        var scale = this.guide.value.y.interpolate({
+        var scale = this.state.ballLocation.y.interpolate({
             inputRange: [0, 1],
             outputRange: [1, 2],
             extrapolate: 'clamp'
@@ -75,7 +91,6 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "red"
     },
     ballBorder: {
         borderWidth: 5,
@@ -85,16 +100,18 @@ const styles = StyleSheet.create({
     ball: {
         width: ballSize,
         height: ballSize,
-        backgroundColor: "rgba(0,0,0, 0.9)",
+        backgroundColor: "rgba(0,0,0, 1)",
         position: "absolute",
-        bottom: -ballOffset,
-        left: -ballOffset,
+        bottom: -(ballOffset - (strokeWidth / 2)),
+        left: -(ballOffset - (strokeWidth / 2)),
         borderRadius: ballSize
     },
     triangleContainer: {
         transform: [
             { rotateZ: "180deg" }
-        ]
-    }
+        ],
+        justifyContent: "center",
+        alignItems: "center"
+    },
 });
 //# sourceMappingURL=TriangleBreath.js.map

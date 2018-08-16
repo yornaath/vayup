@@ -1,64 +1,81 @@
 import React from 'react'
 import {Svg} from 'expo'
-import { StyleSheet, View, Animated } from 'react-native'
-import * as Pranayama from '../../lib/Pranayama'
+import { StyleSheet, View, Animated, Text } from 'react-native'
 
 interface Props {
   ratio: [number, number, number];
-  duration: number;
   style?: Object;
   size: number;
 }
 
 interface State {
-  
+  text: string;
+  ballLocation: Animated.ValueXY;
 }
 
-export default class Breath extends React.Component<Props, State> {
-
-  guide: Pranayama.Guide
+export default class TriangleBreath extends React.Component<Props, State> {
 
   constructor(props:Props) {
     super(props)
     this.state = {
       text: "",
-      ballLocation: new Animated.ValueXY({ x: 0, y: 0 }),
-      ballScale: new Animated.Value(0)
+      ballLocation: new Animated.ValueXY({ x: 0.5, y: 0 })
     }
-    const boxBreath = Pranayama.BoxBreath([1,1,1,0], 10 * 1000, Infinity)
-    this.guide = Pranayama.guide(boxBreath)
-    this.guide.instructions.on("step", (step) => {
-      this.setState({ text: step.instruction })
-    })
   }
 
   async componentDidMount() {
-    try {
-      await this.guide.start()
-    }
-    catch(err) {
-      console.log(err)
-    }
+    this.startAnimation()
   }
 
+  startAnimation() {
+
+    const [inn, innHold, out] = this.props.ratio
+
+    let animation = () => {
+      this.setState({text: "in"})
+      Animated.timing(this.state.ballLocation, {
+        toValue: {x: 0, y: 1},
+        useNativeDriver: true,
+        duration: inn
+      }).start(() => {
+        this.setState({text: "hold"})
+        Animated.timing(this.state.ballLocation, {
+          toValue: {x: 1, y: 1},
+          useNativeDriver: true,
+          duration: innHold
+        }).start(() => {
+          this.setState({text: "out"})
+          Animated.timing(this.state.ballLocation, {
+            toValue: {x: 0.5, y: 0},
+            useNativeDriver: true,
+            duration: out
+          }).start(() => {
+            animation()
+          })
+        })
+      })
+    }
+
+    return animation()
+  }
 
   render() {
 
     const {size} = this.props
 
-    var x = this.guide.value.x.interpolate({
+    var x = this.state.ballLocation.x.interpolate({
       inputRange: [0, 1],
-      outputRange: [this.props.size - strokeWidth, (this.props.size - strokeWidth) / 2, 0],
+      outputRange: [0, this.props.size - strokeWidth],
       extrapolate: 'clamp'
     })
 
-    var y = this.guide.value.y.interpolate({
+    var y = this.state.ballLocation.y.interpolate({
       inputRange: [0, 1],
       outputRange: [0, -(this.props.size - strokeWidth)],
       extrapolate: 'clamp'
     })
 
-    var scale = this.guide.value.y.interpolate({
+    var scale = this.state.ballLocation.y.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 2],
       extrapolate: 'clamp'
@@ -72,15 +89,15 @@ export default class Breath extends React.Component<Props, State> {
           </Svg>
         </View>
         <Animated.View style={[
-          styles.ball,
-          {
-            transform: [
-              {translateX: x},
-              {translateY: y},
-              {scale: scale}
-            ]
-          }
-        ]}></Animated.View>
+            styles.ball,
+            {
+              transform: [
+                {translateX: x},
+                {translateY: y},
+                {scale: scale}
+              ]
+            }
+          ]}></Animated.View>
       </View>
     );
   }
@@ -95,7 +112,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "red"
   },
   ballBorder: {
     borderWidth: 5,
@@ -105,15 +121,17 @@ const styles = StyleSheet.create({
   ball: {
     width: ballSize,
     height: ballSize,
-    backgroundColor: "rgba(0,0,0, 0.9)",
+    backgroundColor: "rgba(0,0,0, 1)",
     position: "absolute",
-    bottom: -ballOffset,
-    left: -ballOffset,
+    bottom: -(ballOffset - (strokeWidth / 2)),
+    left: -(ballOffset - (strokeWidth / 2)),
     borderRadius: ballSize
   },
-  triangleContainer {
+  triangleContainer: {
     transform: [
       {rotateZ: "180deg"}
-    ]
-  }
+    ],
+    justifyContent: "center",
+    alignItems: "center"
+  },
 });
