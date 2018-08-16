@@ -8,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
+import { colors } from '../../theme';
+import Promise from 'bluebird';
 export default class BoxBreath extends React.Component {
     constructor(props) {
         super(props);
@@ -37,33 +39,48 @@ export default class BoxBreath extends React.Component {
     stopAnimation() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.animation) {
-                this.animation.stop();
                 this.animationRunning = false;
+                this.animation.stop();
             }
         });
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.duration !== nextProps.duration) {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+                this.stopAnimation();
+                this.state.breath.setValue({ x: 0, y: 0 });
+                yield Promise.delay(200);
+                setImmediate(() => this.startAnimation());
+            }), 500);
+        }
+    }
     startAnimation() {
-        let animation = () => __awaiter(this, void 0, void 0, function* () {
-            this.setState({ text: "Innhale" });
-            yield this.animateToValue({ x: 0, y: 1 });
-            !this.animationRunning && ;
-            return null;
-            this.setState({ text: "Hold" });
-            yield this.animateToValue({ x: 1, y: 1 });
-            !this.animationRunning && ;
-            return null;
-            this.setState({ text: "Exhale" });
-            yield this.animateToValue({ x: 1, y: 0 });
-            !this.animationRunning && ;
-            return null;
-            this.setState({ text: "Hold" });
-            yield this.animateToValue({ x: 0, y: 0 });
-            !this.animationRunning && ;
-            return null;
-            animation();
+        return __awaiter(this, void 0, void 0, function* () {
+            let animation = () => __awaiter(this, void 0, void 0, function* () {
+                if (!this.animationRunning)
+                    return;
+                this.setState({ text: "Innhale" });
+                yield this.animateToValue({ x: 0, y: 1 });
+                if (!this.animationRunning)
+                    return;
+                this.setState({ text: "Hold" });
+                yield this.animateToValue({ x: 1, y: 1 });
+                if (!this.animationRunning)
+                    return;
+                this.setState({ text: "Exhale" });
+                yield this.animateToValue({ x: 1, y: 0 });
+                if (!this.animationRunning)
+                    return;
+                this.setState({ text: "Hold" });
+                yield this.animateToValue({ x: 0, y: 0 });
+                if (!this.animationRunning)
+                    return;
+                animation();
+            });
+            this.animationRunning = true;
+            return animation();
         });
-        this.animationRunning = true;
-        return animation();
     }
     render() {
         var x = this.state.breath.x.interpolate({
@@ -113,8 +130,8 @@ const styles = StyleSheet.create({
     ball: {
         width: ballSize,
         height: ballSize,
-        backgroundColor: "#2d67c4",
-        shadowColor: '#2d67c4',
+        backgroundColor: colors.blue,
+        shadowColor: colors.blue,
         shadowOffset: { width: 0, height: 0 },
         shadowOpacity: 0.2,
         shadowRadius: 0.5,
@@ -126,7 +143,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 25,
         fontWeight: "normal",
-        color: "#2d67c4"
+        color: colors.blue
     }
 });
 //# sourceMappingURL=BoxBreath.js.map

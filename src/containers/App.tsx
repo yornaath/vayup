@@ -20,7 +20,7 @@ export default class App extends React.Component {
               Box Breath
             </Text>
             <Text style={styles.titleSubHeader}>
-              Even breath to calm and increase blood oxygenation.
+              Calming breath that regulates the autonomic nervous system.
             </Text>
           </View>
         </View>

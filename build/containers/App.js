@@ -9,7 +9,7 @@ export default class App extends React.Component {
             React.createElement(View, { style: styles.header },
                 React.createElement(View, { style: styles.title },
                     React.createElement(Text, { style: styles.titleHeader }, "Box Breath"),
-                    React.createElement(Text, { style: styles.titleSubHeader }, "Even breath to calm and increase blood oxygenation."))),
+                    React.createElement(Text, { style: styles.titleSubHeader }, "Calming breath that regulates the autonomic nervous system."))),
             React.createElement(View, { style: styles.contentContainer },
                 React.createElement(BoxBreath, null))));
     }

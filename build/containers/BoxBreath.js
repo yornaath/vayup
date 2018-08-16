@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Slider } from 'react-native';
 import BoxBreathVisualization from '../components/visualizations/BoxBreath';
-import { spacing } from '../theme';
+import { spacing, colors } from '../theme';
 const { width } = Dimensions.get("window");
 export default class BoxBreath extends React.Component {
     constructor(props) {
@@ -16,9 +16,9 @@ export default class BoxBreath extends React.Component {
     render() {
         return (React.createElement(View, { style: [styles.container] },
             React.createElement(View, { style: styles.visualizationContainer },
-                React.createElement(BoxBreathVisualization, { size: (width / 100) * 70, duration: this.state.duration * 1000 })),
+                React.createElement(BoxBreathVisualization, { size: ((width - (spacing.four * 2)) / 100) * 100, duration: this.state.duration * 1000 })),
             React.createElement(View, { style: styles.sliderContainer },
-                React.createElement(Slider, { minimumValue: 1, maximumValue: 30, value: this.state.duration, style: styles.slider, onValueChange: this.onDurationSliderChange }),
+                React.createElement(Slider, { minimumValue: 1, maximumValue: 30, step: 1, value: this.state.duration, style: styles.slider, onValueChange: this.onDurationSliderChange }),
                 React.createElement(Text, { style: styles.durationText },
                     this.state.duration,
                     " seconds"))));
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     visualizationContainer: {
         flex: 3,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "flex-start"
     },
     sliderContainer: {
         flex: 1,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         width: width - (spacing.four * 2)
     },
     durationText: {
-        color: "blue"
+        color: colors.blue
     }
 });
 //# sourceMappingURL=BoxBreath.js.map

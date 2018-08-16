@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native' 
-
+import {colors} from '../../theme'
+import Promise from 'bluebird'
 
 interface Props {
   duration: number;
@@ -46,30 +47,44 @@ export default class BoxBreath extends React.Component<Props, State> {
 
   async stopAnimation() {
     if(this.animation) {
-      this.animation.stop()
       this.animationRunning = false
+      this.animation.stop()
     }
   }
 
-  startAnimation() {
+  componentWillReceiveProps(nextProps:Props) {
+    if(this.props.duration !== nextProps.duration) {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(async () => {
+        this.stopAnimation()
+        this.state.breath.setValue({x: 0, y:0})
+        await Promise.delay(200)
+        setImmediate(() => this.startAnimation())
+      }, 500)
+    }
+  }
+
+  async startAnimation() {
 
     let animation = async () => {
 
+      if(!this.animationRunning) return
+
       this.setState({text: "Innhale"})
       await this.animateToValue({x: 0, y: 1})
-      !this.animationRunning && return null
+      if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
       await this.animateToValue({x: 1, y: 1})
-      !this.animationRunning && return null
+      if(!this.animationRunning) return
 
       this.setState({text: "Exhale"})
       await this.animateToValue({x: 1, y: 0})
-      !this.animationRunning && return null
+      if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
       await this.animateToValue({x: 0, y: 0})
-      !this.animationRunning && return null
+      if(!this.animationRunning) return
 
       animation()
     }
@@ -139,8 +154,8 @@ const styles = StyleSheet.create({
   ball: {
     width: ballSize,
     height: ballSize,
-    backgroundColor: "#2d67c4",
-    shadowColor: '#2d67c4',
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 0.5,
@@ -152,6 +167,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     fontWeight: "normal",
-    color: "#2d67c4"
+    color: colors.blue
   }
 });
