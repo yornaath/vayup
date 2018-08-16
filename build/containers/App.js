@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import BoxBreath from '../containers/BoxBreath';
 import { LinearGradient } from 'expo';
 import { heading, spacing } from '../theme';
+const dimensions = Dimensions.get("screen");
 export default class App extends React.Component {
     render() {
         return (React.createElement(LinearGradient, { start: [0.1, 0.1], end: [1, 1], colors: ["rgb(255,255,255)", "rgb(235,235,235)"], style: styles.container },
             React.createElement(View, { style: styles.header },
+                React.createElement(Image, { source: require("../../assets/title_logo.png"), style: styles.logoTitle, resizeMode: "contain" }),
                 React.createElement(View, { style: styles.title },
                     React.createElement(Text, { style: styles.titleHeader }, "Box Breath"),
                     React.createElement(Text, { style: styles.titleSubHeader }, "Calming breath that regulates the autonomic nervous system."))),
@@ -18,6 +20,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    logoTitle: {
+        position: "absolute",
+        top: 40,
+        width: 200,
+        height: 40,
+        left: (dimensions.width / 2) - 100
     },
     header: {
         flex: 1,
