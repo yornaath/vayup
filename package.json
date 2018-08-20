@@ -1,7 +1,8 @@
 {
-  "name": "empty-project-template",
+  "name": "vayup",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "privacy": "unlisted",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
