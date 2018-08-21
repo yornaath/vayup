@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native'
-import TriangleBreath from '../containers/TriangleBreath'
 import Breath from '../containers/Breath'
 import {LinearGradient} from 'expo'
 import {heading, spacing} from '../theme'
 
-const dimensions = Dimensions.get("screen")
+const screen = Dimensions.get("screen")
+
 
 export default class App extends React.Component {
 
@@ -34,8 +34,9 @@ export default class App extends React.Component {
         </View>
 
       </LinearGradient>
-    );
+    )
   }
+
 }
 
 
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     top: 40,
     width: 200,
     height: 40,
-    left: (dimensions.width / 2) - 100
+    left: (screen.width / 2) - 100
   },
   header: {
     flex: 1,
