@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, Slider } from 'react-native' 
+import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
+import range from 'lodash/range'
 import BoxBreathVisualization from '../components/visualizations/BoxBreath'
-import { spacing, colors } from '../theme'
+import { spacing, colors, heading} from '../theme'
 
 
 interface Props {
@@ -23,7 +24,7 @@ export default class BoxBreath extends React.Component<Props, State> {
     }
   }
 
-  onDurationSliderChange = (duration:number) => {
+  onSecondsChange = (duration:number) => {
     this.setState({ duration: Math.floor(duration) })
   }
 
@@ -35,10 +36,17 @@ export default class BoxBreath extends React.Component<Props, State> {
           <BoxBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} duration={this.state.duration * 1000} />
         </View>
         
-        <View style={styles.sliderContainer}>
-          <Slider minimumValue={1} maximumValue={30} step={1} value={this.state.duration} style={styles.slider} onValueChange={this.onDurationSliderChange}/>
+        <View style={styles.secondsChooserContainer}>
+          <View style={styles.pickerContainer}>
+            <Picker style={styles.secondsPicker} itemStyle={styles.secondsPickerItem} selectedValue={this.state.duration} onValueChange={this.onSecondsChange}>
+              {
+                range(1,60).map((num) => 
+                  <Picker.Item key={num} label={num.toString()} value={num}/>)
+              }
+            </Picker>
+          </View>
           <Text style={styles.durationText}>
-            {this.state.duration} seconds
+            seconds
           </Text>
         </View>
 
@@ -59,15 +67,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start"
   },
-  sliderContainer: {
+  secondsChooserContainer: {
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  slider: {
-    width: width - (spacing.four * 2)
+  pickerContainer: {
+    flex: 2,
+    justifyContent: "flex-end",
+  },
+  secondsPicker: {
+    width: 800,
+    height: 50,
+    marginBottom: spacing.two,
+    overflow: "hidden",
+    justifyContent:'center',
+  },
+  secondsPickerItem: {
+    fontSize: 40,
+    color: colors.blue
   },
   durationText: {
+    flex: 1,
     color: colors.blue
   }
 });

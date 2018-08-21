@@ -17,13 +17,17 @@
   },
   "dependencies": {
     "@types/bluebird": "^3.5.23",
+    "@types/lodash": "^4.14.116",
     "@types/ms": "^0.7.30",
+    "@types/react-navigation": "^2.0.16",
     "bluebird": "^3.5.1",
     "events": "^3.0.0",
     "expo": "^29.0.0",
+    "lodash": "^4.17.10",
     "ms": "^2.1.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
+    "react-navigation": "^2.11.2",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0"
   },
