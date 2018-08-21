@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native' 
-import {colors} from '../../theme'
+import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native' 
 import Promise from 'bluebird'
+import {colors} from '../../theme'
 
 interface Props {
   duration: number;

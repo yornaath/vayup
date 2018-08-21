@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import BoxBreath from '../containers/BoxBreath';
+import Breath from '../containers/Breath';
 import { LinearGradient } from 'expo';
 import { heading, spacing } from '../theme';
 const dimensions = Dimensions.get("screen");
@@ -13,7 +13,7 @@ export default class App extends React.Component {
                     React.createElement(Text, { style: styles.titleHeader }, "Box Breath"),
                     React.createElement(Text, { style: styles.titleSubHeader }, "Calming breath that regulates the autonomic nervous system."))),
             React.createElement(View, { style: styles.contentContainer },
-                React.createElement(BoxBreath, null))));
+                React.createElement(Breath, null))));
     }
 }
 const styles = StyleSheet.create({

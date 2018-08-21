@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import React from 'react';
 import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native';
-import { colors } from '../../theme';
 import Promise from 'bluebird';
+import { colors } from '../../theme';
 export default class BoxBreath extends React.Component {
     constructor(props) {
         super(props);

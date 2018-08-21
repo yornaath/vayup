@@ -1,6 +1,7 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { StyleSheet, View, Animated, Text } from 'react-native'
+import { colors } from '../../theme'
 
 interface Props {
   ratio: [number, number, number];
@@ -121,7 +122,11 @@ const styles = StyleSheet.create({
   ball: {
     width: ballSize,
     height: ballSize,
-    backgroundColor: "rgba(0,0,0, 1)",
+    backgroundColor: colors.blue,
+    shadowColor: colors.blue,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 0.5,
     position: "absolute",
     bottom: -(ballOffset - (strokeWidth / 2)),
     left: -(ballOffset - (strokeWidth / 2)),

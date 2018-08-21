@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native'
-import BoxBreath from '../containers/BoxBreath'
+import TriangleBreath from '../containers/TriangleBreath'
+import Breath from '../containers/Breath'
 import {LinearGradient} from 'expo'
 import {heading, spacing} from '../theme'
 
@@ -29,7 +30,7 @@ export default class App extends React.Component {
         </View>
 
         <View style={styles.contentContainer}>
-          <BoxBreath />
+          <Breath/>
         </View>
 
       </LinearGradient>
