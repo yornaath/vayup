@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
 import range from 'lodash/range'
+import BreathHeader from '../components/BreathHeader'
 import BoxBreathVisualization from '../components/visualizations/BoxBreath'
-import { spacing, colors, heading} from '../theme'
+import { spacing, colors} from '../theme'
 
 
 interface Props {
@@ -32,6 +33,11 @@ export default class BoxBreath extends React.Component<Props, State> {
     return (
       <View style={[styles.container]}>
         
+        <BreathHeader 
+          title="Box Breath"
+          subTitle="An exploration of the corners of the breath that regulates the autonimic nervous system."
+        />
+
         <View style={styles.visualizationContainer}>
           <BoxBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} duration={this.state.duration * 1000} />
         </View>

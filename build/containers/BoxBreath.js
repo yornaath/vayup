@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native';
 import range from 'lodash/range';
+import BreathHeader from '../components/BreathHeader';
 import BoxBreathVisualization from '../components/visualizations/BoxBreath';
 import { spacing, colors } from '../theme';
 const { width } = Dimensions.get("window");
@@ -16,6 +17,7 @@ export default class BoxBreath extends React.Component {
     }
     render() {
         return (React.createElement(View, { style: [styles.container] },
+            React.createElement(BreathHeader, { title: "Box Breath", subTitle: "An exploration of the corners of the breath that regulates the autonimic nervous system." }),
             React.createElement(View, { style: styles.visualizationContainer },
                 React.createElement(BoxBreathVisualization, { size: ((width - (spacing.four * 2)) / 100) * 100, duration: this.state.duration * 1000 })),
             React.createElement(View, { style: styles.secondsChooserContainer },

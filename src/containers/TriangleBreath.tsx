@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
 import range from 'lodash/range'
+import BreathHeader from '../components/BreathHeader'
 import TriangleBreathVisualization from '../components/visualizations/TriangleBreath'
 import { spacing, colors, heading} from '../theme'
 
@@ -32,6 +33,11 @@ export default class TriangleBreath extends React.Component<Props, State> {
     return (
       <View style={[styles.container]}>
         
+        <BreathHeader 
+          title="Triangle Breath"
+          subTitle="Emphasize controll."
+        />
+
         <View style={styles.visualizationContainer}>
           <TriangleBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} ratio={[4000, 2000, 5000]} />
         </View>

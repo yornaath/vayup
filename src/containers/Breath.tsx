@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
 import range from 'lodash/range'
 import BreathVisualization from '../components/visualizations/Breath'
+import BreathHeader from '../components/BreathHeader'
+import RatioPicker from '../components/RatioPicker'
 import { spacing, colors, heading} from '../theme'
 
 
@@ -35,23 +37,16 @@ export default class Breath extends React.Component<Props, State> {
     return (
       <View style={[styles.container]}>
         
+        <BreathHeader 
+          title="Just Breathe"
+          subTitle="Relieve stress or anxiety by training your breath to the vizualisation."
+        />
+
         <View style={styles.visualizationContainer}>
           <BreathVisualization ratio={[duration, duration]} size={((width - (spacing.four * 2)) / 100) * 100}/>
         </View>
         
-        <View style={styles.secondsChooserContainer}>
-          <View style={styles.pickerContainer}>
-            <Picker style={styles.secondsPicker} itemStyle={styles.secondsPickerItem} selectedValue={this.state.duration} onValueChange={this.onSecondsChange}>
-              {
-                range(1,60).map((num) => 
-                  <Picker.Item key={num} label={num.toString()} value={num}/>)
-              }
-            </Picker>
-          </View>
-          <Text style={styles.durationText}>
-            seconds
-          </Text>
-        </View>
+        <RatioPicker style={styles.ratioPicker}/>
 
       </View>
     );
@@ -63,35 +58,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 3,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: "column"
   },
   visualizationContainer: {
     flex: 3,
     justifyContent: "center",
     alignItems: "flex-start"
   },
-  secondsChooserContainer: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  pickerContainer: {
-    flex: 2,
-    justifyContent: "flex-end",
-  },
-  secondsPicker: {
-    width: 800,
-    height: 50,
-    marginBottom: spacing.two,
-    overflow: "hidden",
-    justifyContent:'center',
-  },
-  secondsPickerItem: {
-    fontSize: 40,
-    color: colors.blue
-  },
-  durationText: {
-    flex: 1,
-    color: colors.blue
+  ratioPicker: {
+    flex: 1
   }
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native';
 import range from 'lodash/range';
+import BreathHeader from '../components/BreathHeader';
 import TriangleBreathVisualization from '../components/visualizations/TriangleBreath';
 import { spacing, colors } from '../theme';
 const { width } = Dimensions.get("window");
@@ -16,6 +17,7 @@ export default class TriangleBreath extends React.Component {
     }
     render() {
         return (React.createElement(View, { style: [styles.container] },
+            React.createElement(BreathHeader, { title: "Triangle Breath", subTitle: "Emphasize controll." }),
             React.createElement(View, { style: styles.visualizationContainer },
                 React.createElement(TriangleBreathVisualization, { size: ((width - (spacing.four * 2)) / 100) * 100, ratio: [4000, 2000, 5000] })),
             React.createElement(View, { style: styles.secondsChooserContainer },
