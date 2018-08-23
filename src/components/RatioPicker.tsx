@@ -100,8 +100,8 @@ export default class RatioPicker extends React.Component<Props, State> {
         </Animated.Text>
         <View style={styles.pickersContainer}>
           {
-            map(showValues, (ratio, key) => (
-              <View key={key} style={styles.ratioContainer} onTouchStart={this.activityHandler}>
+            map(showValues, (ratio) => (
+              <View key={ratio} style={styles.ratioContainer} onTouchStart={this.activityHandler}>
                 <View style={styles.pickerContainer}>
                   <Picker style={[styles.secondsPicker, { overflow: !active ? "hidden" : "visible" }]}  itemStyle={styles.secondsPickerItem} selectedValue={value[ratio]} onValueChange={this.createValueChangeHandler(ratio)}>
                     {
