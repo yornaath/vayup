@@ -4,6 +4,7 @@ import Breath from './containers/Breath'
 import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import {LinearGradient, Asset} from 'expo'
+import Color from 'color'
 import {spacing, colors, heading} from './theme'
 
 const screen = Dimensions.get("screen")
@@ -169,7 +170,12 @@ const styles = StyleSheet.create({
     left: spacing.four,
     width: 24,
     height: 24,
-    borderRadius: 24
+    borderRadius: 24,
+    shadowOffset: {height: 0, width: 0},
+    shadowRadius: 1,
+    shadowOpacity: 0.5,
+    elevation: 1,
+    shadowColor: 'black'
   },
   menuContainer: {
     position: "absolute",

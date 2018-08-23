@@ -1,19 +1,19 @@
 
 export const heading =  {
-  one: 30,
+  one: 32,
   two: 22,
   three: 16,
   four: 12
 }
 
 export const spacing = {
-  one: 8,
+  one: 16,
   two: 24,
-  three: 32,
-  four: 40
+  three: 30,
+  four: 36
 }
 
 export const colors = {
-  blue: "#2d67c4",
+  blue: "rgb(43, 131, 219)",
   black: "rgb(253,253,253)"
 }

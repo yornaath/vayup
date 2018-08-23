@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: colors.blue,
     padding: 4,
-    backgroundColor: "white",
     borderRadius: 2
   },
   activitySurface: {
