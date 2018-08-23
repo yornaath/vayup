@@ -1,10 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
-import range from 'lodash/range'
+import { StyleSheet, View, Dimensions } from 'react-native'
 import BreathVisualization from '../components/visualizations/Breath'
 import BreathHeader from '../components/BreathHeader'
 import RatioPicker, {Ratio} from '../components/RatioPicker'
-import { spacing, colors, heading} from '../theme'
+import { spacing } from '../theme'
 
 
 interface Props {

@@ -14,5 +14,6 @@ export const spacing = {
 }
 
 export const colors = {
-  blue: "#2d67c4"
+  blue: "#2d67c4",
+  black: "rgb(253,253,253)"
 }
