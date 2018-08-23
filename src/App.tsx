@@ -1,13 +1,16 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native'
 import Breath from './containers/Breath'
-import {LinearGradient} from 'expo'
+import BoxBreath from './containers/BoxBreath'
+import TriangleBreath from './containers/TriangleBreath'
+import {LinearGradient, Asset} from 'expo'
 import {spacing, colors, heading} from './theme'
 
 const screen = Dimensions.get("screen")
 
 interface State {
   menuOpen: boolean
+  url: string
 }
 
 interface Props {
@@ -19,20 +22,26 @@ export default class App extends React.Component<Props, State> {
   menuAnimation = new Animated.Value(0)
 
   state = {
-    menuOpen: false
+    menuOpen: false,
+    url: "breathe"
   }
+
 
   menuButtonPress = () => {
     this.setState({menuOpen: !this.state.menuOpen})
   }
 
+  navigate = (url:string) => () => {
+    this.setState({ url, menuOpen: false })
+  }
+
   componentWillUpdate(nextProps:Props, nextState:State) {
-    if(nextState.menuOpen) {
+    if(!this.state.menuOpen && nextState.menuOpen) {
       Animated.spring(this.menuAnimation, {
         toValue: 1
       }).start()
     }
-    else {
+    else if(this.state.menuOpen) {
       Animated.spring(this.menuAnimation, {
         toValue: 0
       }).start()
@@ -40,6 +49,8 @@ export default class App extends React.Component<Props, State> {
   }
 
   render() {
+
+    const {url} = this.state
 
     const menuScale = this.menuAnimation.interpolate({
       inputRange: [0,1],
@@ -69,34 +80,48 @@ export default class App extends React.Component<Props, State> {
         colors={["rgb(255,255,255)", "rgb(235,235,235)"]}
         style={styles.container}>
 
-        <Image source={require("../assets/title_logo.png")} style={styles.logoTitle} resizeMode={"contain"}/>
+        <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
 
         <View style={styles.contentContainer}>
-          <Breath/>
+          {
+            url == "breathe" ?
+              <Breath /> :
+            url == "boxbreath" ?
+              <BoxBreath /> :
+            url == "detoxbreath" ?
+              <TriangleBreath />
+            : null
+          }
         </View>
 
         <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
 
         <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-          <Image source={require("../assets/line-menu.png")} style={styles.menuIconImage} resizeMode={"contain"}/>
+          <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
         </TouchableOpacity>
-        innerMenuRotation
+
+        <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
+          <Animated.Image source={Asset.fromModule(require("../assets/line-menu-white.png"))} style={[styles.menuIconImage, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
+        </TouchableOpacity>
+
+        <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
+        
         <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
           {scale: innerMenuScale},
           {rotate: innerMenuRotation}
         ]}]}>
-          <View style={styles.menuButtonContainer}>
+          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
             <Text style={styles.menuButtonText}>Just Breathe</Text>
             <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
-          </View>
-          <View style={styles.menuButtonContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
             <Text style={styles.menuButtonText}>Box Breath</Text>
             <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
-          </View>
-          <View style={styles.menuButtonContainer}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
             <Text style={styles.menuButtonText}>Stress release</Text>
             <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
-          </View>
+          </TouchableOpacity>
         </Animated.View>
 
 
@@ -147,7 +172,7 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     position: "absolute",
-    top: 45 + + 24 + spacing.three,
+    top: 45 + + 24 + spacing.four,
     left: spacing.four
   },
   menuButtonContainer: {

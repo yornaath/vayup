@@ -31,8 +31,11 @@ export default class Breath extends React.Component<Props, State> {
   async componentDidMount() {
     this.startAnimation()
   }
-  
 
+  componentWillUnmount() {
+    this.stopAnimation()
+  }
+  
   async animateToValue(value: number, duration: number) {
     return new Promise(resolve => {
       this.animation = Animated.timing(this.state.breath, {

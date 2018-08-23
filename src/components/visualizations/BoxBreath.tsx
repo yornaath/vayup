@@ -32,8 +32,11 @@ export default class BoxBreath extends React.Component<Props, State> {
   async componentDidMount() {
     this.startAnimation()
   }
-  
 
+  componentWillUnmount() {
+    this.stopAnimation()
+  }
+  
   async animateToValue(value: {x:number, y: number}) {
     return new Promise(resolve => {
       this.animation = Animated.timing(this.state.breath, {
