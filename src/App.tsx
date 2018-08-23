@@ -16,7 +16,7 @@ interface Props {
 
 export default class App extends React.Component<Props, State> {
 
-  menuScale = new Animated.Value(0)
+  menuAnimation = new Animated.Value(0)
 
   state = {
     menuOpen: false
@@ -28,18 +28,40 @@ export default class App extends React.Component<Props, State> {
 
   componentWillUpdate(nextProps:Props, nextState:State) {
     if(nextState.menuOpen) {
-      Animated.spring(this.menuScale, {
-        toValue: 42
+      Animated.spring(this.menuAnimation, {
+        toValue: 1
       }).start()
     }
     else {
-      Animated.spring(this.menuScale, {
+      Animated.spring(this.menuAnimation, {
         toValue: 0
       }).start()
     }
   }
 
   render() {
+
+    const menuScale = this.menuAnimation.interpolate({
+      inputRange: [0,1],
+      outputRange: [0, 42]
+    })
+
+    const innerMenuOpacity = this.menuAnimation.interpolate({
+      inputRange: [0,1],
+      outputRange: [0, 42]
+    })
+
+    const innerMenuScale = this.menuAnimation.interpolate({
+      inputRange: [0,1],
+      outputRange: [0, 1]
+    })
+
+    const innerMenuRotation = this.menuAnimation.interpolate({
+      inputRange: [0,1],
+      outputRange: ['-10deg', '0deg']
+    })
+
+
     return (
       <LinearGradient 
         start={[0.1, 0.1]}
@@ -53,13 +75,16 @@ export default class App extends React.Component<Props, State> {
           <Breath/>
         </View>
 
-        <Animated.View style={[styles.menuBackground, {transform: [{ scale: this.menuScale }] }]} />
+        <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
 
         <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
           <Image source={require("../assets/line-menu.png")} style={styles.menuIconImage} resizeMode={"contain"}/>
         </TouchableOpacity>
-
-        <View style={styles.menuContainer}>
+        innerMenuRotation
+        <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
+          {scale: innerMenuScale},
+          {rotate: innerMenuRotation}
+        ]}]}>
           <View style={styles.menuButtonContainer}>
             <Text style={styles.menuButtonText}>Just Breathe</Text>
           </View>
@@ -69,7 +94,7 @@ export default class App extends React.Component<Props, State> {
           <View style={styles.menuButtonContainer}>
             <Text style={styles.menuButtonText}>Detox Breath</Text>
           </View>
-        </View>
+        </Animated.View>
 
 
       </LinearGradient>
