@@ -87,12 +87,15 @@ export default class App extends React.Component<Props, State> {
         ]}]}>
           <View style={styles.menuButtonContainer}>
             <Text style={styles.menuButtonText}>Just Breathe</Text>
+            <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
           </View>
           <View style={styles.menuButtonContainer}>
             <Text style={styles.menuButtonText}>Box Breath</Text>
+            <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
           </View>
           <View style={styles.menuButtonContainer}>
-            <Text style={styles.menuButtonText}>Detox Breath</Text>
+            <Text style={styles.menuButtonText}>Stress release</Text>
+            <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
           </View>
         </Animated.View>
 
@@ -152,6 +155,11 @@ const styles = StyleSheet.create({
   },
   menuButtonText: {
     color: "white",
-    fontSize: heading.one
+    fontSize: heading.one,
+    marginBottom: spacing.one
+  },
+  menuButtonDescription: {
+    color: "white",
+    fontSize: heading.four
   }
 })
