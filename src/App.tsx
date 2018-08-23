@@ -119,7 +119,7 @@ export default class App extends React.Component<Props, State> {
             <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
-            <Text style={styles.menuButtonText}>Stress release</Text>
+            <Text style={styles.menuButtonText}>O2 Breath</Text>
             <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+    paddingTop: spacing.one,
     alignItems: 'center',
     justifyContent: 'center',
   },

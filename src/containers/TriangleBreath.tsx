@@ -34,8 +34,8 @@ export default class TriangleBreath extends React.Component<Props, State> {
       <View style={[styles.container]}>
         
         <BreathHeader 
-          title="Triangle Breath"
-          subTitle="Emphasize controll."
+          title="O2 Breath"
+          subTitle="Emphazise the removal of c02 and reoxygenation of the blood."
         />
 
         <View style={styles.visualizationContainer}>

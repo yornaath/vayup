@@ -35,7 +35,7 @@ export default class BoxBreath extends React.Component<Props, State> {
         
         <BreathHeader 
           title="Box Breath"
-          subTitle="An exploration of the corners of the breath that regulates the autonimic nervous system."
+          subTitle="Regulate, vitalize and calm the autonomic nervous system."
         />
 
         <View style={styles.visualizationContainer}>
