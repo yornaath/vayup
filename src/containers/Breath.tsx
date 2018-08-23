@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
 import range from 'lodash/range'
 import BreathVisualization from '../components/visualizations/Breath'
 import BreathHeader from '../components/BreathHeader'
-import RatioPicker, {Value as RatioValue} from '../components/RatioPicker'
+import RatioPicker, {Ratio} from '../components/RatioPicker'
 import { spacing, colors, heading} from '../theme'
 
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface State {
-  ratio: RatioValue
+  ratio: Ratio
 }
 
 const { width } = Dimensions.get("window")
@@ -23,20 +23,20 @@ export default class Breath extends React.Component<Props, State> {
     super(props)
     this.state = {
       ratio: {
-        innhale: 4,
+        inhale: 4,
         exhale: 4
       }
     }
   }
 
-  onRatioChange = (ratio:RatioValue) => {
+  onRatioChange = (ratio:Ratio) => {
     this.setState({ ratio: ratio })
   }
 
   render() {
 
     const {ratio} = this.state
-    console.log(ratio)
+    
     return (
       <View style={[styles.container]}>
         
@@ -46,15 +46,13 @@ export default class Breath extends React.Component<Props, State> {
         />
 
         <View style={styles.visualizationContainer}>
-          <BreathVisualization ratio={[ratio["innhale"] * 1000, ratio["exhale"] * 1000]} size={((width - (spacing.four * 2)) / 100) * 100}/>
+          <BreathVisualization ratio={[ratio["inhale"] * 1000, ratio["exhale"] * 1000]} size={((width - (spacing.four * 2)) / 100) * 100}/>
         </View>
         
         <RatioPicker 
-          style={styles.ratioPicker} 
-          ratios={{
-            innhale: { label: "innhale", default: 4 },
-            exhale: { label: "exhale", default: 4 }
-          }}
+          style={styles.ratioPicker}
+          value={ratio}
+          showValues={["inhale", "exhale"]}
           onChange={this.onRatioChange}
         />
 

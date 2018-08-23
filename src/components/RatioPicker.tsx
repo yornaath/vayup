@@ -1,27 +1,33 @@
 import React from 'react'
-import { StyleSheet, Text, View, Picker, Animated, TouchableWithoutFeedback} from 'react-native'
+import { StyleSheet, View, Picker, Animated} from 'react-native'
 import range from 'lodash/range'
 import map from 'lodash/map'
-import reduce from 'lodash/reduce'
 import { spacing, colors, heading} from '../theme'
 
-export interface Value {
-  [key:string]: number
+export type Ratio = {
+  [key in Breath]?: number
 }
+
+export type Breath = "inhale" | "inHold" | "exhale" | "outHold"
 
 export interface Props {
   style: Object;
-  value?: Value;
-  ratios: {
-    [key:string]: {default: number, label: string}
-  }
-  onChange?: (value:Value) => void
+  value?: Ratio;
+  showValues: Array<Breath>
+  onChange?: (value:Ratio) => void
 }
 
 export interface State {
   activeValue: Animated.Value;
-  value: Value;
+  value: Ratio;
   active: boolean
+}
+
+const valueLabels:{[key in Breath]: string} = {
+  inhale: "inhale",
+  exhale: "exhale",
+  inHold: "in-hold",
+  outHold: "out-hold"
 }
 
 export default class RatioPicker extends React.Component<Props, State> {
@@ -34,10 +40,7 @@ export default class RatioPicker extends React.Component<Props, State> {
     this.state = {
       active: false,
       activeValue: new Animated.Value(0),
-      value: props.value || reduce(props.ratios, (value, ratio, key) => ({
-        ...value,
-        [key]: ratio.default
-      }), {})
+      value: props.value || {}
     }
   }
 
@@ -72,7 +75,7 @@ export default class RatioPicker extends React.Component<Props, State> {
 
   render() {
 
-    const {style, ratios} = this.props
+    const {style, showValues} = this.props
     const {value, activeValue, active} = this.state
 
     const scale = activeValue.interpolate({
@@ -85,17 +88,22 @@ export default class RatioPicker extends React.Component<Props, State> {
       outputRange: [0, 1]
     })
 
+    const headerOpacity = activeValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0]
+    })
+
     return (
       <Animated.View style={[styles.container, style, {transform: [{scale}]}]}>
-        <Text style={styles.header}>
+        <Animated.Text style={[styles.header, {opacity: headerOpacity}]}>
           ratio
-        </Text>
+        </Animated.Text>
         <View style={styles.pickersContainer}>
           {
-            map(ratios, (ratio, key) => (
+            map(showValues, (ratio, key) => (
               <View key={key} style={styles.ratioContainer} onTouchStart={this.activityHandler}>
                 <View style={styles.pickerContainer}>
-                  <Picker style={styles.secondsPicker}  itemStyle={styles.secondsPickerItem} selectedValue={value[key]} onValueChange={this.createValueChangeHandler(key)}>
+                  <Picker style={[styles.secondsPicker, { overflow: !active ? "hidden" : "visible" }]}  itemStyle={styles.secondsPickerItem} selectedValue={value[ratio]} onValueChange={this.createValueChangeHandler(ratio)}>
                     {
                       range(1,60).map((num) => 
                         <Picker.Item key={num} label={num.toString()} value={num}/>)
@@ -103,7 +111,7 @@ export default class RatioPicker extends React.Component<Props, State> {
                   </Picker>
                 </View>
                 <Animated.Text style={[styles.labelText, {opacity:labelOpacity}]}>
-                  {ratio.label}
+                  {valueLabels[ratio]}
                 </Animated.Text>
               </View>
             ))
@@ -149,7 +157,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 45,
     marginBottom: spacing.two,
-    overflow: "hidden",
     justifyContent:'center',
   },
   secondsPickerItem: {
@@ -159,7 +166,10 @@ const styles = StyleSheet.create({
   labelText: {
     flex: 1,
     textAlign: "center",
-    color: colors.blue
+    color: colors.blue,
+    padding: 4,
+    backgroundColor: "white",
+    borderRadius: 2
   },
   activitySurface: {
     position: "absolute",
