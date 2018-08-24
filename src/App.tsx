@@ -4,7 +4,6 @@ import Breath from './containers/Breath'
 import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import {LinearGradient, Asset} from 'expo'
-import Color from 'color'
 import {spacing, colors, heading} from './theme'
 
 const screen = Dimensions.get("screen")
