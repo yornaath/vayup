@@ -1,6 +1,7 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { StyleSheet, View, Animated, Text } from 'react-native'
+import { Vizualization } from './types'
 import { colors } from '../../theme'
 
 interface Props {
@@ -14,7 +15,11 @@ interface State {
   ballLocation: Animated.ValueXY;
 }
 
-export default class TriangleBreath extends React.Component<Props, State> {
+export default class TriangleBreath extends React.Component<Props, State> implements Vizualization {
+
+  animation: Animated.CompositeAnimation
+  animationRunning: boolean
+  timeout: any
 
   constructor(props:Props) {
     super(props)
@@ -28,36 +33,56 @@ export default class TriangleBreath extends React.Component<Props, State> {
     this.startAnimation()
   }
 
-  startAnimation() {
-
-    const [inn, innHold, out] = this.props.ratio
-
-    let animation = () => {
-      this.setState({text: "in"})
-      Animated.timing(this.state.ballLocation, {
-        toValue: {x: 0, y: 1},
+  async animateToValue(value: {x: number, y:number}, duration: number) {
+    return new Promise(resolve => {
+      this.animation = Animated.timing(this.state.ballLocation, {
+        toValue: value,
         useNativeDriver: true,
-        duration: inn
-      }).start(() => {
-        this.setState({text: "hold"})
-        Animated.timing(this.state.ballLocation, {
-          toValue: {x: 1, y: 1},
-          useNativeDriver: true,
-          duration: innHold
-        }).start(() => {
-          this.setState({text: "out"})
-          Animated.timing(this.state.ballLocation, {
-            toValue: {x: 0.5, y: 0},
-            useNativeDriver: true,
-            duration: out
-          }).start(() => {
-            animation()
-          })
-        })
+        duration: duration
       })
+      this.animation.start(resolve)
+    })
+  }
+
+  async startAnimation() {
+
+    let animation = async () => {
+
+      if(!this.animationRunning) return
+
+      this.setState({text: "Innhale"})
+      await this.animateToValue({x: 0, y: 1}, this.props.ratio[0])
+      if(!this.animationRunning) return
+
+      this.setState({text: "Hold"})
+      await this.animateToValue({x: 1, y: 1}, this.props.ratio[1])
+      if(!this.animationRunning) return
+
+      this.setState({text: "Exhale"})
+      await this.animateToValue({x: 0.5, y: 0}, this.props.ratio[2])
+      if(!this.animationRunning) return
+
+
+      animation()
     }
 
+    this.animationRunning = true
+
     return animation()
+  }
+
+  async stopAnimation() {
+    if(this.animation) {
+      this.animationRunning = false
+      this.animation.stop()
+    }
+  }
+
+  async restartAnimation() {
+    this.stopAnimation()
+    this.state.ballLocation.setValue({ x: 0.5, y: 0 })
+    await Promise.delay(200)
+    setImmediate(() => this.startAnimation())
   }
 
   render() {

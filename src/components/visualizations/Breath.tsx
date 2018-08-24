@@ -1,6 +1,7 @@
 import React from 'react'
 import Promise from 'bluebird'
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
+import { Vizualization } from './types'
 import isEqual from 'lodash/isEqual'
 import { colors } from '../../theme'
 
@@ -14,7 +15,7 @@ interface State {
   breath: Animated.Value
 }
 
-export default class Breath extends React.Component<Props, State> {
+export default class Breath extends React.Component<Props, State> implements Vizualization {
 
   animation: Animated.CompositeAnimation
   animationRunning: boolean

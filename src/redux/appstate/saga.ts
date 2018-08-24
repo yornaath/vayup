@@ -2,7 +2,8 @@ import { AppState } from 'react-native'
 import { Amplitude, Permissions } from 'expo'
 import { channel } from 'redux-saga'
 import { takeEvery, select, put, call } from 'redux-saga/effects'
-import { setState, setAssetsLoaded, setStorageHydrated } from './actions'
+import { setState } from './actions'
+import { getAppState } from './reducer'
 
 export const appStateChannel = channel()
 
@@ -16,11 +17,7 @@ export function* saga() {
 }
 
 export function* init() {
-
-  yield put(setAssetsLoaded(true))
-  
   const hasNotificationPermission = yield call([Permissions, 'getAsync'], Permissions.NOTIFICATIONS)
-  
   if(hasNotificationPermission.status !== "granted") {
     yield call([Permissions, 'askAsync'], Permissions.NOTIFICATIONS)
   }
