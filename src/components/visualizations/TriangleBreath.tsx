@@ -110,11 +110,18 @@ export default class TriangleBreath extends React.Component<Props, State> implem
 
     return (
       <View style={[styles.container, this.props.style]}>
+
         <View style={styles.triangleContainer}>
           <Svg height={size} width={size}>
-            <Svg.Path strokeLineJoin="round" stroke="black" strokeWidth={strokeWidth} fill={"transparent"} d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
+            <Svg.Path 
+              strokeLineJoin="round" 
+              stroke="black" 
+              strokeWidth={strokeWidth} 
+              fill={"transparent"} 
+              d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
           </Svg>
         </View>
+
         <Animated.View style={[
             styles.ball,
             {
@@ -124,7 +131,8 @@ export default class TriangleBreath extends React.Component<Props, State> implem
                 {scale: scale}
               ]
             }
-          ]}></Animated.View>
+          ]}/>
+
       </View>
     );
   }

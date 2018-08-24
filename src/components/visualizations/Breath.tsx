@@ -104,21 +104,28 @@ export default class Breath extends React.Component<Props, State> implements Viz
     })
 
     return (
-      <TouchableOpacity style={[styles.container, this.props.style]} onPress={this.restartAnimation.bind(this)}>
-        <View style={[styles.ballBorder, {borderRadius: size}]}>
-          <Animated.View style={[
-            styles.ball,
-            {
-              width: size,
-              height: size,
-              borderRadius: size,
-              transform: [
-                {scale: scale}
-              ]
-            }
-          ]}>
-          </Animated.View>
-        </View>
+      <TouchableOpacity 
+        style={[styles.container, this.props.style]} 
+        onPress={this.restartAnimation.bind(this)}>
+
+          <View 
+            style={[styles.ballBorder, {borderRadius: size}]}>
+
+              <Animated.View 
+                style={[
+                  styles.ball,
+                  {
+                    width: size,
+                    height: size,
+                    borderRadius: size,
+                    transform: [
+                      {scale: scale}
+                    ]
+                  }
+                ]
+              } />
+              
+          </View>
       </TouchableOpacity>
     );
   }

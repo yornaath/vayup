@@ -46,7 +46,9 @@ export default class Breath extends React.Component<Props, State> {
         />
 
         <View style={styles.visualizationContainer}>
-          <BreathVisualization ratio={ratioMap(ratio, (n) => n * 1000)} size={((width - (spacing.four * 2)) / 100) * 100}/>
+          <BreathVisualization 
+            ratio={ratioMap(ratio, (n) => n * 1000)} 
+            size={((width - (spacing.four * 2)) / 100) * 100}/>
         </View>
         
         <RatioPicker 
