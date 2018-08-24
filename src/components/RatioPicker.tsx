@@ -3,12 +3,7 @@ import { StyleSheet, View, Picker, Animated} from 'react-native'
 import range from 'lodash/range'
 import map from 'lodash/map'
 import { spacing, colors, heading} from '../theme'
-
-export type Ratio = {
-  [key in Breath]?: number
-}
-
-export type Breath = "inhale" | "inHold" | "exhale" | "outHold"
+import { Ratio, Breath } from '../types'
 
 export interface Props {
   style: Object;

@@ -1,7 +1,7 @@
 import React from 'react'
-import Promise from 'bluebird'
+import { delay } from 'bluebird'
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
-import { Vizualization } from './types'
+import { Vizualization } from '../../types'
 import isEqual from 'lodash/isEqual'
 import { colors } from '../../theme'
 
@@ -67,7 +67,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
   async restartAnimation() {
     this.stopAnimation()
     this.state.breath.setValue(0)
-    await Promise.delay(200)
+    await delay(200)
     setImmediate(() => this.startAnimation())
   }
 

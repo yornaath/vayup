@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native' 
-import Promise from 'bluebird'
-import { Vizualization } from './types'
+import { delay } from 'bluebird'
+import { Vizualization } from '../../types'
 import {colors} from '../../theme'
 
 interface Props {
@@ -68,7 +68,7 @@ export default class BoxBreath extends React.Component<Props, State> implements 
   async restartAnimation() {
     this.stopAnimation()
     this.state.breath.setValue({x: 0, y:0})
-    await Promise.delay(200)
+    await delay(200)
     setImmediate(() => this.startAnimation())
   }
 

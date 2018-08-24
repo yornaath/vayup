@@ -1,5 +1,6 @@
 import React from 'react'
 import {Svg} from 'expo'
+import { delay } from 'bluebird'
 import { StyleSheet, View, Animated, Text } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
@@ -81,7 +82,7 @@ export default class TriangleBreath extends React.Component<Props, State> implem
   async restartAnimation() {
     this.stopAnimation()
     this.state.ballLocation.setValue({ x: 0.5, y: 0 })
-    await Promise.delay(200)
+    await delay(200)
     setImmediate(() => this.startAnimation())
   }
 
