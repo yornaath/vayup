@@ -1,8 +1,8 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { delay } from 'bluebird'
-import { StyleSheet, View, Animated, Text } from 'react-native'
-import { Vizualization } from './types'
+import { StyleSheet, View, Animated } from 'react-native'
+import { Vizualization } from '../../lib/types'
 import { colors } from '../../theme'
 
 interface Props {

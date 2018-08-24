@@ -1,12 +1,13 @@
 import React from 'react'
 import { delay } from 'bluebird'
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
-import { Vizualization } from '../../types'
 import isEqual from 'lodash/isEqual'
 import { colors } from '../../theme'
+import { Vizualization } from './types'
+import { Ratio } from '../../lib/Ratio'
 
 interface Props {
-  ratio: [number, number];
+  ratio: Ratio;
   style?: Object;
   size: number;
 }
@@ -77,10 +78,10 @@ export default class Breath extends React.Component<Props, State> implements Viz
 
       if(!this.animationRunning) return
 
-      await this.animateToValue(1, this.props.ratio[0])
+      await this.animateToValue(1, this.props.ratio.inhale)
       if(!this.animationRunning) return
 
-      await this.animateToValue(0, this.props.ratio[1])
+      await this.animateToValue(0, this.props.ratio.exhale)
       if(!this.animationRunning) return
 
       animation()

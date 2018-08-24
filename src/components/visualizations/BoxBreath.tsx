@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native' 
 import { delay } from 'bluebird'
-import { Vizualization } from '../../types'
-import {colors} from '../../theme'
+import { Vizualization } from './types'
+import { colors } from '../../theme'
 
 interface Props {
   duration: number;

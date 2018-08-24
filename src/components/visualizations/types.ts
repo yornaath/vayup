@@ -1,4 +1,5 @@
 
+
 import { Animated } from 'react-native' 
 
 export interface Vizualization {
@@ -12,11 +13,3 @@ export interface Vizualization {
   stopAnimation():Promise<void>
 
 }
-
-
-export type Ratio = {
-  [key in Breath]?: number
-}
-
-
-export type Breath = "inhale" | "inHold" | "exhale" | "outHold"

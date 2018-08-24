@@ -2,8 +2,9 @@ import React from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import BreathVisualization from '../components/visualizations/Breath'
 import BreathHeader from '../components/BreathHeader'
-import RatioPicker, {Ratio} from '../components/RatioPicker'
+import RatioPicker from '../components/RatioPicker'
 import { spacing } from '../theme'
+import { Ratio, map as ratioMap } from '../lib/Ratio'
 
 
 interface Props {
@@ -45,7 +46,7 @@ export default class Breath extends React.Component<Props, State> {
         />
 
         <View style={styles.visualizationContainer}>
-          <BreathVisualization ratio={[ratio["inhale"] * 1000, ratio["exhale"] * 1000]} size={((width - (spacing.four * 2)) / 100) * 100}/>
+          <BreathVisualization ratio={ratioMap(ratio, (n) => n * 1000)} size={((width - (spacing.four * 2)) / 100) * 100}/>
         </View>
         
         <RatioPicker 
