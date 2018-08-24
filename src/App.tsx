@@ -1,134 +1,168 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 import { store } from './redux/store'
 import Breath from './containers/Breath'
 import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import {LinearGradient, Asset} from 'expo'
 import {spacing, colors, heading} from './theme'
+import * as navigation from './redux/navigation'
+import { RootState } from './redux/root-reducer'
 
-const screen = Dimensions.get("screen")
+
 
 interface State {
   menuOpen: boolean
 }
 
-interface Props {
+type DProps = {
+  setLocation: (location:navigation.Location) => navigation.NavigationAction
+}
+
+type SProps = {
+  location?: navigation.Location;
+}
+
+type IProps = {
 
 }
+
+type Props = IProps & DProps & SProps
+
 
 export default () => (
   <Provider store={store}>
-    <App />>
+    <App />
   </Provider>
 )
 
-class App extends React.Component<Props, State> {
+const mapStateToProps = (state:RootState) => ({
+  location: navigation.getLocation(state)
+})
 
-  menuAnimation = new Animated.Value(0)
+const mapDispatchToProps = (dispatch) => ({
+  setLocation: (location:navigation.Location) => dispatch(navigation.setLocation(location))
+})
 
-  state = {
-    menuOpen: false,
-  }
+const screen = Dimensions.get("screen")
 
-  menuButtonPress = () => {
-    this.setState({menuOpen: !this.state.menuOpen})
-  }
+const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
+  class extends React.Component<Props, State> {
 
-  componentWillUpdate(nextProps:Props, nextState:State) {
-    if(!this.state.menuOpen && nextState.menuOpen) {
-      Animated.spring(this.menuAnimation, {
-        toValue: 1
-      }).start()
+    menuAnimation = new Animated.Value(0)
+
+    state = {
+      menuOpen: false,
     }
-    else if(this.state.menuOpen) {
-      Animated.spring(this.menuAnimation, {
-        toValue: 0
-      }).start()
+
+    menuButtonPress = () => {
+      this.setState({menuOpen: !this.state.menuOpen})
     }
-  }
 
-  render() {
+    componentWillUpdate(nextProps:Props, nextState:State) {
+      if(!this.state.menuOpen && nextState.menuOpen) {
+        Animated.spring(this.menuAnimation, {
+          toValue: 1
+        }).start()
+      }
+      else if(this.state.menuOpen) {
+        Animated.spring(this.menuAnimation, {
+          toValue: 0
+        }).start()
+      }
+    }
 
-    const menuScale = this.menuAnimation.interpolate({
-      inputRange: [0,1],
-      outputRange: [0, 42]
-    })
+    navigate = (path:string) => {
+      return () => {
+        this.props.setLocation({
+          path
+        })
+      }
+    }
 
-    const innerMenuOpacity = this.menuAnimation.interpolate({
-      inputRange: [0,1],
-      outputRange: [0, 42]
-    })
+    render() {
 
-    const innerMenuScale = this.menuAnimation.interpolate({
-      inputRange: [0,1],
-      outputRange: [0, 1]
-    })
+      const { path } = this.props.location
+      
+      const menuScale = this.menuAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: [0, 42]
+      })
 
-    const innerMenuRotation = this.menuAnimation.interpolate({
-      inputRange: [0,1],
-      outputRange: ['-10deg', '0deg']
-    })
+      const innerMenuOpacity = this.menuAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: [0, 42]
+      })
+
+      const innerMenuScale = this.menuAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: [0, 1]
+      })
+
+      const innerMenuRotation = this.menuAnimation.interpolate({
+        inputRange: [0,1],
+        outputRange: ['-10deg', '0deg']
+      })
 
 
-    return (
-      <LinearGradient 
-        start={[0.1, 0.1]}
-        end={[1,1]}
-        colors={["rgb(255,255,255)", "rgb(235,235,235)"]}
-        style={styles.container}>
+      return (
+        <LinearGradient 
+          start={[0.1, 0.1]}
+          end={[1,1]}
+          colors={["rgb(255,255,255)", "rgb(235,235,235)"]}
+          style={styles.container}>
 
-        <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
+          <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
 
-        <View style={styles.contentContainer}>
-          {
-            url == "breathe" ?
-              <Breath /> :
-            url == "boxbreath" ?
-              <BoxBreath /> :
-            url == "detoxbreath" ?
-              <TriangleBreath />
-            : null
-          }
-        </View>
+          <View style={styles.contentContainer}>
+            {
+              path == "breathe" ?
+                <Breath /> :
+              path == "boxbreath" ?
+                <BoxBreath /> :
+              path == "detoxbreath" ?
+                <TriangleBreath />
+              : null
+            }
+          </View>
 
-        <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
+          <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
 
-        <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-          <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-          <Animated.Image source={Asset.fromModule(require("../assets/line-menu-white.png"))} style={[styles.menuIconImage, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
-        </TouchableOpacity>
-
-        <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
-        
-        <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
-          {scale: innerMenuScale},
-          {rotate: innerMenuRotation}
-        ]}]}>
-          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
-            <Text style={styles.menuButtonText}>Just Breathe</Text>
-            <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
+          <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
+            <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
-            <Text style={styles.menuButtonText}>Box Breath</Text>
-            <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
+
+          <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
+            <Animated.Image source={Asset.fromModule(require("../assets/line-menu-white.png"))} style={[styles.menuIconImage, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
-            <Text style={styles.menuButtonText}>O2 Breath</Text>
-            <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
-          </TouchableOpacity>
-        </Animated.View>
+
+          <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
+          
+          <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
+            {scale: innerMenuScale},
+            {rotate: innerMenuRotation}
+          ]}]}>
+            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
+              <Text style={styles.menuButtonText}>Just Breathe</Text>
+              <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
+              <Text style={styles.menuButtonText}>Box Breath</Text>
+              <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
+              <Text style={styles.menuButtonText}>O2 Breath</Text>
+              <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
+            </TouchableOpacity>
+          </Animated.View>
 
 
-      </LinearGradient>
-    )
-  }
+        </LinearGradient>
+      )
+    }
 
-}
+  })
 
 
 

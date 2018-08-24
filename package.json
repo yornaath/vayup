@@ -21,6 +21,7 @@
     "@types/lodash": "^4.14.116",
     "@types/ms": "^0.7.30",
     "@types/react-navigation": "^2.0.16",
+    "@types/react-redux": "^6.0.6",
     "@types/redux-persist": "^4.3.1",
     "@types/redux-saga": "^0.10.5",
     "bluebird": "^3.5.1",
