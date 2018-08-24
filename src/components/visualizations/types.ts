@@ -1,8 +1,12 @@
-
-
+import { Component } from 'react'
 import { Animated } from 'react-native' 
+import { Ratio } from '../../lib/Ratio'
 
-export interface Vizualization {
+export interface VizualizationProps {
+  ratio: Ratio
+}
+
+export interface Vizualization extends Component<VizualizationProps> {
   
   readonly animation: Animated.CompositeAnimation
   readonly animationRunning: boolean

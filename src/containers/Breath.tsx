@@ -4,7 +4,7 @@ import BreathVisualization from '../components/visualizations/Breath'
 import BreathHeader from '../components/BreathHeader'
 import RatioPicker from '../components/RatioPicker'
 import { spacing } from '../theme'
-import { Ratio, map as ratioMap } from '../lib/Ratio'
+import { Ratio, ratioToMs } from '../lib/Ratio'
 
 
 interface Props {
@@ -47,7 +47,7 @@ export default class Breath extends React.Component<Props, State> {
 
         <View style={styles.visualizationContainer}>
           <BreathVisualization 
-            ratio={ratioMap(ratio, (n) => n * 1000)} 
+            ratio={ratioToMs(ratio)} 
             size={((width - (spacing.four * 2)) / 100) * 100}/>
         </View>
         

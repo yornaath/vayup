@@ -3,9 +3,10 @@ import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native'
 import { delay } from 'bluebird'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
+import { Ratio, ratioToMs, equals as ratioEquals } from '../../lib/Ratio'
 
 interface Props {
-  duration: number;
+  ratio: Ratio;
   size: number;
   style?: Object
 }
@@ -38,12 +39,12 @@ export default class BoxBreath extends React.Component<Props, State> implements 
     this.stopAnimation()
   }
   
-  async animateToValue(value: {x:number, y: number}) {
+  async animateToValue(value: {x:number, y: number}, duration:number) {
     return new Promise(resolve => {
       this.animation = Animated.timing(this.state.breath, {
         toValue: value,
         useNativeDriver: true,
-        duration: this.props.duration
+        duration: duration
       })
       this.animation.start(resolve)
     })
@@ -57,7 +58,7 @@ export default class BoxBreath extends React.Component<Props, State> implements 
   }
 
   componentWillReceiveProps(nextProps:Props) {
-    if(this.props.duration !== nextProps.duration) {
+    if(!ratioEquals(this.props.ratio, nextProps.ratio)) {
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         this.restartAnimation()
@@ -79,19 +80,19 @@ export default class BoxBreath extends React.Component<Props, State> implements 
       if(!this.animationRunning) return
 
       this.setState({text: "Innhale"})
-      await this.animateToValue({x: 0, y: 1})
+      await this.animateToValue({x: 0, y: 1}, ratioToMs(this.props.ratio).inhale)
       if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
-      await this.animateToValue({x: 1, y: 1})
+      await this.animateToValue({x: 1, y: 1}, ratioToMs(this.props.ratio).inHold)
       if(!this.animationRunning) return
 
       this.setState({text: "Exhale"})
-      await this.animateToValue({x: 1, y: 0})
+      await this.animateToValue({x: 1, y: 0}, ratioToMs(this.props.ratio).exhale)
       if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
-      await this.animateToValue({x: 0, y: 0})
+      await this.animateToValue({x: 0, y: 0}, ratioToMs(this.props.ratio).outHold)
       if(!this.animationRunning) return
 
       animation()

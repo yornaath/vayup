@@ -4,9 +4,10 @@ import { delay } from 'bluebird'
 import { StyleSheet, View, Animated } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
+import { Ratio, ratioToMs } from '../../lib/Ratio'
 
 interface Props {
-  ratio: [number, number, number];
+  ratio: Ratio;
   style?: Object;
   size: number;
 }
@@ -52,15 +53,15 @@ export default class TriangleBreath extends React.Component<Props, State> implem
       if(!this.animationRunning) return
 
       this.setState({text: "Innhale"})
-      await this.animateToValue({x: 0, y: 1}, this.props.ratio[0])
+      await this.animateToValue({x: 0, y: 1}, ratioToMs(this.props.ratio).inHold)
       if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
-      await this.animateToValue({x: 1, y: 1}, this.props.ratio[1])
+      await this.animateToValue({x: 1, y: 1}, ratioToMs(this.props.ratio).inHold)
       if(!this.animationRunning) return
 
       this.setState({text: "Exhale"})
-      await this.animateToValue({x: 0.5, y: 0}, this.props.ratio[2])
+      await this.animateToValue({x: 0.5, y: 0}, ratioToMs(this.props.ratio).exhale)
       if(!this.animationRunning) return
 
 

@@ -1,10 +1,9 @@
 import React from 'react'
 import { delay } from 'bluebird'
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
-import isEqual from 'lodash/isEqual'
 import { colors } from '../../theme'
 import { Vizualization } from './types'
-import { Ratio } from '../../lib/Ratio'
+import { Ratio, equals as ratioEquals } from '../../lib/Ratio'
 
 interface Props {
   ratio: Ratio;
@@ -57,7 +56,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
   }
 
   componentWillReceiveProps(nextProps:Props) {
-    if(!isEqual(this.props.ratio, nextProps.ratio)) {
+    if(!ratioEquals(this.props.ratio, nextProps.ratio)) {
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         this.restartAnimation()
