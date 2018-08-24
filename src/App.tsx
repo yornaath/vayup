@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native'
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
 import Breath from './containers/Breath'
 import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
@@ -10,29 +12,28 @@ const screen = Dimensions.get("screen")
 
 interface State {
   menuOpen: boolean
-  url: string
 }
 
 interface Props {
 
 }
 
-export default class App extends React.Component<Props, State> {
+export default () => (
+  <Provider store={store}>
+    <App />>
+  </Provider>
+)
+
+class App extends React.Component<Props, State> {
 
   menuAnimation = new Animated.Value(0)
 
   state = {
     menuOpen: false,
-    url: "breathe"
   }
-
 
   menuButtonPress = () => {
     this.setState({menuOpen: !this.state.menuOpen})
-  }
-
-  navigate = (url:string) => () => {
-    this.setState({ url, menuOpen: false })
   }
 
   componentWillUpdate(nextProps:Props, nextState:State) {
@@ -49,8 +50,6 @@ export default class App extends React.Component<Props, State> {
   }
 
   render() {
-
-    const {url} = this.state
 
     const menuScale = this.menuAnimation.interpolate({
       inputRange: [0,1],
