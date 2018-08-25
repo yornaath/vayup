@@ -6,6 +6,13 @@ export type Ratio = {
   [key in Breath]?: number
 }
 
+export const BoxRatio = (num:number):Ratio => ({
+  inhale: num,
+  inHold: num,
+  exhale: num,
+  outHold: num
+})
+
 export const map = (mapper:(duration:number, breath:Breath) => number, ratio:Ratio):Ratio => ({
   inhale: mapper(ratio.inhale || 0, 'inhale'),
   inHold: mapper(ratio.inHold || 0, 'inHold'),

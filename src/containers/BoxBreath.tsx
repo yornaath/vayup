@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, Picker } from 'react-native'
-import range from 'lodash/range'
+import { StyleSheet, View, Dimensions } from 'react-native'
 import BreathHeader from '../components/BreathHeader'
+import RatioPicker from '../components/RatioPicker'
 import BoxBreathVisualization from '../components/visualizations/BoxBreath'
-import { spacing, colors} from '../theme'
+import { spacing } from '../theme'
+import { Ratio, ratioToMs, BoxRatio } from '../lib/Ratio'
 
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 }
 
 interface State {
-  duration: number
+  ratio: Ratio
 }
 
 const { width } = Dimensions.get("window")
@@ -21,12 +22,12 @@ export default class BoxBreath extends React.Component<Props, State> {
   constructor(props:Props) {
     super(props)
     this.state = {
-      duration: 4
+      ratio: BoxRatio(4)
     }
   }
 
-  onSecondsChange = (duration:number) => {
-    this.setState({ duration: Math.floor(duration) })
+  onRatioChange = (ratio:Ratio) => {
+    this.setState({ ratio: ratio })
   }
 
   render() {
@@ -39,22 +40,15 @@ export default class BoxBreath extends React.Component<Props, State> {
         />
 
         <View style={styles.visualizationContainer}>
-          <BoxBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} duration={this.state.duration * 1000} />
+          <BoxBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} ratio={ratioToMs(this.state.ratio)} />
         </View>
         
-        <View style={styles.secondsChooserContainer}>
-          <View style={styles.pickerContainer}>
-            <Picker style={styles.secondsPicker} itemStyle={styles.secondsPickerItem} selectedValue={this.state.duration} onValueChange={this.onSecondsChange}>
-              {
-                range(1,60).map((num) => 
-                  <Picker.Item key={num} label={num.toString()} value={num}/>)
-              }
-            </Picker>
-          </View>
-          <Text style={styles.durationText}>
-            seconds
-          </Text>
-        </View>
+        <RatioPicker 
+          style={styles.ratioPicker}
+          value={this.state.ratio}
+          showValues={["inhale", "inHold", "exhale", "outHold"]}
+          onChange={this.onRatioChange}
+        />
 
       </View>
     );
@@ -73,28 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start"
   },
-  secondsChooserContainer: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  pickerContainer: {
-    flex: 2,
-    justifyContent: "flex-end",
-  },
-  secondsPicker: {
-    width: 800,
-    height: 50,
-    marginBottom: spacing.two,
-    overflow: "hidden",
-    justifyContent:'center',
-  },
-  secondsPickerItem: {
-    fontSize: 40,
-    color: colors.blue
-  },
-  durationText: {
-    flex: 1,
-    color: colors.blue
+  ratioPicker: {
+    flex: 1
   }
 });
