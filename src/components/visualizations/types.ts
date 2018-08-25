@@ -1,9 +1,9 @@
 import { Component } from 'react'
 import { Animated } from 'react-native' 
-import { Ratio } from '../../lib/Ratio'
+import { TRatio } from '../../lib/Ratio'
 
 export interface VizualizationProps {
-  ratio: Ratio;
+  ratio: TRatio;
 }
 
 export interface Vizualization extends Component<VizualizationProps> {

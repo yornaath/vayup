@@ -3,19 +3,19 @@ import { StyleSheet, View, Picker, Animated} from 'react-native'
 import range from 'lodash/range'
 import map from 'lodash/map'
 import { spacing, colors, heading} from '../theme'
-import { Ratio } from '../lib/Ratio'
+import { TRatio } from '../lib/Ratio'
 import { Breath } from '../lib/Breath'
 
 export interface Props {
   style: Object;
-  value?: Ratio;
+  value?: TRatio;
   showValues: Array<Breath>
-  onChange?: (value:Ratio) => void
+  onChange?: (value:TRatio) => void
 }
 
 export interface State {
   activeValue: Animated.Value;
-  value: Ratio;
+  value: TRatio;
   active: boolean
 }
 

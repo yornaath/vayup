@@ -3,10 +3,10 @@ import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native'
 import { delay } from 'bluebird'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
-import { Ratio, ratioToMs, equals as ratioEquals } from '../../lib/Ratio'
+import { TRatio, ratioToMs, equals as ratioEquals } from '../../lib/Ratio'
 
 interface Props {
-  ratio: Ratio;
+  ratio: TRatio;
   size: number;
   style?: Object
 }

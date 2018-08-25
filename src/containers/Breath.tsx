@@ -4,7 +4,7 @@ import BreathVisualization from '../components/visualizations/Breath'
 import BreathHeader from '../components/BreathHeader'
 import RatioPicker from '../components/RatioPicker'
 import { spacing } from '../theme'
-import { Ratio, ratioToMs } from '../lib/Ratio'
+import { TRatio, Ratio, ratioToMs } from '../lib/Ratio'
 
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface State {
-  ratio: Ratio
+  ratio: TRatio
 }
 
 const { width } = Dimensions.get("window")
@@ -22,14 +22,11 @@ export default class Breath extends React.Component<Props, State> {
   constructor(props:Props) {
     super(props)
     this.state = {
-      ratio: {
-        inhale: 4,
-        exhale: 4
-      }
+      ratio: Ratio(4, 0, 4, 0)
     }
   }
 
-  onRatioChange = (ratio:Ratio) => {
+  onRatioChange = (ratio:TRatio) => {
     this.setState({ ratio: ratio })
   }
 

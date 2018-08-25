@@ -4,7 +4,7 @@ import BreathHeader from '../components/BreathHeader'
 import RatioPicker from '../components/RatioPicker'
 import BoxBreathVisualization from '../components/visualizations/BoxBreath'
 import { spacing } from '../theme'
-import { Ratio, ratioToMs, BoxRatio } from '../lib/Ratio'
+import { TRatio, ratioToMs, BoxRatio } from '../lib/Ratio'
 
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface State {
-  ratio: Ratio
+  ratio: TRatio
 }
 
 const { width } = Dimensions.get("window")
@@ -26,7 +26,7 @@ export default class BoxBreath extends React.Component<Props, State> {
     }
   }
 
-  onRatioChange = (ratio:Ratio) => {
+  onRatioChange = (ratio:TRatio) => {
     this.setState({ ratio: ratio })
   }
 
