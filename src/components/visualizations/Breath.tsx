@@ -1,6 +1,7 @@
 import React from 'react'
 import { delay } from 'bluebird'
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
+import Color from 'color'
 import { colors } from '../../theme'
 import { Vizualization } from './types'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
@@ -95,10 +96,12 @@ export default class Breath extends React.Component<Props, State> implements Viz
   render() {
 
     const {size} = this.props
+    const lowerScale = 0.45
+    const upperScale = 1
 
     var scale = this.state.breath.interpolate({
       inputRange: [0, 1],
-      outputRange: [0.5, 1],
+      outputRange: [lowerScale, upperScale],
       extrapolate: 'clamp'
     })
 
@@ -123,6 +126,22 @@ export default class Breath extends React.Component<Props, State> implements Viz
                   }
                 ]
               } />
+
+              <View 
+                style={[
+                  styles.innerBall,
+                  {
+                    width: size,
+                    height: size,
+                    top: 0,
+                    left: 0,
+                    borderRadius: size,
+                    transform: [
+                      {scale: lowerScale}
+                    ]
+                  }
+                ]
+              } />
               
           </View>
       </TouchableOpacity>
@@ -142,6 +161,12 @@ const styles = StyleSheet.create({
   },
   ball: {
     backgroundColor: colors.blue,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  innerBall: {
+    position: "absolute",
+    backgroundColor: Color(colors.blue).darken(0.15).toString(),
     justifyContent: "center",
     alignItems: "center"
   }
