@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Picker, Animated} from 'react-native'
 import range from 'lodash/range'
+import get from 'lodash/get'
 import map from 'lodash/map'
 import { spacing, colors, heading} from '../theme'
 import { TRatio } from '../lib/Ratio'
@@ -9,6 +10,7 @@ import { Breath } from '../lib/Breath'
 export interface Props {
   style: Object;
   value?: TRatio;
+  labels?: RatioLabels;
   showValues: Array<Breath>
   onChange?: (value:TRatio) => void
 }
@@ -19,7 +21,9 @@ export interface State {
   active: boolean
 }
 
-const valueLabels:{[key in Breath]: string} = {
+type RatioLabels = {[key in Breath]?: string}
+
+const valueLabels:RatioLabels = {
   inhale: "inhale",
   exhale: "exhale",
   inHold: "in-hold",
@@ -106,9 +110,11 @@ export default class RatioPicker extends React.Component<Props, State> {
                     }
                   </Picker>
                 </View>
-                <Animated.Text style={[styles.labelText, {opacity:labelOpacity}]}>
-                  {valueLabels[ratio]}
-                </Animated.Text>
+                <Animated.View style={[styles.labelTextContainer, {opacity:labelOpacity}]}>
+                  <Animated.Text style={[styles.labelText]}>
+                    {get(this.props, ['labels', ratio],valueLabels[ratio])}
+                  </Animated.Text>
+                </Animated.View>
               </View>
             ))
           }
@@ -159,12 +165,15 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: colors.blue,
   },
-  labelText: {
+  labelTextContainer: {
     flex: 1,
-    textAlign: "center",
+    padding: 5,
+  },
+  labelText: {
     color: colors.blue,
-    padding: 4,
-    borderRadius: 2
+    borderRadius: 4,
+    textAlign: "center",
+    overflow: "hidden"
   },
   activitySurface: {
     position: "absolute",
