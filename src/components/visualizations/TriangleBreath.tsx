@@ -53,15 +53,15 @@ export default class TriangleBreath extends React.Component<Props, State> implem
       if(!this.animationRunning) return
 
       this.setState({text: "Innhale"})
-      await this.animateToValue({x: 0, y: 1}, ratioToMs(this.props.ratio).inHold)
+      await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
       if(!this.animationRunning) return
 
       this.setState({text: "Hold"})
-      await this.animateToValue({x: 1, y: 1}, ratioToMs(this.props.ratio).inHold)
+      await this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
       if(!this.animationRunning) return
 
       this.setState({text: "Exhale"})
-      await this.animateToValue({x: 0.5, y: 0}, ratioToMs(this.props.ratio).exhale)
+      await this.animateToValue({x: 0.5, y: 0}, this.props.ratio.exhale)
       if(!this.animationRunning) return
 
 

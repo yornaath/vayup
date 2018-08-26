@@ -1,59 +1,71 @@
 import React from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
+import { connect } from 'react-redux'
 import RatioPicker from '../components/RatioPicker'
 import BreathHeader from '../components/BreathHeader'
 import TriangleBreathVisualization from '../components/visualizations/TriangleBreath'
 import { spacing } from '../theme'
-import { TRatio, Ratio, ratioToMs, } from '../lib/Ratio'
+import { TRatio, ratioToMs, } from '../lib/Ratio'
+import { RootState } from '../redux/root-reducer'
+import * as settings from '../redux/settings'
 
-
-interface Props {
-  
+interface SProps {
+  ratio: TRatio;
 }
 
-interface State {
+interface DProps {
+  setRatio: (ratio:TRatio) => void
+}
+
+interface IProps {
   ratio: TRatio
 }
 
+type Props = SProps & DProps & IProps
+
+const settingsKey = "detoxbreath"
+
+const mapStateToProps = (state:RootState) => ({
+  ratio: settings.getRatioForKey(state, settingsKey)
+})
+
+const mapDispatchToprops = (dispatch) => ({
+  setRatio: (ratio:TRatio) => dispatch(settings.setRatioForKey(settingsKey, ratio))
+})
+
 const { width } = Dimensions.get("window")
 
-export default class TriangleBreath extends React.Component<Props, State> {
+export default connect(mapStateToProps, mapDispatchToprops)(
+  class TriangleBreath extends React.Component<Props> {
 
-  constructor(props:Props) {
-    super(props)
-    this.state = {
-      ratio: Ratio(4, 2, 5, 0)
+    onRatioChange = (ratio:TRatio) => {
+      this.props.setRatio(ratio)
     }
-  }
 
-  onRatioChange = (ratio:TRatio) => {
-    this.setState({ ratio: ratio })
-  }
+    render() {
+      return (
+        <View style={[styles.container]}>
+          
+          <BreathHeader 
+            title="O2 Breath"
+            subTitle="Emphazise the removal of c02 and reoxygenation of the blood."
+          />
 
-  render() {
-    return (
-      <View style={[styles.container]}>
-        
-        <BreathHeader 
-          title="O2 Breath"
-          subTitle="Emphazise the removal of c02 and reoxygenation of the blood."
-        />
+          <View style={styles.visualizationContainer}>
+            <TriangleBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} ratio={ratioToMs(this.props.ratio)} />
+          </View>
+          
+          <RatioPicker 
+            style={styles.ratioPicker}
+            value={this.props.ratio}
+            showValues={["inhale", "inHold", "exhale"]}
+            onChange={this.onRatioChange}
+          />
 
-        <View style={styles.visualizationContainer}>
-          <TriangleBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} ratio={ratioToMs(this.state.ratio)} />
         </View>
-        
-        <RatioPicker 
-          style={styles.ratioPicker}
-          value={this.state.ratio}
-          showValues={["inhale", "inHold", "exhale", "outHold"]}
-          onChange={this.onRatioChange}
-        />
-
-      </View>
-    );
-  }
-}
+      );
+    }
+  })
 
 
 const styles = StyleSheet.create({

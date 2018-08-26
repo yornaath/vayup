@@ -14,7 +14,8 @@ export type RootState = {
 
 export const reducer = persistCombineReducers<RootState>({
   key: "storage",
-  storage
+  storage,
+  whitelist: [settings.key, navigation.key]
 },{
   [appstate.key]: appstate.reducer,
   [settings.key]: settings.reducer,

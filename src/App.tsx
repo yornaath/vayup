@@ -7,8 +7,9 @@ import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import {LinearGradient, Asset} from 'expo'
 import {spacing, colors, heading} from './theme'
-import * as navigation from './redux/navigation'
 import { RootState } from './redux/root-reducer'
+import * as navigation from './redux/navigation'
+import * as appstate from './redux/appstate'
 
 
 
@@ -22,6 +23,7 @@ type DProps = {
 
 type SProps = {
   location?: navigation.Location;
+  loaded: boolean;
 }
 
 type IProps = {
@@ -38,7 +40,8 @@ export default () => (
 )
 
 const mapStateToProps = (state:RootState) => ({
-  location: navigation.getLocation(state)
+  location: navigation.getLocation(state),
+  loaded: appstate.getIsLoaded(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -84,6 +87,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     render() {
 
       const { path } = this.props.location
+      const { loaded } = this.props
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0,1],
@@ -107,6 +111,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
 
       return (
+        loaded &&
         <LinearGradient 
           start={[0.1, 0.1]}
           end={[1,1]}
