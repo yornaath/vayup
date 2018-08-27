@@ -65,7 +65,7 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
         <View style={styles.reminderTimesContainer}>
           {
             settings.reminderTimes.map((reminderTime, index) => (
-              <View style={styles.reminderTime}>
+              <View key={index} style={styles.reminderTime}>
                 <TouchableOpacity onLongPress={this.onLongPress(index)}>
                   <Text style={styles.reminderTimeText}>
                     {moment(reminderTime).format("h:mm a")}
