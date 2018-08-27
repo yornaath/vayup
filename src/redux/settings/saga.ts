@@ -5,7 +5,10 @@ import { getState } from './reducer'
 import * as actions from './actions'
 
 export function* saga():IterableIterator<any> {
-  yield takeEvery([getType(actions.addReminderTime), getType(actions.removeReminderTimeAtIndex)], resetReminders)
+  yield takeEvery([
+    getType(actions.addReminderTime), 
+    getType(actions.removeReminderTimeAtIndex)
+  ], resetReminders)
 }
 
 function* resetReminders () {
