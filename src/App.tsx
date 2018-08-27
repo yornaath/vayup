@@ -85,9 +85,14 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       }
     }
 
+    closeMenu = () => {
+      this.setState({ menuOpen: false })
+    }
+
     render() {
 
       const { path } = this.props.location
+      const { menuOpen } = this.state
       const { loaded } = this.props
       
       const menuScale = this.menuAnimation.interpolate({
@@ -134,6 +139,11 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           </View>
 
           <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
+
+          {
+            menuOpen &&
+              <TouchableOpacity style={styles.touchableCloseBackground} onPress={this.closeMenu}/>
+          }
 
           <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
             <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
@@ -214,6 +224,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     elevation: 1,
     shadowColor: 'black'
+  },
+  touchableCloseBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   menuContainer: {
     position: "absolute",
