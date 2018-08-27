@@ -4,7 +4,7 @@ import { delay } from 'bluebird'
 import { StyleSheet, View, Animated } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
-import { TRatio, ratioToMs } from '../../lib/Ratio'
+import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
 
 interface Props {
   ratio: TRatio;
@@ -33,6 +33,15 @@ export default class TriangleBreath extends React.Component<Props, State> implem
 
   async componentDidMount() {
     this.startAnimation()
+  }
+
+  componentWillReceiveProps(nextProps:Props) {
+    if(!ratioEquals(this.props.ratio, nextProps.ratio)) {
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        this.restartAnimation()
+      }, 500)
+    }
   }
 
   async animateToValue(value: {x: number, y:number}, duration: number) {
