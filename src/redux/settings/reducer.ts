@@ -4,12 +4,14 @@ import * as actions from './actions'
 import { TRatio, Ratio, BoxRatio } from '../../lib/Ratio'
 
 export interface State {
+  remindersOn: boolean;
   ratios: {
     [key:string]: TRatio
   }
 }
 
 export const initialState:State = {
+  remindersOn: true,
   ratios: {
     boxbreath: BoxRatio(4),
     breathe: Ratio(4, 0, 4, 0),
@@ -31,6 +33,12 @@ export const reducer = (state = initialState, action:SettingsAction) => {
           ...state.ratios,
           [action.payload.key]: action.payload.ratio
         }
+      }
+    
+    case getType(actions.setRemindersOn):
+      return {
+        ...state,
+        remindersOn: action.payload
       }
       
   }

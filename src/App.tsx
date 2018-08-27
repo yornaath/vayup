@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch } from 'react-native'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
 import { store } from './redux/store'
@@ -11,6 +11,7 @@ import {spacing, colors, heading} from './theme'
 import { RootState } from './redux/root-reducer'
 import * as navigation from './redux/navigation'
 import * as appstate from './redux/appstate'
+import * as settings from './redux/settings'
 
 
 
@@ -19,12 +20,14 @@ interface State {
 }
 
 type DProps = {
-  setLocation: (location:navigation.Location) => navigation.NavigationAction
+  setLocation: (location:navigation.Location) => navigation.NavigationAction;
+  setRemindersOn: (on:Boolean) => settings.SettingsAction
 }
 
 type SProps = {
   location?: navigation.Location;
   loaded: boolean;
+  settings: settings.State
 }
 
 type IProps = {
@@ -42,11 +45,13 @@ export default () => (
 
 const mapStateToProps = (state:RootState) => ({
   location: navigation.getLocation(state),
-  loaded: appstate.getIsLoaded(state)
+  loaded: appstate.getIsLoaded(state),
+  settings: settings.getstate(state)
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  setLocation: (location:navigation.Location) => dispatch(navigation.setLocation(location))
+  setLocation: (location:navigation.Location) => dispatch(navigation.setLocation(location)),
+  setRemindersOn: (on:boolean) => dispatch(settings.setRemindersOn(on))
 })
 
 const screen = Dimensions.get("screen")
@@ -70,7 +75,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           toValue: 1
         }).start()
       }
-      else if(this.state.menuOpen) {
+      else if(this.state.menuOpen && !nextState.menuOpen) {
         Animated.spring(this.menuAnimation, {
           toValue: 0
         }).start()
@@ -79,6 +84,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
     navigate = (path:string) => {
       return () => {
+        this.closeMenu()
         this.props.setLocation({
           path
         })
@@ -89,11 +95,15 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       this.setState({ menuOpen: false })
     }
 
+    setRemindersOn = (value:boolean) => {
+      this.props.setRemindersOn(value)
+    }
+
     render() {
 
       const { path } = this.props.location
       const { menuOpen } = this.state
-      const { loaded } = this.props
+      const { settings, loaded } = this.props
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0,1],
@@ -171,6 +181,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               <Text style={styles.menuButtonText}>O2 Breath</Text>
               <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
             </TouchableOpacity>
+            <View style={styles.menuButtonContainer}>
+              <Text style={[styles.menuButtonDescription, { fontSize: heading.three, marginBottom: spacing.one}]}>Reminders</Text>
+              <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
+            </View>
           </Animated.View>
 
 
