@@ -1,23 +1,20 @@
 import React from 'react'
+import {LinearGradient, Asset} from 'expo'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch } from 'react-native'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
-import { store } from './redux/store'
-import Breath from './containers/Breath'
-import BoxBreath from './containers/BoxBreath'
-import TriangleBreath from './containers/TriangleBreath'
-import {LinearGradient, Asset} from 'expo'
 import {spacing, colors, heading} from './theme'
+import { store } from './redux/store'
 import { RootState } from './redux/root-reducer'
 import * as navigation from './redux/navigation'
 import * as appstate from './redux/appstate'
 import * as settings from './redux/settings'
+import Breath from './containers/Breath'
+import BoxBreath from './containers/BoxBreath'
+import TriangleBreath from './containers/TriangleBreath'
+import ReminderTimes from './containers/ReminderTimes'
+import DateTimePicker from 'react-native-modal-datetime-picker'
 
-
-
-interface State {
-  menuOpen: boolean
-}
 
 type DProps = {
   setLocation: (location:navigation.Location) => navigation.NavigationAction;
@@ -36,17 +33,14 @@ type IProps = {
 
 type Props = IProps & DProps & SProps
 
-
-export default () => (
-  <Provider store={store}>
-    <App />
-  </Provider>
-)
+interface State {
+  menuOpen: boolean;
+}
 
 const mapStateToProps = (state:RootState) => ({
   location: navigation.getLocation(state),
   loaded: appstate.getIsLoaded(state),
-  settings: settings.getstate(state)
+  settings: settings.getState(state)
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -56,13 +50,19 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 const screen = Dimensions.get("screen")
 
+export default () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+
 const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
   class extends React.Component<Props, State> {
 
     menuAnimation = new Animated.Value(0)
 
     state = {
-      menuOpen: false,
+      menuOpen: false
     }
 
     menuButtonPress = () => {
@@ -107,7 +107,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0,1],
-        outputRange: [0, 42]
+        outputRange: [0, 48]
       })
 
       const innerMenuOpacity = this.menuAnimation.interpolate({
@@ -183,7 +183,13 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             </TouchableOpacity>
             <View style={styles.menuButtonContainer}>
               <Text style={[styles.menuButtonDescription, { fontSize: heading.three, marginBottom: spacing.one}]}>Reminders</Text>
-              <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
+              <View style={styles.reminderSettingsToggleRow}>
+                <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
+                {
+                  settings.remindersOn &&
+                    <ReminderTimes />
+                }
+              </View>
             </View>
           </Animated.View>
 
@@ -262,5 +268,8 @@ const styles = StyleSheet.create({
   menuButtonDescription: {
     color: "white",
     fontSize: heading.four
+  },
+  reminderSettingsToggleRow: {
+    flexDirection: "row"
   }
 })

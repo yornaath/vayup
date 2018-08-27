@@ -1,5 +1,6 @@
 
 import { createAction } from 'typesafe-actions'
+import { Moment } from 'moment'
 import { TRatio } from '../../lib/Ratio'
 
 export const setRatioForKey = createAction("@settings/SET_RATIO_FOR_KEY", resolve => {
@@ -8,4 +9,12 @@ export const setRatioForKey = createAction("@settings/SET_RATIO_FOR_KEY", resolv
 
 export const setRemindersOn = createAction("@settings/SET_REMINDERS_ON", resolve => {
   return (on:boolean) => resolve(on)
+})
+
+export const addReminderTime = createAction("@settings/ADD_REMINDER_TIME", resolve => {
+  return (reminder: Moment) => resolve(reminder)
+})
+
+export const removeReminderTimeAtIndex = createAction("@settings/REMOVE_REMINDER_TIME_AT_INDEX", resolve => {
+  return (index:number) => resolve(index)
 })
