@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
+import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import RatioPicker from '../components/RatioPicker'
 import BreathHeader from '../components/BreathHeader'
@@ -29,7 +30,7 @@ const mapStateToProps = (state:RootState) => ({
   ratio: settings.getRatioForKey(state, settingsKey)
 })
 
-const mapDispatchToprops = (dispatch) => ({
+const mapDispatchToprops = (dispatch: Dispatch) => ({
   setRatio: (ratio:TRatio) => dispatch(settings.setRatioForKey(settingsKey, ratio))
 })
 

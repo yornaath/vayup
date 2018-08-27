@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity } from 'react-native'
+import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
 import { store } from './redux/store'
 import Breath from './containers/Breath'
@@ -44,7 +45,7 @@ const mapStateToProps = (state:RootState) => ({
   loaded: appstate.getIsLoaded(state)
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   setLocation: (location:navigation.Location) => dispatch(navigation.setLocation(location))
 })
 
