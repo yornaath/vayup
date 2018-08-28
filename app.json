@@ -21,6 +21,7 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "no.vayu",
       "supportsTablet": false
     }
   }

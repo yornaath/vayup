@@ -15,7 +15,7 @@ export interface State {
 
 
 export const initialState:State = {
-  remindersOn: true,
+  remindersOn: false,
   reminderTimes: [
     moment("2013-02-08 12:00")
   ],
