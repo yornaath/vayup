@@ -6,7 +6,7 @@ import { TRatio, Ratio, BoxRatio } from '../../lib/Ratio'
 
 export interface State {
   remindersOn: boolean;
-  reminderTimes: Moment[];
+  reminderTimes: Array<Moment>;
   ratios: {
     [key:string]: TRatio
   }

@@ -5,6 +5,7 @@ import { StyleSheet, View, Animated } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
+import BreathBall from './BreathBall'
 
 interface Props {
   ratio: TRatio;
@@ -112,12 +113,6 @@ export default class TriangleBreath extends React.Component<Props, State> implem
       extrapolate: 'clamp'
     })
 
-    var scale = this.state.ballLocation.y.interpolate({
-      inputRange: [0, 1],
-      outputRange: [1, 2],
-      extrapolate: 'clamp'
-    })
-
     return (
       <View style={[styles.container, this.props.style]}>
 
@@ -125,23 +120,14 @@ export default class TriangleBreath extends React.Component<Props, State> implem
           <Svg height={size} width={size}>
             <Svg.Path 
               strokeLineJoin="round" 
-              stroke="black" 
+              stroke={colors.highlight} 
               strokeWidth={strokeWidth} 
               fill={"transparent"} 
               d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
           </Svg>
         </View>
 
-        <Animated.View style={[
-            styles.ball,
-            {
-              transform: [
-                {translateX: x},
-                {translateY: y},
-                {scale: scale}
-              ]
-            }
-          ]}/>
+        <BreathBall x={x} y={y} scale={this.state.ballLocation.y} size={35} offset={0}/>
 
       </View>
     );
@@ -156,7 +142,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   ballBorder: {
     borderWidth: 5,
@@ -166,8 +152,8 @@ const styles = StyleSheet.create({
   ball: {
     width: ballSize,
     height: ballSize,
-    backgroundColor: colors.blue,
-    shadowColor: colors.blue,
+    backgroundColor: colors.active,
+    shadowColor: colors.active,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 0.5,

@@ -1,6 +1,7 @@
 import React from 'react'
+import Color from 'color'
 import { StyleSheet, View, Text } from 'react-native'
-import {heading, spacing} from '../theme'
+import {colors, heading, spacing } from '../theme'
 
 interface Props {
   title: string|React.Component;
@@ -31,18 +32,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-end",
-    
   },
   title: {
     flex: 1,
   },
   titleHeader: {
     fontSize: heading.one,
-    color: "rgba(0,0,0,0.96)",
+    color: Color(colors.highlight).desaturate(0.5).darken(0.2).toString(),
     marginBottom: spacing.one
   },
   titleSubHeader: {
     fontSize: heading.three,
-    color: "rgba(0,0,0,0.7)",
+    color: Color(colors.highlight).desaturate(0.75).darken(0.1).toString(),
   },
 })

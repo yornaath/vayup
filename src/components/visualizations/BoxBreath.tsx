@@ -1,9 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native' 
 import { delay } from 'bluebird'
+import Color from 'color'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
+import BreathBall from './BreathBall'
 
 interface Props {
   ratio: TRatio;
@@ -117,25 +119,10 @@ export default class BoxBreath extends React.Component<Props, State> implements 
       outputRange: [0, -(this.props.size - borderWidth)],
       extrapolate: 'clamp'
     })
-
-    var scale = this.state.breath.y.interpolate({
-      inputRange: [0, 1],
-      outputRange: [1, 2.2],
-      extrapolate: 'clamp'
-    })
-
+    
     return (
       <TouchableOpacity style={[styles.box, {height: this.props.size, width: this.props.size}]} onPress={this.restartAnimation.bind(this)}>
-          <Animated.View style={[
-            styles.ball,
-            {
-              transform: [
-                {translateX: x},
-                {translateY: y},
-                {scale: scale}
-              ]
-            }
-          ]}></Animated.View>
+          <BreathBall x={x} y={y} scale={this.state.breath.y} size={35} offset={borderWidth}/>
           <Text style={styles.text}>
             {this.state.text}
           </Text>
@@ -144,14 +131,14 @@ export default class BoxBreath extends React.Component<Props, State> implements 
   }
 }
 
-const borderWidth = 4
-const ballSize = 20
-const ballOffset = (borderWidth / 2) + (ballSize / 2)
+
+
+const borderWidth = 5
 
 const styles = StyleSheet.create({
   box: {
     borderWidth: borderWidth,
-    borderColor: "rgb(50,50,50)",
+    borderColor: colors.highlight,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center"
@@ -160,22 +147,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  ball: {
-    width: ballSize,
-    height: ballSize,
-    backgroundColor: colors.blue,
-    shadowColor: colors.blue,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 0.5,
-    position: "absolute",
-    bottom: -ballOffset,
-    left: -ballOffset,
-    borderRadius: ballSize
-  },
   text: {
     fontSize: 25,
     fontWeight: "normal",
-    color: colors.blue
+    color: colors.active
   }
 });

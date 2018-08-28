@@ -131,7 +131,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
         <LinearGradient 
           start={[0.1, 0.1]}
           end={[1,1]}
-          colors={["rgb(255,255,255)", "rgb(235,235,235)"]}
+          colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
           style={styles.container}>
 
           <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   menuBackground: {
-    backgroundColor: colors.blue,
+    backgroundColor: colors.active,
     position: "absolute",
     top: 45,
     left: spacing.four,

@@ -157,16 +157,16 @@ const styles = StyleSheet.create({
   },
   ballBorder: {
     borderWidth: 5,
-    borderColor: "black",
+    borderColor: colors.highlight,
   },
   ball: {
-    backgroundColor: colors.blue,
+    backgroundColor: colors.active,
     justifyContent: "center",
     alignItems: "center"
   },
   innerBall: {
     position: "absolute",
-    backgroundColor: Color(colors.blue).darken(0.15).toString(),
+    backgroundColor: Color(colors.active).darken(0.15).toString(),
     justifyContent: "center",
     alignItems: "center"
   }

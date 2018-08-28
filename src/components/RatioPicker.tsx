@@ -88,16 +88,9 @@ export default class RatioPicker extends React.Component<Props, State> {
       outputRange: [0, 1]
     })
 
-    const headerOpacity = activeValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [1, 0]
-    })
 
     return (
       <Animated.View style={[styles.container, style, {transform: [{scale}]}]}>
-        <Animated.Text style={[styles.header, {opacity: headerOpacity}]}>
-          ratio
-        </Animated.Text>
         <View style={styles.pickersContainer}>
           {
             map(showValues, (ratio) => (
@@ -134,7 +127,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     textAlign: "center",
-    color: colors.blue,
+    color: colors.highlight,
     fontSize: heading.two
   },
   pickersContainer: {
@@ -163,14 +156,14 @@ const styles = StyleSheet.create({
   },
   secondsPickerItem: {
     fontSize: 40,
-    color: colors.blue,
+    color: colors.highlight,
   },
   labelTextContainer: {
     flex: 1,
     padding: 5,
   },
   labelText: {
-    color: colors.blue,
+    color: colors.highlight,
     borderRadius: 4,
     textAlign: "center",
     overflow: "hidden"
