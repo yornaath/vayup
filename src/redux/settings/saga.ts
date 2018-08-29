@@ -31,12 +31,13 @@ export function* resetReminders () {
   yield call(unscheduleAllReminders)
 
   for(let reminderTime of reminderTimes) {
+
     const reminderMoment = moment(reminderTime)
-    const today = moment()
-    const reminderDate = today.set({
+    const reminderDate = moment().set({
       hour: reminderMoment.hour(),
       minute: reminderMoment.minute()
     })
+
     yield call(Notifications.scheduleLocalNotificationAsync, {
       title: "Remember to breathe.",
       body: "Take a time out to do your breathing excercises."

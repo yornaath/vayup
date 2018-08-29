@@ -20,13 +20,17 @@ export type AppstateAction = ActionType<typeof actions>;
 
 export const reducer = (state = initialState, action:AppstateAction) => {
   switch(action.type) {
+
     case getType(actions.setState): 
       return { ...state, 
                appstate: action.payload.nextAppState}
+
     case getType(actions.setStorageHydrated):
       return { ...state, storageHydrated: action.payload }
+
     case getType(actions.setAssetsLoaded):
       return { ...state, assetsLoaded: action.payload }
+      
   }
   return state
 }

@@ -24,6 +24,6 @@ export const map = (mapper:(duration:number, breath:Breath) => number, ratio:TRa
   outHold: mapper(ratio.outHold || 0, 'outHold')
 })
 
-export const equals = (a:TRatio, b:TRatio):boolean => _isEqual(a, b)
-
 export const ratioToMs = _partial(map, (n:number) => n * 1000)
+
+export const equals = (a:TRatio, b:TRatio):boolean => _isEqual(a, b)

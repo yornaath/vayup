@@ -1,12 +1,11 @@
 import { ActionType, getType } from 'typesafe-actions'
-import moment, { Moment } from 'moment'
 import { RootState } from '../root-reducer'
 import * as actions from './actions'
 import { TRatio, Ratio, BoxRatio } from '../../lib/Ratio'
 
 export interface State {
   remindersOn: boolean;
-  reminderTimes: Array<Moment>;
+  reminderTimes: Array<Date>;
   ratios: {
     [key:string]: TRatio
   }
@@ -17,7 +16,7 @@ export interface State {
 export const initialState:State = {
   remindersOn: false,
   reminderTimes: [
-    moment("2013-02-08 12:00")
+    new Date("1970-01-01 12:00")
   ],
   ratios: {
     boxbreath: BoxRatio(4),

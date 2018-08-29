@@ -1,6 +1,6 @@
 import React from 'react'
 import { Asset } from 'expo'
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import { StyleSheet, Image, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
@@ -12,7 +12,7 @@ import * as settings from '../redux/settings'
 
 
 type DProps = {
-  addReminder: (time: Moment) => void
+  addReminder: (time: Date) => void
   removeAtIndex: (index:number) => void
 }
 
@@ -35,7 +35,7 @@ const mapStateToProps = (state:RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addReminder: (time: Moment) => dispatch(settings.addReminderTime(time)),
+  addReminder: (time: Date) => dispatch(settings.addReminderTime(time)),
   removeAtIndex: (index: number) => dispatch(settings.removeReminderTimeAtIndex(index))
 })
 
@@ -63,6 +63,7 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
       return (
         <View style={styles.reminderTimesContainer}>
+        
           {
             settings.reminderTimes.map((reminderTime, index) => (
               <View key={index} style={styles.reminderTime}>
@@ -74,6 +75,7 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               </View>
             ))
           }
+
           <TouchableOpacity onPress={(() => this.setState({ addModalOpen: true }))}>
             <Image source={Asset.fromModule(require("../../assets/add.png"))} style={styles.addIcon} resizeMode={"contain"}/>
           </TouchableOpacity>
@@ -83,7 +85,7 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             isVisible={addModalOpen}
             is24Hour={false}
             onConfirm={(value) => {
-              this.props.addReminder(moment(value))
+              this.props.addReminder(value)
               this.setState({ addModalOpen: false })
             }}
             onCancel={() => this.setState({addModalOpen: false} )}/>
