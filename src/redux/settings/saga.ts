@@ -2,11 +2,11 @@
 import { getType } from 'typesafe-actions'
 import { Notifications } from 'expo'
 import moment from 'moment'
-import { takeEvery, call, select } from 'redux-saga/effects'
+import { takeEvery, call, select, Effect } from 'redux-saga/effects'
 import { getState, State } from './reducer'
 import * as actions from './actions'
 
-export function* saga():IterableIterator<any> {
+export function* saga():IterableIterator<Effect> {
 
   yield takeEvery([
     getType(actions.addReminderTime), 
