@@ -37,7 +37,7 @@ export function* resetReminders () {
       hour: reminderMoment.hour(),
       minute: reminderMoment.minute()
     })
-
+    
     yield call(Notifications.scheduleLocalNotificationAsync, {
       title: "Remember to breathe.",
       body: "Take a time out to do your breathing excercises."
@@ -50,5 +50,10 @@ export function* resetReminders () {
 }
 
 export function* unscheduleAllReminders() {
-  yield call(Notifications.dismissAllNotificationsAsync)
+  try {
+    return yield call(Notifications.cancelAllScheduledNotificationsAsync)
+  }
+  catch(error) {
+    console.log(error)
+  }
 }
