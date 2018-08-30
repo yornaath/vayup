@@ -26,7 +26,10 @@ export function* saga():IterableIterator<Effect> {
 
 export function* resetReminders () {
 
-  const { reminderTimes }:State = yield select(getState)
+  const { remindersOn, reminderTimes }:State = yield select(getState)
+
+  if(!remindersOn) 
+    return null
 
   yield call(unscheduleAllReminders)
 
@@ -50,10 +53,5 @@ export function* resetReminders () {
 }
 
 export function* unscheduleAllReminders() {
-  try {
-    return yield call(Notifications.cancelAllScheduledNotificationsAsync)
-  }
-  catch(error) {
-    console.log(error)
-  }
+  return yield call(Notifications.cancelAllScheduledNotificationsAsync)
 }
