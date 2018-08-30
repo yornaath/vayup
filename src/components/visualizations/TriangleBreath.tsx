@@ -1,7 +1,7 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { delay } from 'bluebird'
-import { StyleSheet, View, Animated } from 'react-native'
+import { StyleSheet, View, Animated, Text } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
@@ -62,15 +62,15 @@ export default class TriangleBreath extends React.Component<Props, State> implem
 
       if(!this.animationRunning) return
 
-      this.setState({text: "Innhale"})
+      this.setState({text: "innhale"})
       await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
       if(!this.animationRunning) return
 
-      this.setState({text: "Hold"})
+      this.setState({text: "hold"})
       await this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
       if(!this.animationRunning) return
 
-      this.setState({text: "Exhale"})
+      this.setState({text: "exhale"})
       await this.animateToValue({x: 0.5, y: 0}, this.props.ratio.exhale)
       if(!this.animationRunning) return
 
@@ -127,7 +127,11 @@ export default class TriangleBreath extends React.Component<Props, State> implem
           </Svg>
         </View>
 
-        <BreathBall x={x} y={y} scale={this.state.ballLocation.y} size={35} offset={0}/>
+        <Text style={[styles.text, {width: size, top: (size / 2) - 60}]}>
+          {this.state.text}
+        </Text>
+
+        <BreathBall x={x} y={y} scale={this.state.ballLocation.y} size={45} offset={-5}/>
 
       </View>
     );
@@ -169,4 +173,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  text: {
+    fontSize: 25,
+    fontWeight: "normal",
+    color: colors.active,
+    position: 'absolute',
+    left: 0,
+    textAlign: 'center'
+  }
 });

@@ -1,6 +1,6 @@
 import React from 'react'
-import {LinearGradient, Asset} from 'expo'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch } from 'react-native'
+import { LinearGradient, Asset } from 'expo'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView } from 'react-native'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
 import {spacing, colors, heading} from './theme'
@@ -13,7 +13,6 @@ import Breath from './containers/Breath'
 import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import ReminderTimes from './containers/ReminderTimes'
-import DateTimePicker from 'react-native-modal-datetime-picker'
 
 
 type DProps = {
@@ -133,67 +132,67 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           end={[1,1]}
           colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
           style={styles.container}>
+          <SafeAreaView style={{flex: 1}}>
+            <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
 
-          <Image source={Asset.fromModule(require("../assets/title_logo.png"))} style={styles.logoTitle} resizeMode={"contain"}/>
-
-          <View style={styles.contentContainer}>
-            {
-              path == "breathe" ?
-                <Breath /> :
-              path == "boxbreath" ?
-                <BoxBreath /> :
-              path == "detoxbreath" ?
-                <TriangleBreath />
-              : null
-            }
-          </View>
-
-          <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
-
-          {
-            menuOpen &&
-              <TouchableOpacity style={styles.touchableCloseBackground} onPress={this.closeMenu}/>
-          }
-
-          <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-            <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-            <Animated.Image source={Asset.fromModule(require("../assets/line-menu-white.png"))} style={[styles.menuIconImage, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
-          </TouchableOpacity>
-
-          <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
-          
-          <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
-            {scale: innerMenuScale},
-            {rotate: innerMenuRotation}
-          ]}]}>
-            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
-              <Text style={styles.menuButtonText}>Just Breathe</Text>
-              <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
-              <Text style={styles.menuButtonText}>Box Breath</Text>
-              <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
-              <Text style={styles.menuButtonText}>O2 Breath</Text>
-              <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
-            </TouchableOpacity>
-            <View style={styles.menuButtonContainer}>
-              <Text style={[styles.menuButtonDescription, { fontSize: heading.three, marginBottom: spacing.one}]}>Reminders</Text>
-              <View style={styles.reminderSettingsToggleRow}>
-                <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
-                {
-                  settings.remindersOn &&
-                    <ReminderTimes />
-                }
-              </View>
+            <View style={styles.contentContainer}>
+              {
+                path == "breathe" ?
+                  <Breath /> :
+                path == "boxbreath" ?
+                  <BoxBreath /> :
+                path == "detoxbreath" ?
+                  <TriangleBreath />
+                : null
+              }
             </View>
-          </Animated.View>
 
+            <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
 
+            {
+              menuOpen &&
+                <TouchableOpacity style={styles.touchableCloseBackground} onPress={this.closeMenu}/>
+            }
+
+            <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
+              <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
+              <Animated.Image source={Asset.fromModule(require("../assets/line-menu-white.png"))} style={[styles.menuIconImage, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
+            </TouchableOpacity>
+
+            <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/>
+            
+            <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
+              {scale: innerMenuScale},
+              {rotate: innerMenuRotation}
+            ]}]}>
+              <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
+                <Text style={styles.menuButtonText}>Just Breathe</Text>
+                <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
+                <Text style={styles.menuButtonText}>Box Breath</Text>
+                <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
+                <Text style={styles.menuButtonText}>O2 Breath</Text>
+                <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
+              </TouchableOpacity>
+              <View style={styles.menuButtonContainer}>
+                <Text style={[styles.menuButtonDescription, { fontSize: heading.three, marginBottom: spacing.one}]}>Reminders</Text>
+                <View style={styles.reminderSettingsToggleRow}>
+                  <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
+                  {
+                    settings.remindersOn &&
+                      <ReminderTimes />
+                  }
+                </View>
+              </View>
+            </Animated.View>
+
+          </SafeAreaView>
         </LinearGradient>
       )
     }

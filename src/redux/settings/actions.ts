@@ -11,7 +11,7 @@ export const setRemindersOn = createAction("@settings/SET_REMINDERS_ON", resolve
 })
 
 export const addReminderTime = createAction("@settings/ADD_REMINDER_TIME", resolve => {
-  return (reminder: Date) => resolve(reminder)
+  return (reminder: { hour:number, minute:number }) => resolve(reminder)
 })
 
 export const removeReminderTimeAtIndex = createAction("@settings/REMOVE_REMINDER_TIME_AT_INDEX", resolve => {

@@ -81,19 +81,19 @@ export default class BoxBreath extends React.Component<Props, State> implements 
 
       if(!this.animationRunning) return
 
-      this.setState({text: "Innhale"})
+      this.setState({text: "innhale"})
       await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
       if(!this.animationRunning) return
 
-      this.setState({text: "Hold"})
+      this.setState({text: "hold"})
       await this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
       if(!this.animationRunning) return
 
-      this.setState({text: "Exhale"})
+      this.setState({text: "exhale"})
       await this.animateToValue({x: 1, y: 0}, this.props.ratio.exhale)
       if(!this.animationRunning) return
 
-      this.setState({text: "Hold"})
+      this.setState({text: "hold"})
       await this.animateToValue({x: 0, y: 0}, this.props.ratio.outHold)
       if(!this.animationRunning) return
 
@@ -122,7 +122,7 @@ export default class BoxBreath extends React.Component<Props, State> implements 
     
     return (
       <TouchableOpacity style={[styles.box, {height: this.props.size, width: this.props.size}]} onPress={this.restartAnimation.bind(this)}>
-          <BreathBall x={x} y={y} scale={this.state.breath.y} size={35} offset={borderWidth}/>
+          <BreathBall x={x} y={y} scale={this.state.breath.y} size={45} offset={borderWidth}/>
           <Text style={styles.text}>
             {this.state.text}
           </Text>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   box: {
     borderWidth: borderWidth,
     borderColor: colors.highlight,
-    borderRadius: 5,
+    borderRadius: 4,
     justifyContent: "center",
     alignItems: "center"
   },

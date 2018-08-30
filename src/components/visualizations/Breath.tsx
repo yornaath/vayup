@@ -5,6 +5,7 @@ import Color from 'color'
 import { colors } from '../../theme'
 import { Vizualization } from './types'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
+import BreathBall from './BreathBall'
 
 interface Props {
   ratio: TRatio;
@@ -110,40 +111,8 @@ export default class Breath extends React.Component<Props, State> implements Viz
         style={[styles.container, this.props.style]} 
         onPress={this.restartAnimation.bind(this)}>
 
-          <View 
-            style={[styles.ballBorder, {borderRadius: size}]}>
+          <BreathBall size={size} scale={scale}/>
 
-              <Animated.View 
-                style={[
-                  styles.ball,
-                  {
-                    width: size,
-                    height: size,
-                    borderRadius: size,
-                    transform: [
-                      {scale: scale}
-                    ]
-                  }
-                ]
-              } />
-
-              <View 
-                style={[
-                  styles.innerBall,
-                  {
-                    width: size,
-                    height: size,
-                    top: 0,
-                    left: 0,
-                    borderRadius: size,
-                    transform: [
-                      {scale: lowerScale}
-                    ]
-                  }
-                ]
-              } />
-              
-          </View>
       </TouchableOpacity>
     );
   }
@@ -166,7 +135,7 @@ const styles = StyleSheet.create({
   },
   innerBall: {
     position: "absolute",
-    backgroundColor: Color(colors.active).darken(0.15).toString(),
+    backgroundColor: Color(colors.active).darken(0.2).toString(),
     justifyContent: "center",
     alignItems: "center"
   }

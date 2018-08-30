@@ -1,6 +1,7 @@
 import React from 'react'
 import { Asset } from 'expo'
 import moment from 'moment'
+import omit from 'lodash/omit'
 import { StyleSheet, Image, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
@@ -12,7 +13,7 @@ import * as settings from '../redux/settings'
 
 
 type DProps = {
-  addReminder: (time: Date) => void
+  addReminder: (time: {hour: number, minute:number}) => void
   removeAtIndex: (index:number) => void
 }
 
@@ -27,7 +28,8 @@ type IProps = {
 type Props = IProps & DProps & SProps
 
 interface State {
-  addModalOpen: boolean
+  addModalOpen: boolean;
+  editModalsOpen: {[key:number]: boolean}
 }
 
 const mapStateToProps = (state:RootState) => ({
@@ -35,7 +37,7 @@ const mapStateToProps = (state:RootState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addReminder: (time: Date) => dispatch(settings.addReminderTime(time)),
+  addReminder: (time: {hour: number, minute:number}) => dispatch(settings.addReminderTime(time)),
   removeAtIndex: (index: number) => dispatch(settings.removeReminderTimeAtIndex(index))
 })
 
@@ -43,17 +45,36 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
   class ReminderTimes extends React.Component<Props, State> {
 
-    state = {
-      addModalOpen: false
+    state:State = {
+      addModalOpen: false,
+      editModalsOpen: {}
     }
 
-    onLongPress = (index:number) => {
+    onLongPressReminder = (index:number) => {
       return () => {
         Alert.alert("Remove reminder", "Areyou sure you want to remove this reminder?", [
           {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
           {text: 'Yes', onPress: () => this.props.removeAtIndex(index)},
         ])
       }
+    }
+
+    onPressReminder = (index:number) => {
+      return () => {
+        this.openModalForIndex(index)
+      }
+    }
+
+    openModalForIndex = (index: number) => {
+      this.setState({
+        editModalsOpen: { ...this.state.editModalsOpen, [index]: true }
+      })
+    }
+
+    closeModalForIndex = (index: number) => {
+      this.setState({
+        editModalsOpen: omit(this.state.editModalsOpen, index)
+      })
     }
 
     render() {
@@ -67,11 +88,20 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           {
             settings.reminderTimes.map((reminderTime, index) => (
               <View key={index} style={styles.reminderTime}>
-                <TouchableOpacity onLongPress={this.onLongPress(index)}>
+                <TouchableOpacity onPress={this.onPressReminder(index)} onLongPress={this.onLongPressReminder(index)}>
                   <Text style={styles.reminderTimeText}>
-                    {moment(reminderTime).format("h:mm a")}
+                    {reminderTime.hour}:{reminderTime.minute < 9 && "0"}{reminderTime.minute}
                   </Text>
                 </TouchableOpacity>
+                {/* <DateTimePicker
+                  date={reminderTime}
+                  mode="time"
+                  isVisible={editModalsOpen[index]}
+                  is24Hour={false}
+                  onConfirm={(value) => {
+                    this.closeModalForIndex(index)
+                  }}
+                  onCancel={() => this.closeModalForIndex(index)}/> */}
               </View>
             ))
           }
@@ -85,7 +115,10 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             isVisible={addModalOpen}
             is24Hour={false}
             onConfirm={(value) => {
-              this.props.addReminder(value)
+              this.props.addReminder({
+                hour: moment(value).get("hour"),
+                minute: moment(value).get("minute")
+              })
               this.setState({ addModalOpen: false })
             }}
             onCancel={() => this.setState({addModalOpen: false} )}/>

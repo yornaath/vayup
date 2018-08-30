@@ -4,24 +4,24 @@ import { Animated, StyleSheet } from 'react-native'
 import Color from 'color'
 import { colors } from '../../theme'
 
-export default (props:{ size:number, x:Animated.AnimatedInterpolation, y: Animated.AnimatedInterpolation, scale: Animated.AnimatedInterpolation, offset:number }) => {
+export default (props:{ size:number, x?:Animated.AnimatedInterpolation, y?: Animated.AnimatedInterpolation, scale: Animated.AnimatedInterpolation, offset?:number }) => {
 
   const width = props.size
   const height = props.size
-  const ballOffset = (props.offset / 2) + (props.size / 2)
+  const ballOffset = ((props.offset || 0) / 2) + (props.size / 2)
   const bottom = -ballOffset
   const left = -ballOffset
   const borderRadius = props.size
 
   const innerScale = props.scale.interpolate({
     inputRange: [0, 1],
-    outputRange: [0.5, 1],
+    outputRange: [0.3, 0.45],
     extrapolate: 'clamp'
   })
 
   const outerScale = props.scale.interpolate({
     inputRange: [0, 1],
-    outputRange: [1, 1.25],
+    outputRange: [0.5, 1],
     extrapolate: 'clamp'
   })
 
@@ -32,8 +32,8 @@ export default (props:{ size:number, x:Animated.AnimatedInterpolation, y: Animat
         { width, height, bottom, left, borderRadius },
         {
           transform: [
-            {translateX: props.x},
-            {translateY: props.y},
+            {translateX: props.x || 0},
+            {translateY: props.y || 0},
             {scale: outerScale}
           ]
         }
@@ -44,8 +44,8 @@ export default (props:{ size:number, x:Animated.AnimatedInterpolation, y: Animat
         { width, height, bottom, left, borderRadius },
         {
           transform: [
-            {translateX: props.x},
-            {translateY: props.y},
+            {translateX: props.x || 0},
+            {translateY: props.y || 0},
             {scale: innerScale}
           ]
         }
@@ -56,15 +56,12 @@ export default (props:{ size:number, x:Animated.AnimatedInterpolation, y: Animat
 
 const styles = StyleSheet.create({
   ball: {
-    backgroundColor: "white",
+    backgroundColor: colors.active,
     shadowColor: colors.active,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.2,
-    shadowRadius: 0.5,
     position: "absolute",
   },
   innerBall: {
-    backgroundColor: Color(colors.active).darken(0).toString(),
+    backgroundColor: Color(colors.active).darken(0.2).toString(),
   },
   text: {
     fontSize: 25,

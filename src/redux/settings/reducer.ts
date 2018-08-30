@@ -5,7 +5,10 @@ import { TRatio, Ratio, BoxRatio } from '../../lib/Ratio'
 
 export interface State {
   remindersOn: boolean;
-  reminderTimes: Array<Date>;
+  reminderTimes: Array<{ 
+    hour:number, 
+    minute: number 
+  }>;
   ratios: {
     [key:string]: TRatio
   }
@@ -16,7 +19,7 @@ export interface State {
 export const initialState:State = {
   remindersOn: false,
   reminderTimes: [
-    new Date("1970-01-01 12:00")
+    {hour: 12, minute: 0}
   ],
   ratios: {
     boxbreath: BoxRatio(4),
