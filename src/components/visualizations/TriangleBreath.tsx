@@ -84,8 +84,8 @@ export default class TriangleBreath extends React.Component<Props, State> implem
   }
 
   async stopAnimation() {
+    this.animationRunning = false
     if(this.animation) {
-      this.animationRunning = false
       this.animation.stop()
     }
   }
