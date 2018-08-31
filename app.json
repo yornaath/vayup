@@ -22,7 +22,8 @@
     ],
     "ios": {
       "bundleIdentifier": "no.vayu",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "buildNumber": "2"
     }
   }
 }
