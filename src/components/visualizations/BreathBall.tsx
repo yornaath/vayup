@@ -69,3 +69,5 @@ const styles = StyleSheet.create({
     color: colors.active
   }
 });
+
+console.log(Color(colors.active).darken(0.2).hex() ,colors.active)

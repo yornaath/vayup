@@ -1,5 +1,5 @@
 import { AppState } from 'react-native'
-import { Amplitude, Permissions } from 'expo'
+import { Amplitude, Font, Permissions } from 'expo'
 import { channel } from 'redux-saga'
 import { takeEvery, select, put, call } from 'redux-saga/effects'
 import { setState, setAssetsLoaded } from './actions'
@@ -17,6 +17,7 @@ export function* saga() {
 }
 
 export function* init() {
+  yield call(loadAssets)
   yield put(setAssetsLoaded(true))
   const hasNotificationPermission = yield call([Permissions, 'getAsync'], Permissions.NOTIFICATIONS)
   if(hasNotificationPermission.status !== "granted") {
@@ -28,4 +29,10 @@ function* appStatechanged(nextAppState:string) {
   const prevAppState = (yield select(getAppState)).appstate
   yield put(setState({ prevAppState, nextAppState }))
   yield call(Amplitude.logEventWithProperties, 'appStatechanged', { prevAppState, nextAppState })
+}
+
+function* loadAssets() {
+  yield call(Font.loadAsync, {
+    'comfortaa-bold': require('../../../assets/fonts/Comfortaa-Bold.ttf'),
+  })
 }
