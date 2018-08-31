@@ -11,7 +11,7 @@ export interface Props {
   style: Object;
   value?: TRatio;
   labels?: RatioLabels;
-  showValues: Array<Breath>
+  breaths: Array<Breath>
   onChange?: (value:TRatio) => void
 }
 
@@ -75,7 +75,7 @@ export default class RatioPicker extends React.Component<Props, State> {
 
   render() {
 
-    const {style, showValues} = this.props
+    const {style, breaths} = this.props
     const {value, activeValue, active} = this.state
 
     const scale = activeValue.interpolate({
@@ -93,7 +93,7 @@ export default class RatioPicker extends React.Component<Props, State> {
       <Animated.View style={[styles.container, style, {transform: [{scale}]}]}>
         <View style={styles.pickersContainer}>
           {
-            map(showValues, (ratio) => (
+            map(breaths, (ratio) => (
               <View key={ratio} style={styles.ratioContainer} onTouchStart={this.activityHandler}>
                 <View style={styles.pickerContainer}>
                   <Picker style={[styles.secondsPicker, { overflow: !active ? "hidden" : "visible" }]}  itemStyle={styles.secondsPickerItem} selectedValue={value[ratio]} onValueChange={this.createValueChangeHandler(ratio)}>

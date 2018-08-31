@@ -59,7 +59,7 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           <RatioPicker 
             style={styles.ratioPicker}
             value={this.props.ratio}
-            showValues={["inhale", "inHold", "exhale"]}
+            breaths={["inhale", "inHold", "exhale"]}
             onChange={this.onRatioChange}
           />
 
