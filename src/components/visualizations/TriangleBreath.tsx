@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     color: colors.active,
     position: 'absolute',
     left: 0,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'comfortaa-regular',
   }
 });

@@ -34,5 +34,7 @@ function* appStatechanged(nextAppState:string) {
 function* loadAssets() {
   yield call(Font.loadAsync, {
     'comfortaa-bold': require('../../../assets/fonts/Comfortaa-Bold.ttf'),
+    'comfortaa-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
+    'comfortaa-light': require('../../../assets/fonts/Comfortaa-Light.ttf'),
   })
 }

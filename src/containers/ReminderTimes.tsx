@@ -111,6 +111,7 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           </TouchableOpacity>
 
           <DateTimePicker
+            titleIOS={"Pick a reminder time."}
             mode="time"
             isVisible={addModalOpen}
             is24Hour={false}
@@ -142,7 +143,8 @@ const styles = StyleSheet.create({
     marginLeft: spacing.one,
   },
   reminderTimeText: {
-    color: "white"
+    color: "white",
+    fontFamily: 'comfortaa-regular',
   },
   addIcon: {
     height: 24,

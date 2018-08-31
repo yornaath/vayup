@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     fontWeight: "normal",
-    color: colors.active
+    color: colors.active,
+    fontFamily: 'comfortaa-regular',
   }
 });

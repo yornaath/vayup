@@ -39,10 +39,12 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: heading.one,
     color: Color(colors.highlight).desaturate(0.5).darken(0.2).toString(),
-    marginBottom: spacing.one
+    marginBottom: spacing.one,
+    fontFamily: 'comfortaa-bold'
   },
   titleSubHeader: {
     fontSize: heading.three,
+    fontFamily: 'comfortaa-regular',
     color: Color(colors.highlight).desaturate(0.75).darken(0.1).toString(),
   },
 })

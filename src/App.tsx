@@ -106,23 +106,23 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       const { settings, loaded } = this.props
       
       const menuScale = this.menuAnimation.interpolate({
-        inputRange: [0,1],
+        inputRange: [0, 1],
         outputRange: [0, 48]
       })
 
       const innerMenuOpacity = this.menuAnimation.interpolate({
-        inputRange: [0,1],
+        inputRange: [0, 1],
         outputRange: [0, 42]
       })
 
       const innerMenuScale = this.menuAnimation.interpolate({
-        inputRange: [0,1],
+        inputRange: [0, 1],
         outputRange: [0, 1]
       })
 
       const innerMenuRotation = this.menuAnimation.interpolate({
         inputRange: [0,1],
-        outputRange: ['-10deg', '0deg']
+        outputRange: ['-15deg', '0deg']
       })
 
 
@@ -155,17 +155,15 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                   <TouchableOpacity style={styles.touchableCloseBackground} onPress={this.closeMenu}/>
               }
 
-              {/* <TouchableOpacity onPress={this.menuButtonPress} style={styles.menuIcon}>
-                <Image source={Asset.fromModule(require("../assets/line-menu.png"))} style={styles.menuIconImage} resizeMode={"contain"}/>
-              </TouchableOpacity> */}
+              {
+                menuOpen ?
+                  <MenuIcon style={[styles.menuIcon]} color="white" onPress={this.menuButtonPress} /> :
+                  <MenuIcon style={[styles.menuIcon]} onPress={this.menuButtonPress}/>
+              }
 
-              <MenuIcon style={styles.menuIcon} onPress={this.menuButtonPress}/>
-              <MenuIcon style={[styles.menuIcon, {opacity: innerMenuOpacity}]} color="white" onPress={this.menuButtonPress} />
-
-              {/* <Animated.Image source={Asset.fromModule(require("../assets/title_logo_white.png"))} style={[styles.logoTitle, {opacity: innerMenuOpacity}]} resizeMode={"contain"}/> */}
-              <View style={styles.logoTitle}>
+              <Animated.View style={[styles.logoTitle, {opacity: innerMenuOpacity}]}>
                 <Text style={styles.logoTitleText}>vayup</Text>
-              </View>
+              </Animated.View>
               
               <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
                 {scale: innerMenuScale},
@@ -275,11 +273,13 @@ const styles = StyleSheet.create({
   menuButtonText: {
     color: "white",
     fontSize: heading.one,
-    marginBottom: spacing.one
+    marginBottom: spacing.one,
+    fontFamily: 'comfortaa-regular'
   },
   menuButtonDescription: {
     color: "white",
-    fontSize: heading.four
+    fontSize: heading.four,
+    fontFamily: 'comfortaa-regular'
   },
   reminderSettingsToggleRow: {
     flexDirection: "row"
