@@ -1,7 +1,7 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { delay } from 'bluebird'
-import { StyleSheet, View, Animated, Text } from 'react-native'
+import { StyleSheet, View, Animated, Text, TouchableOpacity } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
@@ -114,27 +114,29 @@ export default class TriangleBreath extends React.Component<Props, State> implem
     })
 
     return (
-      <View style={[styles.container, this.props.style]}>
+      <TouchableOpacity onPress={this.restartAnimation.bind(this)}>
+        <View style={[styles.container, this.props.style]}>
 
-        <View style={styles.triangleContainer}>
-          <Svg height={size} width={size}>
-            <Svg.Path 
-              strokeLineJoin="round" 
-              stroke={colors.highlight} 
-              strokeWidth={strokeWidth} 
-              fill={"transparent"} 
-              d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
-          </Svg>
+          <View style={styles.triangleContainer}>
+            <Svg height={size} width={size}>
+              <Svg.Path 
+                strokeLineJoin="round" 
+                stroke={colors.highlight} 
+                strokeWidth={strokeWidth} 
+                fill={"transparent"} 
+                d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
+            </Svg>
+          </View>
+
+          <Text style={[styles.text, {width: size, top: (size / 2) - 60}]}>
+            {this.state.text}
+          </Text>
+
+          <BreathBall x={x} y={y} scale={this.state.ballLocation.y} size={45} offset={-5}/>
+
         </View>
-
-        <Text style={[styles.text, {width: size, top: (size / 2) - 60}]}>
-          {this.state.text}
-        </Text>
-
-        <BreathBall x={x} y={y} scale={this.state.ballLocation.y} size={45} offset={-5}/>
-
-      </View>
-    );
+      </TouchableOpacity>
+    )
   }
 }
 

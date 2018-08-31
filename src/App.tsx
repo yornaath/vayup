@@ -158,7 +158,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               {
                 menuOpen ?
                   <MenuIcon style={[styles.menuIcon]} color="white" onPress={this.menuButtonPress} /> :
-                  <MenuIcon style={[styles.menuIcon]} onPress={this.menuButtonPress}/>
+                  <MenuIcon style={[styles.menuIcon]} color={colors.highlight} onPress={this.menuButtonPress}/>
               }
 
               <Animated.View style={[styles.logoTitle, {opacity: innerMenuOpacity}]}>
@@ -225,11 +225,12 @@ const styles = StyleSheet.create({
     fontFamily: 'comfortaa-bold'
   },
   menuIcon: {
-    height: 24,
-    width: 24,
+    height: 68,
+    width: 68,
+    padding: 20,
     position: "absolute",
-    top: 45,
-    left: spacing.four
+    top: 25,
+    left: spacing.four - 20
   },
   menuIconImage: {
     height: 24,
@@ -244,8 +245,8 @@ const styles = StyleSheet.create({
   menuBackground: {
     backgroundColor: colors.active,
     position: "absolute",
-    top: 45,
-    left: spacing.four,
+    top: 34 + 17,
+    left: spacing.four + 34,
     width: 24,
     height: 24,
     borderRadius: 24,
