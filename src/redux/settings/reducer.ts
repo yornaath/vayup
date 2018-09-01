@@ -50,15 +50,6 @@ export const reducer = (state = initialState, action:SettingsAction) => {
         remindersOn: action.payload
       }
     
-    case getType(actions.setRemindersOn):
-      return {
-        ...state,
-        reminderTimes: [
-          ...state.reminderTimes,
-          action.payload
-        ]
-      }
-    
     case getType(actions.addReminderTime):
       return {
         ...state,

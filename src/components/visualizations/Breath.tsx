@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface State {
-  breath: Animated.Value
+  breath: Animated.ValueXY
 }
 
 export default class Breath extends React.Component<Props, State> implements Vizualization {
@@ -27,7 +27,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
     super(props)
     this.animationRunning = false
     this.state = {
-      breath: new Animated.Value(0)
+      breath: new Animated.ValueXY({x: 0, y: 0})
     }
   }
 
@@ -39,7 +39,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
     this.stopAnimation()
   }
   
-  async animateToValue(value: number, duration: number) {
+  async animateToValue(value: {x: number: y:number}, duration: number) {
     return new Promise(resolve => {
       this.animation = Animated.timing(this.state.breath, {
         toValue: value,
@@ -68,7 +68,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
 
   async restartAnimation() {
     this.stopAnimation()
-    this.state.breath.setValue(0)
+    this.state.breath.setValue({x: 0, y: 0})
     await delay(200)
     setImmediate(() => this.startAnimation())
   }
@@ -79,10 +79,10 @@ export default class Breath extends React.Component<Props, State> implements Viz
 
       if(!this.animationRunning) return
 
-      await this.animateToValue(1, this.props.ratio.inhale)
+      await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
       if(!this.animationRunning) return
 
-      await this.animateToValue(0, this.props.ratio.exhale)
+      await this.animateToValue({x: 0, y: 0}, this.props.ratio.exhale)
       if(!this.animationRunning) return
 
       animation()
@@ -100,7 +100,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
     const lowerScale = 0.45
     const upperScale = 1
 
-    var scale = this.state.breath.interpolate({
+    var scale = this.state.breath.y.interpolate({
       inputRange: [0, 1],
       outputRange: [lowerScale, upperScale],
       extrapolate: 'clamp'
