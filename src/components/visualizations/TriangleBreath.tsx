@@ -1,6 +1,8 @@
 import React from 'react'
 import {Svg} from 'expo'
 import { delay } from 'bluebird'
+import tail from 'lodash/tail'
+import head from 'lodash/head'
 import { StyleSheet, View, Animated, Text, TouchableOpacity } from 'react-native'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
@@ -21,6 +23,7 @@ interface State {
 export default class TriangleBreath extends React.Component<Props, State> implements Vizualization {
 
   animation: Animated.CompositeAnimation
+  animationRoutine:AsyncRoutine
   animationRunning: boolean
   timeout: any
 
@@ -58,33 +61,29 @@ export default class TriangleBreath extends React.Component<Props, State> implem
 
   async startAnimation() {
 
-    let animation = async () => {
+    this.animationRoutine = asyncRoutine([
+      () => {
+        this.setState({text: "innhale"})
+        return this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
+      },
+      () => {
+        this.setState({text: "hold"})
+        return this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
+      },
+      () => {
+        this.setState({text: "exhale"})
+        return this.animateToValue({x: 0.5, y: 0}, this.props.ratio.exhale)
+      },
+    ], {repeat: true})
 
-      if(!this.animationRunning) return
-
-      this.setState({text: "innhale"})
-      await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
-      if(!this.animationRunning) return
-
-      this.setState({text: "hold"})
-      await this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
-      if(!this.animationRunning) return
-
-      this.setState({text: "exhale"})
-      await this.animateToValue({x: 0.5, y: 0}, this.props.ratio.exhale)
-      if(!this.animationRunning) return
-
-
-      animation()
-    }
-
-    this.animationRunning = true
-
-    return animation()
+    return this.animationRoutine.start()
   }
 
   async stopAnimation() {
     this.animationRunning = false
+    if(this.animationRoutine) {
+      this.animationRoutine.stop()
+    }
     if(this.animation) {
       this.animation.stop()
     }
@@ -137,6 +136,46 @@ export default class TriangleBreath extends React.Component<Props, State> implem
         </View>
       </TouchableOpacity>
     )
+  }
+}
+
+
+type AsyncStep = Array<Function>
+
+type AsyncRoutine = {
+  start: () => Promise<void>;
+  stop: () => boolean;
+}
+
+const asyncRoutine = (steps:AsyncStep, opts?:{repeat: boolean}):AsyncRoutine => {
+
+  const _steps = steps
+  let stopped = false
+
+  const stop = () => stopped = true
+
+  const start = async () => {
+    return await next(steps)
+  }
+
+  const next = async (steps:AsyncStep):Promise<void> => {
+    if(stopped) {
+      return null
+    }
+    if(!steps.length && opts && opts.repeat) {
+      return next(_steps)
+    }
+    if(!steps.length) {
+      stop()
+      return null
+    }
+    const step = head(steps)
+    await step()
+    return next(tail(steps))
+  }
+
+  return {
+    start, stop
   }
 }
 
