@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   reminderTimeText: {
     color: "white",
-    fontFamily: 'comfortaa-regular',
+    fontFamily: 'main-regular',
   },
   addIcon: {
     height: 24,

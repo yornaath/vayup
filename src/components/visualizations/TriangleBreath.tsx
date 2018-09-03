@@ -221,6 +221,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     textAlign: 'center',
-    fontFamily: 'comfortaa-regular',
+    fontFamily: 'main-regular',
   }
 });

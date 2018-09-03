@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   secondsPickerItem: {
     fontSize: 40,
     color: colors.highlight,
-    fontFamily: 'comfortaa-regular',
+    fontFamily: 'main-regular',
   },
   labelTextContainer: {
     flex: 1,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     textAlign: "center",
     overflow: "hidden",
-    fontFamily: 'comfortaa-bold',
+    fontFamily: 'main-bold',
   },
   activitySurface: {
     position: "absolute",

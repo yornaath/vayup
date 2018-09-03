@@ -17,3 +17,4 @@ export const persistor = persistStore(store, {}, async () => {
   sagaMiddleware.run(saga)
 })
 
+persistor.purge()

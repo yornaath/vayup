@@ -39,7 +39,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
     this.stopAnimation()
   }
   
-  async animateToValue(value: {x: number: y:number}, duration: number) {
+  async animateToValue(value: {x: number, y:number}, duration: number) {
     return new Promise(resolve => {
       this.animation = Animated.timing(this.state.breath, {
         toValue: value,

@@ -4,6 +4,7 @@ import { channel } from 'redux-saga'
 import { takeEvery, select, put, call } from 'redux-saga/effects'
 import { setState, setAssetsLoaded } from './actions'
 import { getAppState } from './reducer'
+import * as settings from '../settings'
 
 export const appStateChannel = channel()
 
@@ -21,7 +22,10 @@ export function* init() {
   yield put(setAssetsLoaded(true))
   const hasNotificationPermission = yield call([Permissions, 'getAsync'], Permissions.NOTIFICATIONS)
   if(hasNotificationPermission.status !== "granted") {
-    yield call([Permissions, 'askAsync'], Permissions.NOTIFICATIONS)
+    const permissionResponse = yield call([Permissions, 'askAsync'], Permissions.NOTIFICATIONS)
+    if(permissionResponse.status == "granted") {
+      yield put(settings.setRemindersOn(true))
+    }
   }
 }
 
@@ -33,8 +37,8 @@ function* appStatechanged(nextAppState:string) {
 
 function* loadAssets() {
   yield call(Font.loadAsync, {
-    'comfortaa-bold': require('../../../assets/fonts/Comfortaa-Bold.ttf'),
-    'comfortaa-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
-    'comfortaa-light': require('../../../assets/fonts/Comfortaa-Light.ttf'),
+    'main-bold':    require('../../../assets/fonts/Comfortaa-Bold.ttf'),
+    'main-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
+    'main-light':   require('../../../assets/fonts/Comfortaa-Light.ttf'),
   })
 }

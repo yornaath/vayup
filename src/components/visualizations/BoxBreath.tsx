@@ -151,6 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "normal",
     color: colors.active,
-    fontFamily: 'comfortaa-regular',
+    fontFamily: 'main-regular',
   }
 });

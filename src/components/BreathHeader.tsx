@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
     fontSize: heading.one,
     color: Color(colors.highlight).desaturate(0.5).darken(0.2).toString(),
     marginBottom: spacing.one,
-    fontFamily: 'comfortaa-bold'
+    fontFamily: 'main-bold'
   },
   titleSubHeader: {
     fontSize: heading.three,
-    fontFamily: 'comfortaa-regular',
+    fontFamily: 'main-regular',
     color: Color(colors.highlight).desaturate(0.75).darken(0.1).toString(),
   },
 })

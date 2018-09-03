@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
-    fontFamily: 'comfortaa-bold'
+    fontFamily: 'main-bold'
   },
   menuIcon: {
     height: 68,
@@ -245,11 +245,11 @@ const styles = StyleSheet.create({
   menuBackground: {
     backgroundColor: colors.active,
     position: "absolute",
-    top: 34 + 17,
-    left: spacing.four + 34,
-    width: 24,
-    height: 24,
-    borderRadius: 24,
+    top: -20,
+    left: -20,
+    width: 28,
+    height: 28,
+    borderRadius: 28,
     shadowOffset: {height: 0, width: 0},
     shadowRadius: 1,
     shadowOpacity: 0.5,
@@ -275,12 +275,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: heading.one,
     marginBottom: spacing.one,
-    fontFamily: 'comfortaa-regular'
+    fontFamily: 'main-regular'
   },
   menuButtonDescription: {
     color: "white",
     fontSize: heading.four,
-    fontFamily: 'comfortaa-regular'
+    fontFamily: 'main-regular'
   },
   reminderSettingsToggleRow: {
     flexDirection: "row"

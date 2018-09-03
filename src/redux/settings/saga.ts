@@ -43,8 +43,6 @@ export function* resetReminders () {
     if(reminderDate.isBefore(moment())) {
       reminderDate.add(1, 'day')
     }
-    
-    console.log(reminderDate)
 
     yield call(Notifications.scheduleLocalNotificationAsync, {
       title: "Remember to breathe.",
