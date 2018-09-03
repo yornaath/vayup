@@ -97,7 +97,7 @@ export default class Breath extends React.Component<Props, State> implements Viz
   render() {
 
     const {size} = this.props
-    const lowerScale = 0.45
+    const lowerScale = 0.35
     const upperScale = 1
 
     var scale = this.state.breath.y.interpolate({
