@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, Animated, TouchableOpacity } from 'react-native' 
 import { delay } from 'bluebird'
-import Color from 'color'
 import { Vizualization } from './types'
 import { colors } from '../../theme'
 import { TRatio, equals as ratioEquals } from '../../lib/Ratio'

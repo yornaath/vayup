@@ -1,6 +1,6 @@
 import React from 'react'
 import { delay } from 'bluebird'
-import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native'
+import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import Color from 'color'
 import { colors } from '../../theme'
 import { Vizualization } from './types'

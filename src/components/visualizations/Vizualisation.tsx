@@ -2,7 +2,7 @@ import React from 'react'
 import { Animated } from 'react-native'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
-import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
+import { TRatio } from '../../lib/Ratio'
 
 
 export interface Step {
@@ -22,8 +22,6 @@ export interface Options {
 interface Props {
   ratio: TRatio;
 }
-
-
 
 interface State {
   instruction?:Instruction;
