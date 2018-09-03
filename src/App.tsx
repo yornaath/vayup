@@ -1,6 +1,7 @@
 import React from 'react'
-import { LinearGradient, Asset } from 'expo'
+import { LinearGradient, Asset, Linking } from 'expo'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView } from 'react-native'
+import Color from 'color'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
 import {spacing, colors, heading} from './theme'
@@ -99,6 +100,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       this.props.setRemindersOn(value)
     }
 
+    onPressLuneticAddHandler = () => {
+      Linking.openURL("https://itunes.apple.com/ca/app/lunetic/id1329646325?mt=8")
+    }
+
     render() {
 
       const { path } = this.props.location
@@ -107,7 +112,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 48]
+        outputRange: [0, 53]
       })
 
       const innerMenuOpacity = this.menuAnimation.interpolate({
@@ -191,6 +196,15 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                     }
                   </View>
                 </View>
+                <TouchableOpacity onPress={this.onPressLuneticAddHandler}>
+                  <View style={[styles.menuButtonContainer, styles.luneticButton]}>
+                    <Image source={require("../assets/lunetic_icon.png")} style={styles.luneticIcon}/>
+                    <View style={styles.luneticText}>
+                      <Text style={[styles.luneticTitle]}>Lunetic</Text>
+                      <Text style={[styles.luneticSubTitle]}>Keep Track of Moon Days</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </Animated.View>
 
             </SafeAreaView>
@@ -281,6 +295,33 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: heading.four,
     fontFamily: 'main-regular'
+  },
+  luneticButton: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    backgroundColor: Color(colors.active).darken(0.1).toString(),
+    borderColor: Color(colors.active).darken(0.3).toString(),
+    borderWidth: 2,
+    borderRadius: 4,
+    padding: spacing.one
+  },
+  luneticIcon: {
+    marginRight: spacing.one,
+    height: 64,
+    width: 64,
+    borderRadius: 8
+  },
+  luneticText: {
+
+  },
+  luneticTitle: {
+    fontSize: 20,
+    color: "white",
+    marginBottom: spacing.one / 3
+  },
+  luneticSubTitle: {
+    color: "white",
+    fontSize: 15
   },
   reminderSettingsToggleRow: {
     flexDirection: "row"
