@@ -1,5 +1,5 @@
 import { AppState } from 'react-native'
-import { Amplitude, Font, Permissions } from 'expo'
+import { Font, Permissions } from 'expo'
 import { channel } from 'redux-saga'
 import { takeEvery, select, put, call } from 'redux-saga/effects'
 import { setState, setAssetsLoaded } from './actions'
@@ -32,7 +32,6 @@ export function* init() {
 function* appStatechanged(nextAppState:string) {
   const prevAppState = (yield select(getAppState)).appstate
   yield put(setState({ prevAppState, nextAppState }))
-  yield call(Amplitude.logEventWithProperties, 'appStatechanged', { prevAppState, nextAppState })
 }
 
 function* loadAssets() {
