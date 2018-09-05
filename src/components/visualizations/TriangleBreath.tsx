@@ -1,24 +1,3 @@
-
-  // async startAnimation() {
-
-  //   this.animationRoutine = asyncRoutine([
-  //     () => {
-  //       this.setState({text: "innhale"})
-  //       return this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
-  //     },
-  //     () => {
-  //       this.setState({text: "hold"})
-  //       return this.animateToValue({x: 1, y: 1}, this.props.ratio.inHold)
-  //     },
-  //     () => {
-  //       this.setState({text: "exhale"})
-  //       return this.animateToValue({x: 0.5, y: 0}, this.props.ratio.exhale)
-  //     },
-  //   ], {repeat: true})
-
-  //   return this.animationRoutine.start()
-  // }
-  
 import React from 'react'
 import {Svg} from 'expo'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
