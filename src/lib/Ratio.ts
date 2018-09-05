@@ -24,6 +24,15 @@ export const map = (mapper:(duration:number, breath:Breath) => number, ratio:TRa
   outHold: mapper(ratio.outHold || 0, 'outHold')
 })
 
+export const mapToArray = <T> (mapper:(value:number, breath:Breath) => T, ratio:TRatio):Array<T> => {
+  return [
+    mapper(ratio.inhale, "inhale"),
+    mapper(ratio.inHold, "inHold"),
+    mapper(ratio.exhale, "exhale"),
+    mapper(ratio.outHold, "outHold")
+  ]
+}
+
 export const ratioToMs = _partial(map, (n:number) => n * 1000)
 
 export const equals = (a:TRatio, b:TRatio):boolean => _isEqual(a, b)

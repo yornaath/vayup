@@ -2,11 +2,12 @@ import React from 'react'
 import { Animated } from 'react-native'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
-import { TRatio } from '../../lib/Ratio'
+import * as Ratio from '../../lib/Ratio'
 
 
 export interface Step {
   instruction: Instruction;
+  duration:number;
   value: {x:number, y:number}
 }
 
@@ -20,7 +21,7 @@ export interface Options {
 }
 
 interface Props {
-  ratio: TRatio;
+  ratio: Ratio.TRatio;
 }
 
 interface State {
@@ -39,6 +40,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   constructor(props: P & Props) {
     super(props)
     this.value.setValue(this.initialValue)
+    this.steps = stepsFromRatio(props.ratio)
   }
 
   async startAnimation() {
@@ -47,6 +49,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
       return null
     }
     this.running = true
+    this.steps = stepsFromRatio(this.props.ratio)
     return await this.next(this.steps)
   }
 
@@ -72,16 +75,19 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     if(!steps.length) {
       return this.next(this.steps)
     }
-    if(!steps.length) {
-      return null
-    }
-    const nextStep = head(this.steps)
+    const nextStep = head(steps)
     await this.runStep(nextStep)
-    return this.next(tail(this.steps))
+    return this.next(tail(steps))
   }
 
   createAnimationForStep(step:Step) {
-    return Animated.timing(this.value, {toValue: step.value})
+    return Animated.timing(this.value, {toValue: step.value, duration: step.duration})
+  }
+
+  componentDidUpdate(lastProps:Props) {
+    if(!Ratio.equals(lastProps.ratio, this.props.ratio)) {
+      this.restartAnimation()
+    }
   }
 
   async runStep(step:Step) {
@@ -93,3 +99,22 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   }
 
 }
+
+const stepsFromRatio = (ratio:Ratio.TRatio) => 
+  Ratio.mapToArray<Step>((duration, breath) => ({
+    duration: duration,
+    instruction: {
+      text: 
+        breath == "inhale" ?  "inhale" :
+        breath == "inHold" ?  "hold" :
+        breath == "exhale" ?  "exhale" :
+        breath == "outHold" ? "hold" :
+          null
+    },
+    value: 
+      breath == "inhale" ?  {x: 0, y: 1} :
+      breath == "inHold" ?  {x: 1, y: 1} :
+      breath == "exhale" ?  {x: 1, y: 0} :
+      breath == "outHold" ? {x: 0, y: 0} :
+        null
+  }), ratio)
