@@ -31,7 +31,6 @@ interface State {
 
 export default class Vizualization<P, S> extends React.Component<P & Props, State & S> {
 
-  initialValue: { x: number; y:number } = {x: 0, y: 0}
   steps:Step[] = []
   animation:Animated.CompositeAnimation;
   running: boolean = false;
@@ -39,8 +38,12 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
 
   constructor(props: P & Props) {
     super(props)
-    this.value.setValue(this.initialValue)
-    this.steps = stepsFromRatio(props.ratio)
+    this.value.setValue(this.getInitialValue())
+    this.steps = this.stepsFromRatio(props.ratio)
+  }
+
+  getInitialValue() {
+    return {x: 0, y: 0}
   }
 
   async startAnimation() {
@@ -49,7 +52,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
       return null
     }
     this.running = true
-    this.steps = stepsFromRatio(this.props.ratio)
+    this.steps = this.stepsFromRatio(this.props.ratio)
     return await this.next(this.steps)
   }
 
@@ -62,7 +65,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
 
   async restartAnimation() {
     this.stopAnimation()
-    this.value.setValue(this.initialValue)
+    this.value.setValue(this.getInitialValue())
     return new Promise(resolve => {
       setImmediate(() => resolve(this.startAnimation()))
     })
@@ -80,6 +83,34 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     return this.next(tail(steps))
   }
 
+  async runStep(step:Step) {
+    return new Promise(resolve => {
+      this.setState({ instruction: step.instruction })
+      this.animation = this.createAnimationForStep(step)
+      this.animation.start(resolve)
+    })
+  }
+
+  stepsFromRatio(ratio:Ratio.TRatio) {
+    return Ratio.mapToArray<Step>((duration, breath) => ({
+      duration: duration,
+      instruction: {
+        text: 
+          breath == "inhale" ?  "inhale" :
+          breath == "inHold" ?  "hold" :
+          breath == "exhale" ?  "exhale" :
+          breath == "outHold" ? "hold" :
+            null
+      },
+      value: 
+        breath == "inhale" ?  {x: 0, y: 1} :
+        breath == "inHold" ?  {x: 1, y: 1} :
+        breath == "exhale" ?  {x: 1, y: 0} :
+        breath == "outHold" ? {x: 0, y: 0} :
+          null
+    }), ratio)
+  }
+
   createAnimationForStep(step:Step) {
     return Animated.timing(this.value, {toValue: step.value, duration: step.duration})
   }
@@ -90,31 +121,12 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     }
   }
 
-  async runStep(step:Step) {
-    return new Promise(resolve => {
-      this.setState({ instruction: step.instruction })
-      this.animation = this.createAnimationForStep(step)
-      this.animation.start(resolve)
-    })
+  componentDidMount() {
+    this.startAnimation()
+  }
+
+  componentWillUnmount() {
+    this.stopAnimation()
   }
 
 }
-
-const stepsFromRatio = (ratio:Ratio.TRatio) => 
-  Ratio.mapToArray<Step>((duration, breath) => ({
-    duration: duration,
-    instruction: {
-      text: 
-        breath == "inhale" ?  "inhale" :
-        breath == "inHold" ?  "hold" :
-        breath == "exhale" ?  "exhale" :
-        breath == "outHold" ? "hold" :
-          null
-    },
-    value: 
-      breath == "inhale" ?  {x: 0, y: 1} :
-      breath == "inHold" ?  {x: 1, y: 1} :
-      breath == "exhale" ?  {x: 1, y: 0} :
-      breath == "outHold" ? {x: 0, y: 0} :
-        null
-  }), ratio)

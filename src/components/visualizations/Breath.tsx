@@ -1,106 +1,25 @@
 import React from 'react'
-import { delay } from 'bluebird'
 import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import Color from 'color'
 import { colors } from '../../theme'
-import { Vizualization } from './types'
-import { TRatio, equals as ratioEquals } from '../../lib/Ratio'
+import Vizualization from './Vizualisation'
 import BreathBall from './BreathBall'
 
 interface Props {
-  ratio: TRatio;
   style?: Object;
   size: number;
 }
 
-interface State {
-  breath: Animated.ValueXY
-}
+interface State {}
 
-export default class Breath extends React.Component<Props, State> implements Vizualization {
-
-  animation: Animated.CompositeAnimation
-  animationRunning: boolean
-  timeout: any
-
-  constructor(props:Props) {
-    super(props)
-    this.animationRunning = false
-    this.state = {
-      breath: new Animated.ValueXY({x: 0, y: 0})
-    }
-  }
-
-  async componentDidMount() {
-    this.startAnimation()
-  }
-
-  componentWillUnmount() {
-    this.stopAnimation()
-  }
-  
-  async animateToValue(value: {x: number, y:number}, duration: number) {
-    return new Promise(resolve => {
-      this.animation = Animated.timing(this.state.breath, {
-        toValue: value,
-        useNativeDriver: true,
-        duration: duration
-      })
-      this.animation.start(resolve)
-    })
-  }
-
-  async stopAnimation() {
-    if(this.animation) {
-      this.animationRunning = false
-      this.animation.stop()
-    }
-  }
-
-  componentWillReceiveProps(nextProps:Props) {
-    if(!ratioEquals(this.props.ratio, nextProps.ratio)) {
-      clearTimeout(this.timeout)
-      this.timeout = setTimeout(() => {
-        this.restartAnimation()
-      }, 500)
-    }
-  }
-
-  async restartAnimation() {
-    this.stopAnimation()
-    this.state.breath.setValue({x: 0, y: 0})
-    await delay(200)
-    setImmediate(() => this.startAnimation())
-  }
-
-  async startAnimation() {
-
-    let animation = async () => {
-
-      if(!this.animationRunning) return
-
-      await this.animateToValue({x: 0, y: 1}, this.props.ratio.inhale)
-      if(!this.animationRunning) return
-
-      await this.animateToValue({x: 0, y: 0}, this.props.ratio.exhale)
-      if(!this.animationRunning) return
-
-      animation()
-    }
-
-    this.animationRunning = true
-
-    return animation()
-  }
-
-
+export default class Breath extends Vizualization<Props, State> {
   render() {
 
-    const {size} = this.props
+    const { size } = this.props
     const lowerScale = 0.35
     const upperScale = 1
 
-    var scale = this.state.breath.y.interpolate({
+    var scale = this.value.y.interpolate({
       inputRange: [0, 1],
       outputRange: [lowerScale, upperScale],
       extrapolate: 'clamp'

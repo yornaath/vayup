@@ -16,11 +16,6 @@ interface State {
 }
 
 export default class BoxBreath extends Vizualization<Props, State> {
-
-  componentDidMount() {
-    this.startAnimation()
-  }
-
   render() {
 
     var x = this.value.x.interpolate({
