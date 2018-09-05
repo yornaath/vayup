@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinearGradient, Asset, Linking } from 'expo'
+import { LinearGradient, Asset, Linking, AppLoading } from 'expo'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
@@ -112,7 +112,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 53]
+        outputRange: [0, 51]
       })
 
       const innerMenuOpacity = this.menuAnimation.interpolate({
@@ -132,13 +132,18 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
 
       return (
-        <LinearGradient 
-          start={[0.1, 0.1]}
-          end={[1,1]}
-          colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
-          style={styles.container}>
-          {
-            loaded &&
+        !loaded ?
+          <View style={{ flex: 1 }}>
+            <Image
+              source={require('../assets/splash.png')}
+            />
+          </View>
+        :
+          <LinearGradient 
+            start={[0.1, 0.1]}
+            end={[1,1]}
+            colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
+            style={styles.container}>
             <SafeAreaView style={{flex: 1}}>
               
               <View style={styles.contentContainer}>
@@ -197,19 +202,22 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                   </View>
                 </View>
                 <TouchableOpacity onPress={this.onPressLuneticAddHandler}>
-                  <View style={[styles.menuButtonContainer, styles.luneticButton]}>
-                    <Image source={require("../assets/lunetic_icon.png")} style={styles.luneticIcon}/>
+                <LinearGradient 
+                  start={[0.5, 0]}
+                  end={[0.5,1]}
+                  colors={[Color(colors.active).darken(0.15).toString(), Color(colors.active).darken(0.23).toString()]}
+                  style={[styles.menuButtonContainer, styles.luneticButton]}>
+                    <Image source={Asset.fromModule(require('../assets/lunetic_icon.png'))} style={styles.luneticIcon}/>
                     <View style={styles.luneticText}>
                       <Text style={[styles.luneticTitle]}>Lunetic</Text>
                       <Text style={[styles.luneticSubTitle]}>Keep Track of Moon Days</Text>
                     </View>
-                  </View>
+                  </LinearGradient>>
                 </TouchableOpacity>
               </Animated.View>
 
             </SafeAreaView>
-          }
-        </LinearGradient>
+          </LinearGradient>
       )
     }
 
@@ -283,6 +291,7 @@ const styles = StyleSheet.create({
     left: spacing.four
   },
   menuButtonContainer: {
+    overflow: "hidden",
     marginBottom: spacing.three
   },
   menuButtonText: {
@@ -299,9 +308,7 @@ const styles = StyleSheet.create({
   luneticButton: {
     alignSelf: "flex-start",
     flexDirection: "row",
-    backgroundColor: Color(colors.active).darken(0.1).toString(),
-    borderColor: Color(colors.active).darken(0.3).toString(),
-    borderWidth: 2,
+    backgroundColor: Color(colors.active).darken(0.2).toString(),
     borderRadius: 4,
     padding: spacing.one
   },

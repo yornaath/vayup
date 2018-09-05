@@ -42,6 +42,10 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   }
 
   async startAnimation() {
+    if(this.running) {
+      console.warn("trying to start a already running Vizualization")
+      return null
+    }
     this.running = true
     return await this.next(this.steps)
   }

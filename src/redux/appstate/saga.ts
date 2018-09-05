@@ -1,7 +1,7 @@
 import { AppState } from 'react-native'
-import { Font, Permissions } from 'expo'
+import { Font, Permissions, Asset } from 'expo'
 import { channel } from 'redux-saga'
-import { takeEvery, select, put, call } from 'redux-saga/effects'
+import { takeEvery, select, put, call, all } from 'redux-saga/effects'
 import { setState, setAssetsLoaded } from './actions'
 import { getAppState } from './reducer'
 import * as settings from '../settings'
@@ -40,4 +40,9 @@ function* loadAssets() {
     'main-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
     'main-light':   require('../../../assets/fonts/Comfortaa-Light.ttf'),
   })
+  yield all([
+    require('../../../assets/lunetic_icon.png')
+  ].map(image => call(function* () {
+    return Asset.fromModule(image).downloadAsync()
+  })))
 }
