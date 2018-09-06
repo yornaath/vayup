@@ -9,6 +9,7 @@ import { spacing } from '../theme'
 import { TRatio, ratioToMs } from '../lib/Ratio'
 import { RootState } from '../redux/root-reducer'
 import * as settings from '../redux/settings'
+import isPad from '../lib/isPad'
 
 interface SProps {
   ratio: TRatio;
@@ -47,6 +48,10 @@ export default connect(mapStateToProps, mapDispatchToprops)(
 
       const {ratio} = this.props
       
+      const size = isPad() ?
+                    ((width - (spacing.four * 2)) / 100) * 65 :
+                    ((width - (spacing.four * 2)) / 100) * 100
+      
       return (
         <View style={[styles.container]}>
           
@@ -58,7 +63,7 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           <View style={styles.visualizationContainer}>
             <BreathVisualization 
               ratio={ratioToMs(ratio)} 
-              size={((width - (spacing.four * 2)) / 100) * 100}/>
+              size={size}/>
           </View>
           
           <RatioPicker 
@@ -76,7 +81,7 @@ export default connect(mapStateToProps, mapDispatchToprops)(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column"

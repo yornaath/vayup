@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinearGradient, Asset, Linking, AppLoading } from 'expo'
+import { LinearGradient, Asset, Linking, KeepAwake } from 'expo'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
@@ -15,6 +15,7 @@ import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import ReminderTimes from './containers/ReminderTimes'
 import MenuIcon from './components/MenuIcon'
+import isPad from './lib/isPad'
 
 
 type DProps = {
@@ -112,7 +113,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       
       const menuScale = this.menuAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 51]
+        outputRange: [0, isPad() ? 70 : 51]
       })
 
       const innerMenuOpacity = this.menuAnimation.interpolate({
@@ -146,6 +147,8 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             style={styles.container}>
             <SafeAreaView style={{flex: 1}}>
               
+              <KeepAwake />
+
               <View style={styles.contentContainer}>
                 {
                   path == "breathe" ?

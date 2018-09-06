@@ -6,7 +6,8 @@ import RatioPicker from '../components/RatioPicker'
 import BreathHeader from '../components/BreathHeader'
 import TriangleBreathVisualization from '../components/visualizations/TriangleBreath'
 import { spacing } from '../theme'
-import { TRatio, ratioToMs, } from '../lib/Ratio'
+import { TRatio, ratioToMs } from '../lib/Ratio'
+import isPad from '../lib/isPad'
 import { RootState } from '../redux/root-reducer'
 import * as settings from '../redux/settings'
 
@@ -44,6 +45,11 @@ export default connect(mapStateToProps, mapDispatchToprops)(
     }
 
     render() {
+
+      const size = isPad() ?
+                    ((width - (spacing.four * 2)) / 100) * 65 :
+                    ((width - (spacing.four * 2)) / 100) * 100
+
       return (
         <View style={[styles.container]}>
           
@@ -53,7 +59,7 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           />
 
           <View style={styles.visualizationContainer}>
-            <TriangleBreathVisualization size={((width - (spacing.four * 2)) / 100) * 100} ratio={ratioToMs(this.props.ratio)} />
+            <TriangleBreathVisualization size={size} ratio={ratioToMs(this.props.ratio)} />
           </View>
           
           <RatioPicker 

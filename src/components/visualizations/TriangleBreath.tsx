@@ -90,8 +90,6 @@ const ballOffset =  (ballSize / 2)
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
   },
   ballBorder: {
     borderWidth: 5,
