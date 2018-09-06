@@ -35,14 +35,20 @@ function* appStatechanged(nextAppState:string) {
 }
 
 function* loadAssets() {
-  yield call(Font.loadAsync, {
-    'main-bold':    require('../../../assets/fonts/Comfortaa-Bold.ttf'),
-    'main-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
-    'main-light':   require('../../../assets/fonts/Comfortaa-Light.ttf'),
-  })
-  yield all([
-    require('../../../assets/lunetic_icon.png')
-  ].map(image => call(function* () {
-    return Asset.fromModule(image).downloadAsync()
-  })))
+  try {
+    yield call(Font.loadAsync, {
+      'main-bold':    require('../../../assets/fonts/Comfortaa-Bold.ttf'),
+      'main-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
+      'main-light':   require('../../../assets/fonts/Comfortaa-Light.ttf'),
+    })
+    
+    yield all([
+      require('../../../assets/lunetic_icon.png')
+    ].map(image => call(function* () {
+      return Asset.loadAsync(image)
+    })))
+  }
+  catch(error) {
+    alert(error.message)
+  }
 }

@@ -210,7 +210,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                   end={[0.5,1]}
                   colors={[Color(colors.active).darken(0.15).toString(), Color(colors.active).darken(0.23).toString()]}
                   style={[styles.menuButtonContainer, styles.luneticButton]}>
-                    <Image source={Asset.fromModule(require('../assets/lunetic_icon.png'))} style={styles.luneticIcon}/>
+                    <Image source={require('../assets/lunetic_icon.png')} style={styles.luneticIcon}/>
                     <View style={styles.luneticText}>
                       <Text style={[styles.luneticTitle]}>Lunetic</Text>
                       <Text style={[styles.luneticSubTitle]}>Keep Track of Moon Days</Text>
