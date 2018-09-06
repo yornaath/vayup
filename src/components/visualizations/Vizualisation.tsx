@@ -2,6 +2,7 @@ import React from 'react'
 import { Animated } from 'react-native'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
+import { delay } from 'bluebird'
 import * as Ratio from '../../lib/Ratio'
 
 
@@ -66,6 +67,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   async restartAnimation() {
     this.stopAnimation()
     this.value.setValue(this.getInitialValue())
+    await delay(500)
     return new Promise(resolve => {
       setImmediate(() => resolve(this.startAnimation()))
     })
