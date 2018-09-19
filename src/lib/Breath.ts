@@ -1,2 +1,2 @@
 
-export type Breath = "inhale" | "inHold" | "exhale" | "outHold"
+export type TBreath = "inhale" | "inHold" | "exhale" | "outHold"

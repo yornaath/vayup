@@ -1,9 +1,9 @@
 import _partial from 'lodash/partial'
 import _isEqual from 'lodash/isEqual'
-import { Breath } from './Breath'
+import { TBreath } from './Breath'
 
 export type TRatio = {
-  [key in Breath]?: number
+  [key in TBreath]?: number
 }
 
 export const Ratio = (inhale:number, inHold:number, exhale:number, outHold:number):TRatio => ({
@@ -17,14 +17,14 @@ export const BoxRatio = (num:number):TRatio => ({
   outHold: num
 })
 
-export const map = (mapper:(duration:number, breath:Breath) => number, ratio:TRatio):TRatio => ({
+export const map = (mapper:(duration:number, breath:TBreath) => number, ratio:TRatio):TRatio => ({
   inhale: mapper(ratio.inhale || 0, 'inhale'),
   inHold: mapper(ratio.inHold || 0, 'inHold'),
   exhale: mapper(ratio.exhale || 0, 'exhale'),
   outHold: mapper(ratio.outHold || 0, 'outHold')
 })
 
-export const mapToArray = <T> (mapper:(value:number, breath:Breath) => T, ratio:TRatio):Array<T> => {
+export const mapToArray = <T> (mapper:(value:number, breath:TBreath) => T, ratio:TRatio):Array<T> => {
   return [
     mapper(ratio.inhale, "inhale"),
     mapper(ratio.inHold, "inHold"),

@@ -74,12 +74,14 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     componentWillUpdate(nextProps:Props, nextState:State) {
       if(!this.state.menuOpen && nextState.menuOpen) {
         Animated.spring(this.menuAnimation, {
-          toValue: 1
+          toValue: 1,
+          //duration: 2000
         }).start()
       }
       else if(this.state.menuOpen && !nextState.menuOpen) {
         Animated.spring(this.menuAnimation, {
-          toValue: 0
+          toValue: 0,
+          //duration: 2000
         }).start()
       }
     }
@@ -123,7 +125,17 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
       const innerMenuScale = this.menuAnimation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 1]
+        outputRange: [1, 1]
+      })
+
+      const innerMenuY = this.menuAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-500, 0]
+      })
+
+      const innerMenuX = this.menuAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-500, 0]
       })
 
       const innerMenuRotation = this.menuAnimation.interpolate({
@@ -180,7 +192,9 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               
               <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
                 {scale: innerMenuScale},
-                {rotate: innerMenuRotation}
+                {rotate: innerMenuRotation},
+                {translateY: innerMenuY},
+                {translateX: innerMenuX}
               ]}]}>
                 <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
                   <Text style={styles.menuButtonText}>Just Breathe</Text>
@@ -214,6 +228,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                     <View style={styles.luneticText}>
                       <Text style={[styles.luneticTitle]}>Lunetic</Text>
                       <Text style={[styles.luneticSubTitle]}>Keep Track of Moon Days</Text>
+                      <Text style={[styles.luneticSubSubTitleLol]}>Available on Appstore</Text>
                     </View>
                   </LinearGradient>>
                 </TouchableOpacity>
@@ -311,6 +326,7 @@ const styles = StyleSheet.create({
   luneticButton: {
     alignSelf: "flex-start",
     flexDirection: "row",
+    marginTop: spacing.one,
     backgroundColor: Color(colors.active).darken(0.2).toString(),
     borderRadius: 4,
     padding: spacing.one
@@ -327,11 +343,15 @@ const styles = StyleSheet.create({
   luneticTitle: {
     fontSize: 20,
     color: "white",
-    marginBottom: spacing.one / 3
+    
   },
   luneticSubTitle: {
     color: "white",
     fontSize: 15
+  },
+  luneticSubSubTitleLol: {
+    color: "white",
+    fontSize: 12
   },
   reminderSettingsToggleRow: {
     flexDirection: "row"

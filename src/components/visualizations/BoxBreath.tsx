@@ -16,6 +16,11 @@ interface State {
 }
 
 export default class BoxBreath extends Vizualization<Props, State> {
+
+  // onStep(step:Step) {
+  //   Haptic.impact(Haptic.ImpactStyles.Light)
+  // }
+
   render() {
 
     var x = this.value.x.interpolate({

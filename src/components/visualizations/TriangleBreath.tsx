@@ -22,7 +22,8 @@ export default class TriangleBreath extends Vizualization<Props, State> {
 
   stepsFromRatio(ratio:Ratio.TRatio) {
     return Ratio.mapToArray<Step>((duration, breath) => ({
-      duration: duration,
+      duration,
+      breath,
       instruction: {
         text: 
           breath == "inhale" ?  "inhale" :

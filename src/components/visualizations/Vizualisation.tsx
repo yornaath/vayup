@@ -4,11 +4,13 @@ import head from 'lodash/head'
 import tail from 'lodash/tail'
 import { delay } from 'bluebird'
 import * as Ratio from '../../lib/Ratio'
+import { TBreath } from '../../lib/Breath'
 
 
 export interface Step {
   instruction: Instruction;
   duration:number;
+  breath: TBreath;
   value: {x:number, y:number}
 }
 
@@ -37,6 +39,8 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   running: boolean = false;
   value: Animated.ValueXY = new Animated.ValueXY();
 
+  onStep?:(step:Step) => void;
+
   constructor(props: P & Props) {
     super(props)
     this.value.setValue(this.getInitialValue())
@@ -57,6 +61,18 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     return await this.next(this.steps)
   }
 
+  async next(steps:Step[]):Promise<void> {
+    if(!this.running) {
+      return null
+    }
+    if(!steps.length) {
+      return this.next(this.steps)
+    }
+    const nextStep = head(steps)
+    await this.runStep(nextStep)
+    return this.next(tail(steps))
+  }
+
   async stopAnimation() {
     this.running = false
     if(this.animation) {
@@ -73,29 +89,19 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     })
   }
 
-  async next(steps:Step[]):Promise<void> {
-    if(!this.running) {
-      return null
-    }
-    if(!steps.length) {
-      return this.next(this.steps)
-    }
-    const nextStep = head(steps)
-    await this.runStep(nextStep)
-    return this.next(tail(steps))
-  }
-
   async runStep(step:Step) {
     return new Promise(resolve => {
       this.setState({ instruction: step.instruction })
       this.animation = this.createAnimationForStep(step)
+      this.onStep && this.onStep(step)
       this.animation.start(resolve)
     })
   }
 
   stepsFromRatio(ratio:Ratio.TRatio) {
     return Ratio.mapToArray<Step>((duration, breath) => ({
-      duration: duration,
+      duration,
+      breath,
       instruction: {
         text: 
           breath == "inhale" ?  "inhale" :

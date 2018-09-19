@@ -5,13 +5,13 @@ import get from 'lodash/get'
 import map from 'lodash/map'
 import { spacing, colors, heading} from '../theme'
 import { TRatio } from '../lib/Ratio'
-import { Breath } from '../lib/Breath'
+import { TBreath } from '../lib/Breath'
 
 export interface Props {
   style: Object;
   value?: TRatio;
   labels?: RatioLabels;
-  breaths: Array<Breath>
+  breaths: Array<TBreath>
   onChange?: (value:TRatio) => void
 }
 
@@ -21,7 +21,7 @@ export interface State {
   active: boolean
 }
 
-type RatioLabels = {[key in Breath]?: string}
+type RatioLabels = {[key in TBreath]?: string}
 
 const valueLabels:RatioLabels = {
   inhale: "inhale",
