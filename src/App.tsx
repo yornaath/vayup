@@ -15,12 +15,14 @@ import BoxBreath from './containers/BoxBreath'
 import TriangleBreath from './containers/TriangleBreath'
 import ReminderTimes from './containers/ReminderTimes'
 import MenuIcon from './components/MenuIcon'
+import VibrationIcon from './components/VibrationIcon'
 import isPad from './lib/isPad'
 
 
 type DProps = {
   setLocation: (location:navigation.Location) => navigation.NavigationAction;
   setRemindersOn: (on:Boolean) => settings.SettingsAction
+  setHaptic: (on:Boolean) => settings.SettingsAction
 }
 
 type SProps = {
@@ -47,7 +49,8 @@ const mapStateToProps = (state:RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setLocation: (location:navigation.Location) => dispatch(navigation.setLocation(location)),
-  setRemindersOn: (on:boolean) => dispatch(settings.setRemindersOn(on))
+  setRemindersOn: (on:boolean) => dispatch(settings.setRemindersOn(on)),
+  setHaptic: (on:boolean) => dispatch(settings.setHaptic(on))
 })
 
 const screen = Dimensions.get("screen")
@@ -105,6 +108,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
     onPressLuneticAddHandler = () => {
       Linking.openURL("https://itunes.apple.com/ca/app/lunetic/id1329646325?mt=8")
+    }
+
+    onPressVbrationIconHandler = () => {
+      this.props.setHaptic(!this.props.settings.haptic)
     }
 
     render() {
@@ -171,6 +178,11 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                     <TriangleBreath />
                   : null
                 }
+                <View style={styles.vibrationIconContainer}>
+                  <VibrationIcon 
+                    onPress={this.onPressVbrationIconHandler}
+                    active={settings.haptic}/>
+                </View>
               </View>
 
               <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
@@ -240,6 +252,8 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     }
 
   })
+
+
 
 
 
@@ -355,5 +369,9 @@ const styles = StyleSheet.create({
   },
   reminderSettingsToggleRow: {
     flexDirection: "row"
+  },
+
+  vibrationIconContainer: {
+    marginBottom: spacing.four,
   }
 })

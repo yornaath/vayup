@@ -21,6 +21,7 @@ interface DProps {
 
 interface IProps {
   ratio: TRatio
+  haptic: boolean
 }
 
 type Props = SProps & DProps & IProps
@@ -28,6 +29,7 @@ type Props = SProps & DProps & IProps
 const settingsKey = "breathe"
 
 const mapStateToProps = (state:RootState) => ({
+  haptic: settings.getState(state).haptic,
   ratio: settings.getRatioForKey(state, settingsKey)
 })
 
@@ -63,7 +65,8 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           <View style={styles.visualizationContainer}>
             <BreathVisualization 
               ratio={ratioToMs(ratio)} 
-              size={size}/>
+              size={size}
+              haptic={this.props.haptic}/>
           </View>
           
           <RatioPicker 

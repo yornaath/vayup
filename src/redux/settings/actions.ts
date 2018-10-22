@@ -14,6 +14,10 @@ export const addReminderTime = createAction("@settings/ADD_REMINDER_TIME", resol
   return (reminder: { hour:number, minute:number }) => resolve(reminder)
 })
 
+export const setHaptic = createAction("@settings/SET_HAPTIC", resolve => {
+  return (on: boolean) => resolve(on)
+})
+
 export const removeReminderTimeAtIndex = createAction("@settings/REMOVE_REMINDER_TIME_AT_INDEX", resolve => {
   return (index:number) => resolve(index)
 })

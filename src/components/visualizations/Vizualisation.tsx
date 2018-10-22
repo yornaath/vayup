@@ -1,7 +1,9 @@
 import React from 'react'
 import { Animated } from 'react-native'
+import { Haptic } from 'expo'
 import head from 'lodash/head'
 import tail from 'lodash/tail'
+import range from 'lodash/range'
 import { delay } from 'bluebird'
 import * as Ratio from '../../lib/Ratio'
 import { TBreath } from '../../lib/Breath'
@@ -25,6 +27,7 @@ export interface Options {
 
 interface Props {
   ratio: Ratio.TRatio;
+  haptic?: boolean
 }
 
 interface State {
@@ -38,6 +41,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
   animation:Animated.CompositeAnimation;
   running: boolean = false;
   value: Animated.ValueXY = new Animated.ValueXY();
+  feedbackTimeout:any = null
 
   onStep?:(step:Step) => void;
 
@@ -78,6 +82,9 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     if(this.animation) {
       this.animation.stop()
     }
+    if(this.feedbackTimeout) {
+      clearInterval(this.feedbackTimeout)
+    }
   }
 
   async restartAnimation() {
@@ -94,8 +101,23 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
       this.setState({ instruction: step.instruction })
       this.animation = this.createAnimationForStep(step)
       this.onStep && this.onStep(step)
+      if(this.props.haptic) {
+        this.provideHapticFeedbackForStep(step)
+      }
       this.animation.start(resolve)
     })
+  }
+
+  provideHapticFeedbackForStep(step: Step) {
+    Haptic.impact(Haptic.ImpactStyles.Heavy)
+    for(let tick of range(1, step.duration /1000)) {
+      setTimeout(() => {
+        if(!this.running || !this.props.haptic) {
+          return null
+        }
+        Haptic.impact(Haptic.ImpactStyles.Medium)
+      }, tick * 1000)
+    }
   }
 
   stepsFromRatio(ratio:Ratio.TRatio) {

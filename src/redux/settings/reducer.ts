@@ -5,6 +5,7 @@ import { TRatio, Ratio, BoxRatio } from '../../lib/Ratio'
 
 export interface State {
   remindersOn: boolean;
+  haptic: boolean;
   reminderTimes: Array<{ 
     hour:number, 
     minute: number 
@@ -18,6 +19,7 @@ export interface State {
 
 export const initialState:State = {
   remindersOn: false,
+  haptic: true,
   reminderTimes: [
     {hour: 12, minute: 0}
   ],
@@ -48,6 +50,12 @@ export const reducer = (state = initialState, action:SettingsAction) => {
       return {
         ...state,
         remindersOn: action.payload
+      }
+    
+    case getType(actions.setHaptic):
+      return {
+        ...state,
+        haptic: action.payload
       }
     
     case getType(actions.addReminderTime):

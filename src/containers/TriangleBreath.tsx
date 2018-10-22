@@ -21,6 +21,7 @@ interface DProps {
 
 interface IProps {
   ratio: TRatio
+  haptic: boolean
 }
 
 type Props = SProps & DProps & IProps
@@ -28,6 +29,7 @@ type Props = SProps & DProps & IProps
 const settingsKey = "detoxbreath"
 
 const mapStateToProps = (state:RootState) => ({
+  haptic: settings.getState(state).haptic,
   ratio: settings.getRatioForKey(state, settingsKey)
 })
 
@@ -59,7 +61,10 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           />
 
           <View style={styles.visualizationContainer}>
-            <TriangleBreathVisualization size={size} ratio={ratioToMs(this.props.ratio)} />
+            <TriangleBreathVisualization 
+              size={size} 
+              ratio={ratioToMs(this.props.ratio)} 
+              haptic={this.props.haptic}/>
           </View>
           
           <RatioPicker 
