@@ -101,15 +101,15 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
       this.setState({ instruction: step.instruction })
       this.animation = this.createAnimationForStep(step)
       this.onStep && this.onStep(step)
-      if(this.props.haptic) {
-        this.provideHapticFeedbackForStep(step)
-      }
+      this.provideHapticFeedbackForStep(step)
       this.animation.start(resolve)
     })
   }
 
   provideHapticFeedbackForStep(step: Step) {
-    Haptic.impact(Haptic.ImpactStyles.Heavy)
+    if(this.props.haptic) {
+      Haptic.impact(Haptic.ImpactStyles.Heavy)
+    }
     for(let tick of range(1, step.duration /1000)) {
       setTimeout(() => {
         if(!this.running || !this.props.haptic) {

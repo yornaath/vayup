@@ -19,7 +19,7 @@ export interface State {
 
 export const initialState:State = {
   remindersOn: false,
-  haptic: true,
+  haptic: false,
   reminderTimes: [
     {hour: 12, minute: 0}
   ],

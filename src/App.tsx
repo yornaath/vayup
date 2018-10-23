@@ -178,11 +178,19 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                     <TriangleBreath />
                   : null
                 }
-                <View style={styles.vibrationIconContainer}>
-                  <VibrationIcon 
-                    onPress={this.onPressVbrationIconHandler}
-                    active={settings.haptic}/>
-                </View>
+                <TouchableOpacity onPress={this.onPressVbrationIconHandler}>
+                  <View style={styles.vibrationIconContainer}>
+                    <VibrationIcon 
+                      active={settings.haptic}
+                      onPress={this.onPressVbrationIconHandler}/>
+                    <Text style={styles.hapticFeedbackText}>
+                      {
+                        !settings.haptic ?
+                          "Turn On haptic feedback" : " "
+                      }
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
@@ -283,7 +291,7 @@ const styles = StyleSheet.create({
     width: 68,
     padding: 20,
     position: "absolute",
-    top: 25,
+    top: 35,
     left: spacing.four - 20
   },
   menuIconImage: {
@@ -370,8 +378,11 @@ const styles = StyleSheet.create({
   reminderSettingsToggleRow: {
     flexDirection: "row"
   },
-
   vibrationIconContainer: {
+    alignItems: "center",
     marginBottom: spacing.four,
+  },
+  hapticFeedbackText: {
+    color: Color(colors.active).toString()
   }
 })
