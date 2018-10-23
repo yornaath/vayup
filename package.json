@@ -11,6 +11,7 @@
     "publish": "expo publish",
     "tsc": "tsc",
     "clean": "rimraf build",
+    "build:ios": "expo build:ios",
     "build": "yarn run clean && yarn run tsc --",
     "watch": "yarn run build -- -w",
     "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run ios\"",
