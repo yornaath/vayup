@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinearGradient, Asset, Linking, KeepAwake } from 'expo'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView, StatusBar } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
@@ -202,7 +202,9 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
         :
         <View 
           style={[styles.container]}>
-            
+
+            <StatusBar backgroundColor={"white"}/>
+
             <KeepAwake />
 
             <Animated.View style={[styles.logoTitle, logoTitleTransform]}>
