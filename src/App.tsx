@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, 
 import Color from 'color'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
-import {spacing, colors, heading} from './theme'
+import { spacing, colors, heading } from './theme'
 import { store } from './redux/store'
 import { RootState } from './redux/root-reducer'
 import * as navigation from './redux/navigation'
@@ -71,22 +71,21 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     }
 
     menuButtonPress = () => {
-      this.setState({menuOpen: !this.state.menuOpen})
+      this.openMenu()
     }
 
-    componentWillUpdate(nextProps:Props, nextState:State) {
-      if(!this.state.menuOpen && nextState.menuOpen) {
-        Animated.spring(this.menuAnimation, {
-          toValue: 1,
-          //duration: 2000
-        }).start()
-      }
-      else if(this.state.menuOpen && !nextState.menuOpen) {
-        Animated.spring(this.menuAnimation, {
-          toValue: 0,
-          //duration: 2000
-        }).start()
-      }
+    openMenu = () => {
+      this.setState({menuOpen : true})
+      Animated.spring(this.menuAnimation, {
+        toValue: 1,
+      }).start()
+    }
+
+    closeMenu = () => {
+      this.setState({menuOpen : false})
+      Animated.spring(this.menuAnimation, {
+        toValue: 0,
+      }).start()
     }
 
     navigate = (path:string) => {
@@ -96,10 +95,6 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           path
         })
       }
-    }
-
-    closeMenu = () => {
-      this.setState({ menuOpen: false })
     }
 
     setRemindersOn = (value:boolean) => {
@@ -117,39 +112,85 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     render() {
 
       const { path } = this.props.location
-      const { menuOpen } = this.state
       const { settings, loaded } = this.props
+      const { menuOpen } = this.state
       
-      const menuScale = this.menuAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, isPad() ? 70 : 51]
-      })
+      const contentContainerTransform = {
+        borderWidth: this.menuAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 7]
+        }),
+        borderColor: colors.highlight,
+        borderRadius: this.menuAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 20]
+        }),
+        transform: [
+          { 
+            scale: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0.7]
+            }) 
+          },
+          {
+            translateX: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 270]
+            }) 
+          }
+        ]
+      }
 
-      const innerMenuOpacity = this.menuAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 42]
-      })
+      const logoTitleTransform = {
+        transform: [
+          {
+            translateY: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-100, 0]
+            }) 
+          }
+        ]
+      }
 
-      const innerMenuScale = this.menuAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 1]
-      })
+      const menuTransform = {
+        transform: [
+          {
+            translateX: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [-200, 0]
+            }) 
+          }
+        ]
+      }
 
-      const innerMenuY = this.menuAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-500, 0]
-      })
+      const contentTouchOverlayTransform = {
+        transform: [
+          {
+            translateY: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [screen.height * 2, 0]
+            }) 
+          }
+        ]
+      }
 
-      const innerMenuX = this.menuAnimation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-500, 0]
-      })
+      const menuIconTransform = {
+        top: this.menuAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [40, 20]
+        }) 
+      }
 
-      const innerMenuRotation = this.menuAnimation.interpolate({
-        inputRange: [0,1],
-        outputRange: ['-15deg', '0deg']
-      })
-
+      const luneticButtonContainerTransform = {
+        transform: [
+          {
+            translateY: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [100, 0]
+            }) 
+          }
+        ]
+      }
 
       return (
         !loaded ?
@@ -159,103 +200,92 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             />
           </View>
         :
-          <LinearGradient 
-            start={[0.1, 0.1]}
-            end={[1,1]}
-            colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
-            style={styles.container}>
-            <SafeAreaView style={{flex: 1}}>
-              
-              <KeepAwake />
+        <View 
+          style={[styles.container]}>
+            
+            <KeepAwake />
 
-              <View style={styles.contentContainer}>
-                {
-                  path == "breathe" ?
-                    <Breath /> :
-                  path == "boxbreath" ?
-                    <BoxBreath /> :
-                  path == "detoxbreath" ?
-                    <TriangleBreath />
-                  : null
-                }
-                <TouchableOpacity onPress={this.onPressVbrationIconHandler}>
-                  <View style={styles.vibrationIconContainer}>
-                    <VibrationIcon 
-                      active={settings.haptic}
-                      onPress={this.onPressVbrationIconHandler}/>
-                    <Text style={styles.hapticFeedbackText}>
-                      {
-                        !settings.haptic ?
-                          "Turn On haptic feedback" : " "
-                      }
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+            <Animated.View style={[styles.logoTitle, logoTitleTransform]}>
+              <Text style={styles.logoTitleText}>vayup</Text>
+            </Animated.View>
 
-              <Animated.View style={[styles.menuBackground, {transform: [{ scale: menuScale }] }]} />
+            <Animated.View style={[styles.menuContainer, menuTransform]}>
+              <TouchableOpacity onPress={this.navigate("breathe")}>
+                <Animated.View style={[styles.navItemContainer]}>
+                  <Text style={[styles.navItemtext]}>Just Breathe</Text>
+                  <Text style={styles.navItemDescription}>A guided and calming breath.</Text>
+                </Animated.View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.navigate("boxbreath")}>
+                <Animated.View style={[styles.navItemContainer]}>
+                  <Text style={[styles.navItemtext]}>Box-Breath</Text>
+                  <Text style={styles.navItemDescription}>Relieve stress in the nervous system.</Text>
+                </Animated.View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.navigate("detoxbreath")}>
+                <Animated.View style={[styles.navItemContainer]}>
+                  <Text style={[styles.navItemtext]}>02 Breath</Text>
+                  <Text style={styles.navItemDescription}>Re-oxygenate your blood.</Text>
+                </Animated.View>
+              </TouchableOpacity>
+            </Animated.View>
 
-              {
-                menuOpen &&
-                  <TouchableOpacity style={styles.touchableCloseBackground} onPress={this.closeMenu}/>
-              }
-
-              {
-                menuOpen ?
-                  <MenuIcon style={[styles.menuIcon]} color="white" onPress={this.menuButtonPress} /> :
-                  <MenuIcon style={[styles.menuIcon]} color={colors.highlight} onPress={this.menuButtonPress}/>
-              }
-
-              <Animated.View style={[styles.logoTitle, {opacity: innerMenuOpacity}]}>
-                <Text style={styles.logoTitleText}>vayup</Text>
-              </Animated.View>
-              
-              <Animated.View style={[styles.menuContainer, {opacity: innerMenuOpacity}, {transform: [
-                {scale: innerMenuScale},
-                {rotate: innerMenuRotation},
-                {translateY: innerMenuY},
-                {translateX: innerMenuX}
-              ]}]}>
-                <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("breathe")}>
-                  <Text style={styles.menuButtonText}>Just Breathe</Text>
-                  <Text style={styles.menuButtonDescription}>A guided and calming breath.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("boxbreath")}>
-                  <Text style={styles.menuButtonText}>Box Breath</Text>
-                  <Text style={styles.menuButtonDescription}>Relieve stress in the nervous system.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuButtonContainer} onPress={this.navigate("detoxbreath")}>
-                  <Text style={styles.menuButtonText}>O2 Breath</Text>
-                  <Text style={styles.menuButtonDescription}>Re-oxygenate your blood.</Text>
-                </TouchableOpacity>
-                <View style={styles.menuButtonContainer}>
-                  <Text style={[styles.menuButtonDescription, { fontSize: heading.three, marginBottom: spacing.one}]}>Reminders</Text>
-                  <View style={styles.reminderSettingsToggleRow}>
-                    <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn}/>
-                    {
-                      settings.remindersOn &&
-                        <ReminderTimes />
-                    }
-                  </View>
+            <Animated.View style={[styles.luneticButtonContainer, luneticButtonContainerTransform]}>
+              <TouchableOpacity style={styles.luneticButton} onPress={this.onPressLuneticAddHandler}>
+                <Image source={require('../assets/lunetic_icon.png')} style={styles.luneticIcon}/>
+                <View style={styles.luneticText}>
+                  <Text style={[styles.luneticTitle]}>Lunetic</Text>
+                  <Text style={[styles.luneticSubTitle]}>Track Moon Days</Text>
+                  <Text style={[styles.luneticSubTitle]}>Available on Appstore</Text>
                 </View>
-                <TouchableOpacity onPress={this.onPressLuneticAddHandler}>
-                <LinearGradient 
-                  start={[0.5, 0]}
-                  end={[0.5,1]}
-                  colors={[Color(colors.active).darken(0.15).toString(), Color(colors.active).darken(0.23).toString()]}
-                  style={[styles.menuButtonContainer, styles.luneticButton]}>
-                    <Image source={require('../assets/lunetic_icon.png')} style={styles.luneticIcon}/>
-                    <View style={styles.luneticText}>
-                      <Text style={[styles.luneticTitle]}>Lunetic</Text>
-                      <Text style={[styles.luneticSubTitle]}>Keep Track of Moon Days</Text>
-                      <Text style={[styles.luneticSubSubTitleLol]}>Available on Appstore</Text>
-                    </View>
-                  </LinearGradient>>
-                </TouchableOpacity>
-              </Animated.View>
+              </TouchableOpacity>
+            </Animated.View>
 
-            </SafeAreaView>
-          </LinearGradient>
+            <Animated.View 
+              style={[styles.outerContentContainer, contentContainerTransform]}>
+                <LinearGradient
+                  start={[0.1, 0.1]}
+                  end={[1,1]}
+                  colors={["rgb(255,255,255)", "rgb(233,233,233)"]}
+                  style={[styles.contentContainer, {borderRadius: 20}]}>
+                    
+
+                    {
+                      path == "breathe" ?
+                        <Breath /> :
+                      path == "boxbreath" ?
+                        <BoxBreath /> :
+                      path == "detoxbreath" ?
+                        <TriangleBreath />
+                      : null
+                    }
+
+                    <MenuIcon style={[styles.menuIcon, menuIconTransform]} color={colors.highlight} onPress={this.menuButtonPress}/>
+
+                    <TouchableOpacity onPress={this.onPressVbrationIconHandler}>
+                      <View style={styles.vibrationIconContainer}>
+                        <VibrationIcon 
+                          active={settings.haptic}
+                          onPress={this.onPressVbrationIconHandler}/>
+                        <Text style={styles.hapticFeedbackText}>
+                          {
+                            !settings.haptic ?
+                              "Turn On haptic feedback" : " "
+                          }
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                  
+                </LinearGradient>
+              
+                <Animated.View style={[styles.contentTouchOverlay, contentTouchOverlayTransform]}>
+                  <TouchableOpacity style={styles.contentTouchOverlay} onPress={this.closeMenu} />
+                </Animated.View>
+              
+            </Animated.View>
+
+          </View>
       )
     }
 
@@ -282,7 +312,7 @@ const styles = StyleSheet.create({
   logoTitleText: {
     flex: 1,
     fontSize: 24,
-    color: 'white',
+    color: colors.highlight,
     textAlign: 'center',
     fontFamily: 'main-bold'
   },
@@ -291,67 +321,62 @@ const styles = StyleSheet.create({
     width: 68,
     padding: 20,
     position: "absolute",
-    top: 35,
     left: spacing.four - 20
   },
   menuIconImage: {
     height: 24,
     width: 24,
   },
+  menuContainer: {
+    position: 'absolute',
+    left: 0,
+    paddingLeft: spacing.two,
+    top: (screen.height / 100) * 20
+  },
+  navItemContainer: {
+    marginBottom: spacing.four,
+  },
+  navItemtext: {
+    fontFamily: 'main-bold',
+    fontSize: 23,
+    color: colors.highlight
+  },
+  navItemDescription: {
+    fontFamily: 'main-regular',
+    fontSize: 11,
+    color: colors.highlight
+  },
+  outerContentContainer: {
+    flex: 1
+  },
   contentContainer: {
     flex: 1,
-    paddingTop: spacing.one,
     alignItems: 'center',
     justifyContent: 'center',
+    height: screen.height,
+    paddingTop: spacing.three
   },
-  menuBackground: {
-    backgroundColor: colors.active,
-    position: "absolute",
-    top: -20,
-    left: -20,
-    width: 28,
-    height: 28,
-    borderRadius: 28,
-    shadowOffset: {height: 0, width: 0},
-    shadowRadius: 1,
-    shadowOpacity: 0.5,
-    elevation: 1,
-    shadowColor: 'black'
-  },
-  touchableCloseBackground: {
-    position: "absolute",
-    top: 0,
+  contentTouchOverlay: {
+    position: 'absolute',
     left: 0,
-    right: 0,
-    bottom: 0
+    top: 0,
+    width: screen.width,
+    height: screen.height,
+    backgroundColor: 'transparent'
   },
-  menuContainer: {
-    position: "absolute",
-    top: 45 + + 24 + spacing.four,
-    left: spacing.four
-  },
-  menuButtonContainer: {
-    overflow: "hidden",
-    marginBottom: spacing.three
-  },
-  menuButtonText: {
-    color: "white",
-    fontSize: heading.one,
-    marginBottom: spacing.one,
-    fontFamily: 'main-regular'
-  },
-  menuButtonDescription: {
-    color: "white",
-    fontSize: heading.four,
-    fontFamily: 'main-regular'
+  luneticButtonContainer: {
+    display: 'flex',
+    position: 'absolute',
+    left: 0,
+    bottom: spacing.two,
+    width: screen.width,
   },
   luneticButton: {
-    alignSelf: "flex-start",
+    display: 'flex',
+    flex: 1,
+    alignSelf: "center",
     flexDirection: "row",
-    marginTop: spacing.one,
-    backgroundColor: Color(colors.active).darken(0.2).toString(),
-    borderRadius: 4,
-    padding: spacing.one
+    marginTop: spacing.four,
   },
   luneticIcon: {
     marginRight: spacing.one,
@@ -363,16 +388,12 @@ const styles = StyleSheet.create({
 
   },
   luneticTitle: {
-    fontSize: 20,
-    color: "white",
-    
+    fontSize: 18,
+    marginBottom: 5,
+    color: colors.highlight,
   },
   luneticSubTitle: {
-    color: "white",
-    fontSize: 15
-  },
-  luneticSubSubTitleLol: {
-    color: "white",
+    color: colors.highlight,
     fontSize: 12
   },
   reminderSettingsToggleRow: {

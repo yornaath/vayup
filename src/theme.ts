@@ -15,6 +15,6 @@ export const spacing = {
 
 export const colors = {
   active: "#4a9fe0",
-  black: "rgb(253,253,253)",
+  black: "rgb(40,40,40)",
   highlight: "#544460"
 }
