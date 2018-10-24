@@ -6,7 +6,7 @@ import { StyleSheet, Image, Text, View, TouchableOpacity, Alert } from 'react-na
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import DateTimePicker from 'react-native-modal-datetime-picker'
-import { spacing } from '../theme'
+import { spacing, colors } from '../theme'
 import { RootState } from '../redux/root-reducer'
 import * as settings from '../redux/settings'
 
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing.one,
   },
   reminderTimeText: {
-    color: "white",
+    color: colors.highlight,
     fontFamily: 'main-regular',
   },
   addIcon: {

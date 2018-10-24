@@ -228,6 +228,16 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                   <Text style={styles.navItemDescription}>Re-oxygenate your blood.</Text>
                 </Animated.View>
               </TouchableOpacity>
+              <Animated.View style={[styles.navItemContainer]}>
+                <Text style={styles.navItemDescription}>Reminders</Text>
+                <View style={styles.reminderSettingsToggleRow}>
+                  <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn} tintColor={colors.active} onTintColor={colors.active}/>
+                  {
+                    settings.remindersOn &&
+                      <ReminderTimes />
+                  }
+                </View>
+              </Animated.View>
             </Animated.View>
 
             <Animated.View style={[styles.luneticButtonContainer, luneticButtonContainerTransform]}>
@@ -344,7 +354,7 @@ const styles = StyleSheet.create({
   navItemDescription: {
     fontFamily: 'main-regular',
     fontSize: 11,
-    color: colors.highlight
+    color: colors.highlight,
   },
   outerContentContainer: {
     flex: 1
@@ -397,6 +407,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   reminderSettingsToggleRow: {
+    marginTop: 5,
     flexDirection: "row"
   },
   vibrationIconContainer: {
