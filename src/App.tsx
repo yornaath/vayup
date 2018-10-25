@@ -162,12 +162,12 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       const contentContainerTransform = {
         borderWidth: this.menuAnimation.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, 7]
+          outputRange: [2, 7]
         }),
         borderColor: colors.highlight,
         borderRadius: this.menuAnimation.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, 20]
+          outputRange: [5, 20]
         }),
         transform: [
           { 

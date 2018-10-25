@@ -12,7 +12,8 @@ export interface State {
   }>;
   ratios: {
     [key:string]: TRatio
-  }
+  },
+  hasWarnedAboutRetention: boolean
 }
 
 
@@ -27,7 +28,8 @@ export const initialState:State = {
     boxbreath: BoxRatio(4),
     breathe: Ratio(4, 0, 4, 0),
     detoxbreath: Ratio(4, 2, 5, 0)
-  }
+  },
+  hasWarnedAboutRetention: false
 }
 
 export const key = "settings"
@@ -56,6 +58,12 @@ export const reducer = (state = initialState, action:SettingsAction) => {
       return {
         ...state,
         haptic: action.payload
+      }
+    
+    case getType(actions.setWarnedAboutRetention):
+      return {
+        ...state,
+        hasWarnedAboutRetention: action.payload
       }
     
     case getType(actions.addReminderTime):

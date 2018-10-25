@@ -16,3 +16,5 @@ export const persistor = persistStore(store, {}, async () => {
   store.dispatch(appstate.setStorageHydrated(true))
   sagaMiddleware.run(saga)
 })
+
+persistor.purge()
