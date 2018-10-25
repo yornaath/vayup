@@ -80,7 +80,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                                       false
 
       },
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponderCapture: (evt) => false,
       onPanResponderMove: (evt, gestureState) => {
         const pxMoved = gestureState.dx < 0 ? gestureState.dx * -1 : gestureState.dx
         const prctMoved = pxMoved / screen.width
@@ -92,7 +92,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           this.menuAnimation.setValue(1 - prctMoved)
         }
       },
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
+      onPanResponderTerminationRequest: (evt) => true,
       onPanResponderRelease: (evt, gestureState) => {
         if(gestureState.dx < 100) {
           this.closeMenu()
@@ -101,7 +101,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           this.openMenu()
         }
       },
-      onShouldBlockNativeResponder: (evt, gestureState) => {
+      onShouldBlockNativeResponder: (evt) => {
         return true;
       },
     })

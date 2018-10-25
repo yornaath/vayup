@@ -11,11 +11,12 @@
     "publish": "expo publish",
     "tsc": "tsc",
     "clean": "rimraf build",
-    "build:ios": "expo build:ios",
+    "build:ios": "npm run bumpBuild && expo build:ios",
     "build": "yarn run clean && yarn run tsc --",
     "watch": "yarn run build -- -w",
     "watchAndRunIOS": "concurrently \"yarn run watch\" \"yarn run ios\"",
-    "buildRunIOS": "yarn run build && yarn run watchAndRunIOS "
+    "buildRunIOS": "yarn run build && yarn run watchAndRunIOS ",
+    "bumpBuild": "node .bin/bumpBuild.js"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.23",
