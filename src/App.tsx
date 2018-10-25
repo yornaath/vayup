@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinearGradient, Asset, Linking, KeepAwake } from 'expo'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView, StatusBar } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView, StatusBar, PanResponder } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
@@ -64,14 +64,58 @@ export default () => (
 const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
   class extends React.Component<Props, State> {
 
+    
     menuAnimation = new Animated.Value(0)
 
     state = {
       menuOpen: false
     }
 
+    disableSwipe = false
+
+    panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return this.disableSwipe    ? false :
+               gestureState.dx > 10 || gestureState.dx < -10 ? true :
+                                      false
+
+      },
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onPanResponderMove: (evt, gestureState) => {
+        const pxMoved = gestureState.dx < 0 ? gestureState.dx * -1 : gestureState.dx
+        const prctMoved = pxMoved / screen.width
+        const currentAnimValue = (this.menuAnimation as any)._value
+        if(gestureState.dx > 0 && currentAnimValue < 1) {
+          this.menuAnimation.setValue(prctMoved)
+        }
+        if(gestureState.dx < 0 && currentAnimValue > 0) {
+          this.menuAnimation.setValue(1 - prctMoved)
+        }
+      },
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
+      onPanResponderRelease: (evt, gestureState) => {
+        if(gestureState.dx < 100) {
+          this.closeMenu()
+        }
+        else if(gestureState.dx > 100) {
+          this.openMenu()
+        }
+      },
+      onShouldBlockNativeResponder: (evt, gestureState) => {
+        return true;
+      },
+    })
+
     menuButtonPress = () => {
       this.openMenu()
+    }
+
+    menuButtonPressIn = () => {
+      this.disableSwipe = true
+    }
+
+    menuButtonPressOut = () => {
+      this.disableSwipe = false
     }
 
     openMenu = () => {
@@ -200,7 +244,8 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
             />
           </View>
         :
-        <View 
+        <View
+          {...this.panResponder.panHandlers}
           style={[styles.container]}>
 
             <StatusBar backgroundColor={"white"}/>
@@ -272,7 +317,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                       : null
                     }
 
-                    <MenuIcon style={[styles.menuIcon, menuIconTransform]} color={colors.highlight} onPress={this.menuButtonPress}/>
+                    <MenuIcon style={[styles.menuIcon, menuIconTransform]} color={colors.highlight} onPressIn={this.menuButtonPressIn} onPressOut={this.menuButtonPressOut} onPress={this.menuButtonPress}/>
 
                     <TouchableOpacity onPress={this.onPressVbrationIconHandler}>
                       <View style={styles.vibrationIconContainer}>

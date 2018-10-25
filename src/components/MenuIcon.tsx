@@ -7,6 +7,8 @@ export interface Props {
   style?: StyleProp<ViewStyle> | Array<StyleProp<ViewStyle> | Object>;
   color?: string;
   onPress?: (event:GestureResponderEvent) => void
+  onPressIn?: (event:GestureResponderEvent) => void
+  onPressOut?: (event:GestureResponderEvent) => void
 }
 
 export interface State {
@@ -29,7 +31,7 @@ export default class MenuIcon extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this.onPress}>
+      <TouchableWithoutFeedback onPress={this.onPress} onPressIn={this.props.onPressIn} onPressOut={this.props.onPressOut}>
         <Animated.View style={[this.props.style, {transform: [{scale: this.state.tapAnimation}]}]}>
           <View style={[styles.line, {backgroundColor: this.props.color || "black"}]} />
           <View style={styles.spacing} />
