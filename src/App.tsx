@@ -278,7 +278,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               <Animated.View style={[styles.navItemContainer]}>
                 <Text style={styles.navItemDescription}>Reminders</Text>
                 <View style={styles.reminderSettingsToggleRow}>
-                  <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn} tintColor={colors.active} onTintColor={colors.active}/>
+                  <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn} tintColor={colors.active} onTintColor={colors.highlight}/>
                   {
                     settings.remindersOn &&
                       <ReminderTimes />
