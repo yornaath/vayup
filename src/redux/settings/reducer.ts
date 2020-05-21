@@ -34,7 +34,7 @@ export const initialState:State = {
 
 export const key = "settings"
 
-export type SettingsAction = ActionType<typeof actions>;
+export type SettingsAction = ActionType<typeof actions>
 
 export const reducer = (state = initialState, action:SettingsAction) => {
   switch(action.type) {

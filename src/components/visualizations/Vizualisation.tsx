@@ -1,6 +1,6 @@
 import React from 'react'
 import { Animated } from 'react-native'
-import { Haptic } from 'expo'
+import * as Haptics from 'expo-haptics';
 import head from 'lodash/head'
 import tail from 'lodash/tail'
 import range from 'lodash/range'
@@ -31,17 +31,18 @@ interface Props {
 }
 
 interface State {
-  instruction?:Instruction;
+  instruction?: Instruction;
 }
 
 
-export default class Vizualization<P, S> extends React.Component<P & Props, State & S> {
+export default abstract class Vizualization<P, S> extends React.Component<P & Props, State & S> {
 
   steps:Step[] = []
   animation:Animated.CompositeAnimation;
   running: boolean = false;
   value: Animated.ValueXY = new Animated.ValueXY();
   feedbackTimeout:any = null
+  hapticFeedbackTimeoutIndex: number[] = []
 
   onStep?:(step:Step) => void;
 
@@ -82,6 +83,7 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
     if(this.animation) {
       this.animation.stop()
     }
+    this.hapticFeedbackTimeoutIndex.map(clearTimeout)
     if(this.feedbackTimeout) {
       clearInterval(this.feedbackTimeout)
     }
@@ -108,15 +110,16 @@ export default class Vizualization<P, S> extends React.Component<P & Props, Stat
 
   provideHapticFeedbackForStep(step: Step) {
     if(this.props.haptic) {
-      Haptic.impact(Haptic.ImpactStyles.Heavy)
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     }
     for(let tick of range(1, step.duration /1000)) {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         if(!this.running || !this.props.haptic) {
           return null
         }
-        Haptic.impact(Haptic.ImpactStyles.Medium)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
       }, tick * 1000)
+      this.hapticFeedbackTimeoutIndex = [...new Set([...this.hapticFeedbackTimeoutIndex, timeout])]
     }
   }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Animated } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import Color from 'color'
 import { colors } from '../../theme'
 import Vizualization from './Vizualisation'

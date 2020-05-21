@@ -1,5 +1,5 @@
 import React from 'react'
-import { Asset } from 'expo'
+import { Asset } from 'expo-asset'
 import moment from 'moment'
 import omit from 'lodash/omit'
 import { StyleSheet, Image, Text, View, TouchableOpacity, Alert } from 'react-native'
@@ -93,15 +93,6 @@ export default connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
                     {reminderTime.hour}:{reminderTime.minute < 9 && "0"}{reminderTime.minute}
                   </Text>
                 </TouchableOpacity>
-                {/* <DateTimePicker
-                  date={reminderTime}
-                  mode="time"
-                  isVisible={editModalsOpen[index]}
-                  is24Hour={false}
-                  onConfirm={(value) => {
-                    this.closeModalForIndex(index)
-                  }}
-                  onCancel={() => this.closeModalForIndex(index)}/> */}
               </View>
             ))
           }

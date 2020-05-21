@@ -1,5 +1,7 @@
 import { AppState } from 'react-native'
-import { Font, Permissions, Asset } from 'expo'
+import * as Font from 'expo-font'
+import * as Permissions from 'expo-permissions'
+import { Asset } from 'expo-asset'
 import { channel } from 'redux-saga'
 import { takeEvery, select, put, call, all } from 'redux-saga/effects'
 import { setState, setAssetsLoaded } from './actions'

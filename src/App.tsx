@@ -1,10 +1,12 @@
 import React from 'react'
-import { LinearGradient, Asset, Linking, KeepAwake } from 'expo'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, SafeAreaView, StatusBar, PanResponder } from 'react-native'
+import { Linking } from 'expo'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useKeepAwake } from 'expo-keep-awake'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, StatusBar, PanResponder } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
 import { Provider, connect } from 'react-redux'
-import { spacing, colors, heading } from './theme'
+import { spacing, colors } from './theme'
 import { store } from './redux/store'
 import { RootState } from './redux/root-reducer'
 import * as navigation from './redux/navigation'
@@ -16,7 +18,6 @@ import TriangleBreath from './containers/TriangleBreath'
 import ReminderTimes from './containers/ReminderTimes'
 import MenuIcon from './components/MenuIcon'
 import VibrationIcon from './components/VibrationIcon'
-import isPad from './lib/isPad'
 
 
 type DProps = {
@@ -74,14 +75,13 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     disableSwipe = false
 
     panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
+      onMoveShouldSetPanResponder: (_, gestureState) => {
         return this.disableSwipe    ? false :
                gestureState.dx > 10 || gestureState.dx < -10 ? true :
                                       false
-
       },
-      onMoveShouldSetPanResponderCapture: (evt) => false,
-      onPanResponderMove: (evt, gestureState) => {
+      onMoveShouldSetPanResponderCapture: (_) => false,
+      onPanResponderMove: (_, gestureState) => {
         const pxMoved = gestureState.dx < 0 ? gestureState.dx * -1 : gestureState.dx
         const prctMoved = pxMoved / screen.width
         const currentAnimValue = (this.menuAnimation as any)._value
@@ -92,8 +92,8 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           this.menuAnimation.setValue(1 - prctMoved)
         }
       },
-      onPanResponderTerminationRequest: (evt) => true,
-      onPanResponderRelease: (evt, gestureState) => {
+      onPanResponderTerminationRequest: (_) => true,
+      onPanResponderRelease: (_, gestureState) => {
         if(gestureState.dx < 100) {
           this.closeMenu()
         }
@@ -101,8 +101,8 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
           this.openMenu()
         }
       },
-      onShouldBlockNativeResponder: (evt) => {
-        return true;
+      onShouldBlockNativeResponder: (_) => {
+        return true
       },
     })
 
@@ -157,7 +157,6 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
       const { path } = this.props.location
       const { settings, loaded } = this.props
-      const { menuOpen } = this.state
       
       const contentContainerTransform = {
         borderWidth: this.menuAnimation.interpolate({
@@ -247,10 +246,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
         <View
           {...this.panResponder.panHandlers}
           style={[styles.container]}>
+            
+            <KeepAwake />
 
             <StatusBar backgroundColor={"white"}/>
-
-            <KeepAwake />
 
             <Animated.View style={[styles.logoTitle, logoTitleTransform]}>
               <Text style={styles.logoTitleText}>vayup</Text>
@@ -278,7 +277,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               <Animated.View style={[styles.navItemContainer]}>
                 <Text style={styles.navItemDescription}>Reminders</Text>
                 <View style={styles.reminderSettingsToggleRow}>
-                  <Switch value={settings.remindersOn} onValueChange={this.setRemindersOn} tintColor={colors.active} onTintColor={colors.highlight}/>
+                  <Switch value={settings.remindersOn} trackColor={{true: colors.active, false: colors.highlight}} onValueChange={this.setRemindersOn}/>
                   {
                     settings.remindersOn &&
                       <ReminderTimes />
@@ -348,7 +347,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
   })
 
-
+const KeepAwake = (): null => {
+  useKeepAwake();
+  return null;
+}
 
 
 
