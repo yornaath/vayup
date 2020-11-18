@@ -154,7 +154,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     }
 
     render() {
-
+      console.log('render')
       const { path } = this.props.location
       const { settings, loaded } = this.props
       

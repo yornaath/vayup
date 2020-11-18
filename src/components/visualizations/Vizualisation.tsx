@@ -100,6 +100,7 @@ export default abstract class Vizualization<P, S> extends React.Component<P & Pr
 
   async runStep(step:Step) {
     return new Promise(resolve => {
+      console.log(step)
       this.setState({ instruction: step.instruction })
       this.animation = this.createAnimationForStep(step)
       this.onStep && this.onStep(step)
