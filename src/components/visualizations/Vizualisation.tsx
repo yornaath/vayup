@@ -146,7 +146,7 @@ export default abstract class Vizualization<P, S> extends React.Component<P & Pr
   }
 
   createAnimationForStep(step:Step) {
-    return Animated.timing(this.value, {toValue: step.value, duration: step.duration})
+    return Animated.timing(this.value, {toValue: step.value, duration: step.duration, useNativeDriver: true})
   }
 
   componentDidUpdate(lastProps:Props) {

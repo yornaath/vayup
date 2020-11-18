@@ -1,5 +1,5 @@
 import React from 'react'
-//import {Svg, Path} from 'react-native-svg'
+import {Svg, Path} from 'react-native-svg'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import Vizualization, { Step } from './Vizualisation'
 import get from 'lodash/get'
@@ -62,14 +62,14 @@ export default class TriangleBreath extends Vizualization<Props, State> {
         <View style={[styles.container, this.props.style]}>
 
           <View style={styles.triangleContainer}>
-            {/* <Svg height={size} width={size}>
+            <Svg height={size} width={size}>
               <Path 
                 strokeLinejoin="round" 
                 stroke={colors.highlight} 
                 strokeWidth={strokeWidth} 
                 fill={"transparent"} 
                 d={`M ${size/2},${strokeWidth} ${size - (strokeWidth / 2)},${size- (strokeWidth/2)} ${strokeWidth},${size- (strokeWidth/2)} z`}/>
-            </Svg> */}
+            </Svg>
           </View>
 
           <Text style={[styles.text, {width: size, top: (size / 2) - 60}]}>

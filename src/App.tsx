@@ -121,6 +121,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     openMenu = () => {
       this.setState({menuOpen : true})
       Animated.spring(this.menuAnimation, {
+        useNativeDriver: true,
         toValue: 1,
       }).start()
     }
@@ -128,6 +129,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     closeMenu = () => {
       this.setState({menuOpen : false})
       Animated.spring(this.menuAnimation, {
+        useNativeDriver: true,
         toValue: 0,
       }).start()
     }
@@ -159,10 +161,10 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       const { settings, loaded } = this.props
       
       const contentContainerTransform = {
-        borderWidth: this.menuAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [2, 7]
-        }),
+        // borderWidth: this.menuAnimation.interpolate({
+        //   inputRange: [0, 1],
+        //   outputRange: [2, 7]
+        // }),
         borderColor: colors.highlight,
         borderRadius: this.menuAnimation.interpolate({
           inputRange: [0, 1],
@@ -218,10 +220,14 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
       }
 
       const menuIconTransform = {
-        top: this.menuAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [40, 20]
-        }) 
+        transform: [
+          {
+            translateY: this.menuAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [40, 20]
+            }) 
+          }
+        ]
       }
 
       const luneticButtonContainerTransform = {
@@ -376,11 +382,12 @@ const styles = StyleSheet.create({
     fontFamily: 'main-bold'
   },
   menuIcon: {
-    height: 68,
-    width: 68,
+    top: 45,
+    height: 64,
+    width: 67,
     padding: 20,
     position: "absolute",
-    left: spacing.four - 20
+    left: spacing.four - 33
   },
   menuIconImage: {
     height: 24,

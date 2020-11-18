@@ -42,25 +42,25 @@ export default class VibrationIcon extends React.Component<Props, State> {
   }
 
   animateToActive() {
-    Animated.spring(this.innerValue, { toValue: 1 }).start()
+    Animated.spring(this.innerValue, { useNativeDriver: true, toValue: 1 }).start()
     setTimeout(() => {
-      Animated.spring(this.outerValue, { toValue: 1 }).start()
+      Animated.spring(this.outerValue, { useNativeDriver: true, toValue: 1 }).start()
     }, 100)
   }
 
   animateToInActive() {
-    Animated.spring(this.innerValue, { toValue: 0 }).start()
+    Animated.spring(this.innerValue, { useNativeDriver: true, toValue: 0 }).start()
     setTimeout(() => {
-      Animated.spring(this.outerValue, { toValue: 0 }).start()
+      Animated.spring(this.outerValue, { useNativeDriver: true, toValue: 0 }).start()
     }, 100)
   }
 
   onPressInHandler = () => {
-    Animated.spring(this.pressValue, { toValue: 1 }).start()
+    Animated.spring(this.pressValue, { useNativeDriver: true, toValue: 1 }).start()
   }
 
   onPressOutHandler = () => {
-    Animated.spring(this.pressValue, { toValue: 0 }).start()
+    Animated.spring(this.pressValue, { useNativeDriver: true, toValue: 0 }).start()
   }
 
   render() {
