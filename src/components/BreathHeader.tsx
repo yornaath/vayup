@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     textAlign: isPad() ? "center" : "left"
   },
   titleSubHeader: {
-    fontSize: heading.three,
+    fontSize: 13,
     fontFamily: 'main-regular',
     color: Color(colors.highlight).desaturate(0.75).darken(0.1).toString(),
     textAlign: isPad() ? "center" : "left"

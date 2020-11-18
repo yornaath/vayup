@@ -56,8 +56,8 @@ export default connect(mapStateToProps, mapDispatchToprops)(
         <View style={[styles.container]}>
           
           <BreathHeader 
-            title="O2 Breath"
-            subTitle="Emphazise the removal of c02 and reoxygenation of the blood."
+            title="Vagus Breath"
+            subTitle="Get out of fight or flight mode and into rest and digest with emphasized exhalations."
           />
 
           <View style={styles.visualizationContainer}>

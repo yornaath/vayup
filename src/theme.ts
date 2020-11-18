@@ -2,7 +2,7 @@
 export const heading =  {
   one: 32,
   two: 22,
-  three: 16,
+  three: 14,
   four: 12
 }
 

@@ -51,6 +51,7 @@ export default class RatioPicker extends React.Component<Props, State> {
   activate() {
     this.setState({active: true})
     Animated.spring(this.state.activeValue, {
+      useNativeDriver: true,
       toValue: 1
     }).start()
     clearTimeout(this.timer)
@@ -60,6 +61,7 @@ export default class RatioPicker extends React.Component<Props, State> {
   deactivate() {
     this.setState({active: false})
     Animated.spring(this.state.activeValue, {
+      useNativeDriver: true,
       toValue: 0
     }).start()
   }

@@ -57,7 +57,7 @@ export default connect(mapStateToProps, mapDispatchToprops)(
           
           <BreathHeader 
             title="Box Breath"
-            subTitle="Regulate, vitalize and calm the autonomic nervous system."
+            subTitle="Create more range and availability in your breathing pattern."
           />
 
           <View style={styles.visualizationContainer}>

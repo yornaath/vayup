@@ -265,19 +265,19 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               <TouchableOpacity onPress={this.navigate("breathe")}>
                 <Animated.View style={[styles.navItemContainer]}>
                   <Text style={[styles.navItemtext]}>Just Breathe</Text>
-                  <Text style={styles.navItemDescription}>A guided and calming breath.</Text>
+                  <Text style={styles.navItemDescription}>A calming breathing pattern that helps you to breath deeper and more evenly.</Text>
                 </Animated.View>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.navigate("boxbreath")}>
                 <Animated.View style={[styles.navItemContainer]}>
-                  <Text style={[styles.navItemtext]}>Box-Breath</Text>
-                  <Text style={styles.navItemDescription}>Relieve stress in the nervous system.</Text>
+                  <Text style={[styles.navItemtext]}>Box Breath</Text>
+                  <Text style={styles.navItemDescription}>Create more range and availability in your breathing pattern.</Text>
                 </Animated.View>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.navigate("detoxbreath")}>
                 <Animated.View style={[styles.navItemContainer]}>
-                  <Text style={[styles.navItemtext]}>02 Breath</Text>
-                  <Text style={styles.navItemDescription}>Re-oxygenate your blood.</Text>
+                  <Text style={[styles.navItemtext]}>Vagus Breath</Text>
+                  <Text style={styles.navItemDescription}>Get out of fight or flight mode and into rest and digest.</Text>
                 </Animated.View>
               </TouchableOpacity>
               <Animated.View style={[styles.navItemContainer]}>
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     fontFamily: 'main-bold'
   },
   menuIcon: {
-    top: 45,
+    top: 40,
     height: 64,
     width: 67,
     padding: 20,
@@ -410,6 +410,7 @@ const styles = StyleSheet.create({
   navItemDescription: {
     fontFamily: 'main-regular',
     fontSize: 11,
+    width: 200,
     color: colors.highlight,
   },
   outerContentContainer: {
