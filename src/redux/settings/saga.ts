@@ -1,6 +1,6 @@
 
 import { getType } from 'typesafe-actions'
-import { Notifications } from 'expo'
+import * as Notifications from 'expo-notifications'
 import moment from 'moment'
 import { takeEvery, put, call, select, Effect } from 'redux-saga/effects'
 import { Alert } from 'react-native'
@@ -49,24 +49,30 @@ export function* resetReminders () {
 
   for(let reminderTime of reminderTimes) {
 
+    const now = moment()
+
     const reminderDate = moment().set({
       hour: reminderTime.hour,
       minute: reminderTime.minute
     })
 
-    if(reminderDate.isBefore(moment())) {
+    if(reminderDate.isBefore(now)) {
       reminderDate.add(1, 'day')
     }
 
-    yield call(Notifications.scheduleLocalNotificationAsync, {
-      title: "Remember to breathe.",
-      body: "Take a time out to do your breathing excercises."
-    }, {
-      time: reminderDate.toDate().getTime(),
-      repeat: 'day'
+    yield call(Notifications.scheduleNotificationAsync, {
+      content: {
+        title: "Remember to breathe.",
+        body: "Take a time out to do your breathing excercises."
+      },
+      trigger: {
+        hour: reminderDate.hour(),
+        minute: reminderDate.minute()
+      }
     })
   }
   
+  return true
 }
 
 export function* unscheduleAllReminders() {

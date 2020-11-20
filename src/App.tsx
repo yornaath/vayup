@@ -156,7 +156,6 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     }
 
     render() {
-      console.log('render')
       const { path } = this.props.location
       const { settings, loaded } = this.props
       
@@ -283,7 +282,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
               <Animated.View style={[styles.navItemContainer]}>
                 <Text style={styles.navItemDescription}>Reminders</Text>
                 <View style={styles.reminderSettingsToggleRow}>
-                  <Switch value={settings.remindersOn} trackColor={{true: colors.active, false: colors.highlight}} onValueChange={this.setRemindersOn}/>
+                  <Switch value={settings.remindersOn} trackColor={{true: colors.green, false: "black"}} ios_backgroundColor="rgba(0,0,0, 0.2)" onValueChange={this.setRemindersOn}/>
                   {
                     settings.remindersOn &&
                       <ReminderTimes />
@@ -363,7 +362,7 @@ const KeepAwake = (): null => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.active,
   },
   logoTitle: {
     position: "absolute",
@@ -405,13 +404,13 @@ const styles = StyleSheet.create({
   navItemtext: {
     fontFamily: 'main-bold',
     fontSize: 23,
-    color: colors.highlight
+    color: colors.menuText
   },
   navItemDescription: {
     fontFamily: 'main-regular',
     fontSize: 11,
     width: 200,
-    color: colors.highlight,
+    color: colors.menuText,
   },
   outerContentContainer: {
     flex: 1
