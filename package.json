@@ -37,7 +37,7 @@
     "expo-keep-awake": "~8.3.0",
     "expo-linear-gradient": "~8.3.0",
     "expo-permissions": "~9.3.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.21",
     "moment": "^2.22.2",
     "ms": "^2.1.1",
     "react": "16.13.1",
