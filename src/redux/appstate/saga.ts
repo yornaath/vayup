@@ -39,9 +39,12 @@ function* appStatechanged(nextAppState:string) {
 function* loadAssets() {
   try {
     yield call(Font.loadAsync, {
-      'main-bold':    require('../../../assets/fonts/Comfortaa-Bold.ttf'),
-      'main-regular': require('../../../assets/fonts/Comfortaa-Regular.ttf'),
-      'main-light':   require('../../../assets/fonts/Comfortaa-Light.ttf'),
+      'main-bold':        require('../../../assets/fonts/Comfortaa-Bold.ttf'),
+      'main-regular':     require('../../../assets/fonts/Comfortaa-Regular.ttf'),
+      'main-light':       require('../../../assets/fonts/Comfortaa-Light.ttf'),
+      'chikitsa-main':    require('../../../assets/fonts/BonaNova-Bold.ttf'),
+      'chikitsa-subhead': require('../../../assets/fonts/Montserrat-Bold.ttf'),
+      'chikitsa-sans':    require('../../../assets/fonts/NotoSansJP-Regular.otf')
     })
     
     yield all([

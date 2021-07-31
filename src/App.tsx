@@ -5,6 +5,7 @@ import { useKeepAwake } from 'expo-keep-awake'
 import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableOpacity, Switch, StatusBar, PanResponder } from 'react-native'
 import Color from 'color'
 import { Dispatch } from 'redux'
+import * as WebBrowser from 'expo-web-browser'
 import { Provider, connect } from 'react-redux'
 import { spacing, colors } from './theme'
 import { store } from './redux/store'
@@ -148,7 +149,7 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
     }
 
     onPressLuneticAddHandler = () => {
-      Linking.openURL("https://itunes.apple.com/ca/app/lunetic/id1329646325?mt=8")
+      WebBrowser.openBrowserAsync('https://chikitsa.yoga?utm_source=Vayup')
     }
 
     onPressVbrationIconHandler = () => {
@@ -293,11 +294,11 @@ const App = connect<SProps, DProps>(mapStateToProps, mapDispatchToProps)(
 
             <Animated.View style={[styles.luneticButtonContainer, luneticButtonContainerTransform]}>
               <TouchableOpacity style={styles.luneticButton} onPress={this.onPressLuneticAddHandler}>
-                <Image source={require('../assets/lunetic_icon.png')} style={styles.luneticIcon}/>
+                <Image resizeMode={"contain"} source={require('../assets/chikitsa_logo.png')} style={styles.luneticIcon}/>
                 <View style={styles.luneticText}>
-                  <Text style={[styles.luneticTitle]}>Lunetic</Text>
-                  <Text style={[styles.luneticSubTitle]}>Track Moon Days</Text>
-                  <Text style={[styles.luneticSubTitle]}>Available on Appstore</Text>
+                  <Text style={[styles.luneticTitle]}>Pranayama Fundamentals</Text>
+                  <Text style={[styles.luneticSubTitle]}>Learn the secrets of the breath</Text>
+                  <Text style={[styles.luneticText]}>A breathwork course</Text>
                 </View>
               </TouchableOpacity>
             </Animated.View>
@@ -454,12 +455,19 @@ const styles = StyleSheet.create({
 
   },
   luneticTitle: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 5,
-    color: colors.highlight,
+    fontFamily: 'chikitsa-main',
+    color: colors.menuText,
   },
   luneticSubTitle: {
-    color: colors.highlight,
+    color: colors.menuText,
+    fontFamily: 'chikitsa-subhead',
+    fontSize: 14
+  },
+  luneticText: {
+    color: colors.menuText,
+    fontFamily: 'chikitsa-sans',
     fontSize: 12
   },
   reminderSettingsToggleRow: {

@@ -50,7 +50,8 @@
     "redux-saga": "^0.16.0",
     "typesafe-actions": "^2.0.4",
     "react-native-svg": "12.1.0",
-    "expo-notifications": "~0.7.2"
+    "expo-notifications": "~0.7.2",
+    "expo-web-browser": "~8.5.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.3.0",
