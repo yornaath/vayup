@@ -38,7 +38,7 @@
     "expo-linear-gradient": "~8.3.0",
     "expo-permissions": "~9.3.0",
     "lodash": "^4.17.10",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "ms": "^2.1.1",
     "react": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
